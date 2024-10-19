@@ -1,7 +1,7 @@
 // useRegisterUser.ts
 import { useMutation } from "@tanstack/react-query";
 import { registerUserAPI } from "../api";
-import { User, RegisterUserReqDTO } from "../types";
+import { User, RegisterUserReqDTO, LoginRequestDto } from "../types";
 import { useNavigate } from "react-router-dom";
 import { useToastStore } from "@/store/toast/useToastStore";
 import { pageRoutes } from "@/apiRoutes";
@@ -10,7 +10,7 @@ export const useRegisterUser = () => {
   const { addToast } = useToastStore();
   const navigate = useNavigate();
 
-  return useMutation<User, Error, RegisterUserReqDTO>({
+  return useMutation<User, Error, RegisterUserReqDTO, LoginRequestDto>({
     mutationFn: registerUserAPI,
     onSuccess: () => {
       addToast("회원가입 성공!", "success");

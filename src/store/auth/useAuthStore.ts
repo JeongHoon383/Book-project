@@ -1,8 +1,9 @@
-import { auth } from "@/firebase";
+import { auth, db } from "@/firebase";
 import { User } from "@/lib/auth/types";
 import Cookies from "js-cookie";
 import { create } from "zustand";
 import { AuthStore } from "./types";
+import { doc, getDoc } from "firebase/firestore";
 
 export const useAuthStore = create<AuthStore>((set) => ({
   isLogin: !!Cookies.get("accessToken"),
@@ -14,14 +15,18 @@ export const useAuthStore = create<AuthStore>((set) => ({
     const token = Cookies.get("accessToken");
     if (token) {
       try {
-        auth.onAuthStateChanged((currentUser) => {
+        auth.onAuthStateChanged(async (currentUser) => {
           if (currentUser) {
+            const userDocRef = doc(db, "users", currentUser.uid);
+            const userDocSnap = await getDoc(userDocRef);
+            const userData = userDocSnap.data();
+
             set({
               user: {
                 id: currentUser.uid,
                 email: currentUser.email ?? "",
                 displayName: currentUser.displayName ?? "",
-                isSeller: false, // 기본값 설정, 실제 값은 별도로 가져와야 함
+                isSeller: userData?.isSeller ?? false, // 기본값 설정, 실제 값은 별도로 가져와야 함
                 createdAt: currentUser.metadata.creationTime
                   ? new Date(currentUser.metadata.creationTime)
                   : new Date(),

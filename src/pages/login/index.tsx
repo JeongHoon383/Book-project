@@ -1,4 +1,3 @@
-import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +12,9 @@ interface LoginFormInputs {
   password: string;
   rememberMe: boolean;
 }
+
+// layout 렌더링 안됨
+// zustand에서 값을 못 불러오는 것 같음 - 아님
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();

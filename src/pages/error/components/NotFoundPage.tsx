@@ -12,7 +12,7 @@ export const NotFoundPage = () => {
   return (
     <div
       id="error-page"
-      className="w-screen h-screen flex flex-col justify-center items-center gap-2"
+      className="h-screen flex flex-col justify-center items-center gap-2"
     >
       <h1 className="font-bold text-4xl">404</h1>
       <p>페이지 경로가 잘못 되었습니다!</p>
