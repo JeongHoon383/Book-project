@@ -39,7 +39,7 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="h-32 flex items-center justify-between px-4 md:px-52 border-b border-borderGray mb-7">
+      <nav className="h-32 flex items-center justify-between px-4 md:px-52 border-b border-borderGray">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center h-16">
             <h1
