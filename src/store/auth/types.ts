@@ -2,6 +2,7 @@ import { User } from "@/lib/auth/types";
 
 export interface AuthStore {
   isLogin: boolean;
+  isLoading: boolean;
   user: User | null;
   checkLoginStatus: () => Promise<void>;
   logout: () => void;

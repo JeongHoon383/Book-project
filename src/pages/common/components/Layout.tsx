@@ -26,20 +26,26 @@ export const Layout: React.FC<LayoutProps> = ({
   containerClassName = "",
   authStatus = authStatusType.COMMON,
 }) => {
-  const { isLogin, user } = useAuthStore();
+  const { isLogin, user, isLoading } = useAuthStore();
 
+  // 로딩 중일 때 UI 처리
+  if (isLoading) {
+    return <div>로딩중...</div>;
+  }
+
+  console.log(user);
+
+  // 로그인이 필요할 때
   if (authStatus === authStatusType.NEED_LOGIN && !isLogin) {
     return <Navigate to={pageRoutes.login} />;
   }
 
+  // 로그인이 되어 있을 때
   if (authStatus === authStatusType.NEED_NOT_LOGIN && isLogin) {
-    return (
-      <Navigate
-        to={user?.isSeller ? pageRoutes.productManageMent : pageRoutes.main}
-      />
-    );
+    return <Navigate to={pageRoutes.main} />;
   }
 
+  // 판매자 권한이 필요할 때
   if (authStatus === authStatusType.NEED_SELLER) {
     if (!isLogin) {
       return <Navigate to={pageRoutes.login} />;
@@ -49,12 +55,15 @@ export const Layout: React.FC<LayoutProps> = ({
     }
   }
 
+  // 판매 관리 페이지 접근, 구매 관리 페이지에는 접근 불가
+
+  // 구매자 권한이 필요할 때
   if (authStatus === authStatusType.NEED_BUYER) {
     if (!isLogin) {
       return <Navigate to={pageRoutes.login} />;
     }
     if (user?.isSeller) {
-      return <Navigate to={pageRoutes.productManageMent} />;
+      return <Navigate to={pageRoutes.main} />;
     }
   }
 
