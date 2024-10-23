@@ -24,6 +24,8 @@ export const initialProductState: NewProductDTO = {
   price: 0,
   quantity: 0,
   description: "",
+  publishedDate: "",
+  author: "",
   category: { id: "", name: "" },
   image: null,
 };

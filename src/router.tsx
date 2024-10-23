@@ -6,7 +6,7 @@ import { Home } from "@/pages/home";
 import { Login } from "@/pages/login";
 import { Register } from "@/pages/register";
 import { ProductDetail } from "@/pages/productDetail";
-import { ProductManageMent } from "@/pages/productManagement";
+import { ProductManageMent } from "./pages/productManagement";
 import { Purchase } from "@/pages/purchase";
 import { PurchaseHistory } from "@/pages/purchaseHistory";
 import { ErrorPage } from "@/pages/error/components/ErrorPage";

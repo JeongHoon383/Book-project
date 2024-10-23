@@ -22,10 +22,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   setUser: (user: User) => {
     set({ user, isLogin: true, isLoading: false });
-    setItem("user", user); // localStorage에 사용자 정보 저장
   },
 
-  // 새로고침 했을 때 유저 정보 유지
+  updateUser: (user: User) => {
+    set({ user, isLogin: true, isLoading: false });
+    setItem("user", user); // 필요한 경우에만 로컬 스토리지 업데이트
+  },
 
   setIsLogin: (isLogin: boolean) => {
     set({ isLogin });

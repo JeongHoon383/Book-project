@@ -33,8 +33,6 @@ export const Layout: React.FC<LayoutProps> = ({
     return <div>로딩중...</div>;
   }
 
-  console.log(user);
-
   // 로그인이 필요할 때
   if (authStatus === authStatusType.NEED_LOGIN && !isLogin) {
     return <Navigate to={pageRoutes.login} />;
