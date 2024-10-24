@@ -55,7 +55,6 @@ export const ProductRegistrationModal: React.FC<
     useUpdateProduct(); // 수정 mutation 사용
   const addToast = useToastStore((state) => state.addToast);
   const editableProduct = useProductStore((state) => state.editableProduct); // 수정 모드에 따른 상태 확인
-
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   const {

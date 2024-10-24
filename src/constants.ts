@@ -1,3 +1,5 @@
+export const PRODUCT_PAGE_SIZE = 2;
+
 export const ALL_CATEGORY_ID = "-1";
 
 export const categories: { id: string; name: string }[] = [

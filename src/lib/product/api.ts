@@ -6,14 +6,74 @@ import {
   limit,
   orderBy,
   query,
+  QueryDocumentSnapshot,
   runTransaction,
   serverTimestamp,
   setDoc,
+  startAfter,
   where,
 } from "firebase/firestore";
-import { IProduct, NewProductDTO } from "./types";
+import { IProduct, NewProductDTO, PaginatedProductsDTO } from "./types";
 import { db } from "@/firebase";
 
+// 상품 조회
+export const fetchAllProducts = async (
+  pageSize: number,
+  pageParam: QueryDocumentSnapshot | null
+): Promise<PaginatedProductsDTO> => {
+  try {
+    console.log("Starting fetch with:", {
+      pageSize,
+      hasPageParam: !!pageParam,
+    });
+
+    const productsRef = collection(db, "products");
+
+    // 쿼리 구성
+    let q = query(productsRef, orderBy("createdAt", "desc"), limit(pageSize));
+
+    if (pageParam) {
+      q = query(
+        productsRef,
+        orderBy("createdAt", "desc"),
+        startAfter(pageParam),
+        limit(pageSize)
+      );
+    }
+
+    const querySnapshot = await getDocs(q);
+    const products = querySnapshot.docs.map(
+      (doc) =>
+        ({
+          docId: doc.id,
+          ...doc.data(),
+          createdAt: doc.data().createdAt?.toDate().toISOString(),
+          updatedAt: doc.data().updatedAt?.toDate().toISOString(),
+        } as IProduct)
+    );
+
+    const lastVisible =
+      querySnapshot.docs[querySnapshot.docs.length - 1] || null;
+    const hasNextPage = querySnapshot.docs.length === pageSize;
+
+    console.log("Query result:", {
+      fetchedCount: products.length,
+      hasNextPage,
+      hasLastVisible: !!lastVisible,
+    });
+
+    return {
+      products,
+      hasNextPage,
+      lastVisible,
+    };
+  } catch (error) {
+    console.error("Error in fetchAllProducts:", error);
+    throw error;
+  }
+};
+
+// 상품 추가
 export const addProductAPI = async (
   productData: NewProductDTO
 ): Promise<IProduct> => {
@@ -58,36 +118,6 @@ export const addProductAPI = async (
     });
   } catch (error) {
     console.error("Error adding product:", error);
-    throw error;
-  }
-};
-
-export const fetchAllProducts = async (): Promise<IProduct[]> => {
-  try {
-    const productsRef = collection(db, "products");
-    const q = query(productsRef, orderBy("createdAt", "desc"));
-    const querySnapshot = await getDocs(q);
-
-    const products = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        docId: doc.id, // Firestore 문서의 고유 ID 추가
-        id: String(data.id),
-        title: data.title,
-        price: data.price,
-        quantity: data.quantity,
-        description: data.description,
-        category: data.category,
-        author: data.author,
-        publishedDate: data.publishedDate,
-        image: data.image || "",
-        createdAt: data.createdAt?.toDate().toISOString(),
-        updatedAt: data.updatedAt?.toDate().toISOString(),
-      };
-    });
-    return products as IProduct[];
-  } catch (error) {
-    console.error("Error fetching products", error);
     throw error;
   }
 };
