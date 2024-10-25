@@ -20,12 +20,13 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ALL_CATEGORY_ID, categories } from "@/constants";
+// import { createNewProduct } from "@/helpers/product";
 import { useAddProduct } from "@/lib/product/hooks/useAddProduct";
 import { useUpdateProduct } from "@/lib/product/hooks/useUpdateProduct";
+
 import { NewProductDTO } from "@/lib/product/types";
 import { uploadImage } from "@/lib/utils/imageUpload";
 import { useProductStore } from "@/store/product/useProductStore";
-import { useToastStore } from "@/store/toast/useToastStore";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -50,11 +51,12 @@ interface ProductFormInputs {
 export const ProductRegistrationModal: React.FC<
   ProductRegistrationModalProps
 > = ({ isOpen, onClose, sellerId }) => {
-  const { mutateAsync: addProduct, isPending: isLoading } = useAddProduct();
-  const { mutateAsync: updateProduct, isPending: isUpdating } =
-    useUpdateProduct(); // 수정 mutation 사용
-  const addToast = useToastStore((state) => state.addToast);
-  const editableProduct = useProductStore((state) => state.editableProduct); // 수정 모드에 따른 상태 확인
+  const { mutateAsync: addProductMutate, isPending: isLoading } =
+    useAddProduct();
+  const { mutateAsync: updateProductMutate, isPending: isUpdating } =
+    useUpdateProduct();
+  // isPending 라고 이름을 붙여준 이유 : 지금 이 작업이 진행중이다 라고 명확하게 알려줌, 로딩중이라는 뜻은 좀 더 확장된 의미라 isPending으로 좀 더 명확하게 구분
+  const editableProduct = useProductStore((state) => state.editableProduct);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   const {
@@ -69,12 +71,14 @@ export const ProductRegistrationModal: React.FC<
       title: editableProduct?.title || "",
       author: editableProduct?.author || "",
       price: editableProduct?.price,
-      stock: editableProduct?.quantity,
+      stock: editableProduct?.stock,
       description: editableProduct?.description || "",
       publishedDate: editableProduct?.publishedDate || "",
       categoryId: editableProduct?.category.id || "",
     },
   });
+
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
 
   // 수정 모드일 때 기존 데이터를 폼에 채우기 위한 useEffect
   useEffect(() => {
@@ -83,7 +87,7 @@ export const ProductRegistrationModal: React.FC<
       setValue("title", editableProduct.title);
       setValue("author", editableProduct.author);
       setValue("price", editableProduct.price);
-      setValue("stock", editableProduct.quantity);
+      setValue("stock", editableProduct.stock);
       setValue("description", editableProduct.description || "");
       setValue("publishedDate", editableProduct.publishedDate);
       setValue("categoryId", editableProduct.category.id);
@@ -94,22 +98,18 @@ export const ProductRegistrationModal: React.FC<
     }
   }, [editableProduct, setValue, reset]);
 
-  const [submissionError, setSubmissionError] = useState<string | null>(null);
-
   const onSubmit = async (data: ProductFormInputs) => {
-    setSubmissionError(null);
+    setSubmissionError(null); // 폼 제출 과정에서 발생할 수 있는 에러 관리, ex) 에러 발생했을 때 에러 메세지를 UI에 보여줄 수 있음
     try {
-      let imageUrl = editableProduct?.image || ""; // 기존 이미지 URL 유지
-
-      // 만약 새로운 파일이 업로드된 경우 이미지 업로드 처리
-      if (data.image && data.image.length > 0) {
-        const imageFile = data.image[0];
-        const uploadedUrl = await uploadImage(imageFile);
-        if (!uploadedUrl) {
-          throw new Error("이미지 업로드에 실패했습니다.");
-        }
-        imageUrl = uploadedUrl; // 새 이미지 URL로 업데이트
+      if (!data.image || data.image.length === 0) {
+        throw new Error("이미지를 선택해야 합니다.");
       }
+      const imageFile = data.image[0];
+
+      const imageUrl = await uploadImage(imageFile);
+      if (!imageUrl) {
+        throw new Error("이미지 업로드에 실패했습니다.");
+      } // 이미지 파일을 저장하는게 아닌 이미지 URL을 저장
 
       const selectedCategory = categories.find(
         (category) => category.id === data.categoryId
@@ -119,39 +119,50 @@ export const ProductRegistrationModal: React.FC<
         throw new Error("유효한 카테고리를 선택해주세요.");
       }
 
-      const productData: NewProductDTO = {
-        sellerId, // 현재 로그인한 사용자의 id를 자동으로 가져옵니다.
+      const newProductData: NewProductDTO = {
+        sellerId: sellerId,
         title: data.title,
-        quantity: data.stock,
-        description: data.description,
         price: Number(data.price),
+        stock: Number(data.stock),
+        description: data.description,
         category: { id: selectedCategory.id, name: selectedCategory.name },
         author: data.author,
         publishedDate: data.publishedDate,
         image: imageUrl,
       };
 
+      // `id`를 포함한 최종 데이터 생성
+      const newProduct = {
+        id: editableProduct?.id || `${Date.now()}`, // 수정 시 기존 id, 아니면 새로 생성
+        ...newProductData,
+        createdAt: editableProduct?.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
       if (isEditMode && editableProduct) {
-        // 수정 모드인 경우
-        await updateProduct({ id: editableProduct.docId, ...productData });
-        addToast("상품 수정 성공", "success");
+        // 수정 모드
+        await updateProductMutate(newProduct);
       } else {
-        // 등록 모드인 경우
-        await addProduct(productData);
-        addToast("상품 등록 성공", "success");
+        // 등록 모드
+        await addProductMutate(newProduct);
       }
+      reset();
       reset();
       onClose();
     } catch (error: unknown) {
-      addToast("상품 등록/수정에 실패했습니다.", "error");
-      console.error("상품 등록/수정에 실패 했습니다.", error);
+      if (error instanceof Error) {
+        setSubmissionError(error.message || "상품 등록에 실패 했습니다");
+      } else {
+        setSubmissionError("알 수 없는 에러가 발생했습니다.");
+      }
     }
   };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-white">
         <DialogHeader>
-          <DialogTitle>상품 등록</DialogTitle>
+          <DialogTitle>{isEditMode ? "상품 수정" : "상품 등록"}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">

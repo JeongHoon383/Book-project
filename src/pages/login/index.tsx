@@ -13,9 +13,6 @@ interface LoginFormInputs {
   rememberMe: boolean;
 }
 
-// layout 렌더링 안됨
-// zustand에서 값을 못 불러오는 것 같음 - 아님
-
 export const Login: React.FC = () => {
   const navigate = useNavigate();
   const { mutate: login, isPending: isLoading } = useLogin();

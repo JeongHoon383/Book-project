@@ -1,17 +1,16 @@
 import { QueryDocumentSnapshot } from "firebase/firestore";
 
 export interface IProduct {
-  docId: string; // Firestore 문서의 고유 ID 추가
   id: string;
   sellerId: string;
   title: string;
   price: number;
-  quantity: number;
+  stock: number;
   description?: string;
   category: { id: string; name: string };
   author: string;
   publishedDate: string;
-  image: string;
+  image: string | File | null;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -27,7 +26,7 @@ export interface NewProductDTO {
   sellerId: string;
   title: string;
   price: number;
-  quantity: number;
+  stock: number;
   description?: string;
   category: { id: string; name: string };
   author: string;

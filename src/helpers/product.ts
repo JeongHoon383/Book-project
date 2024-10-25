@@ -22,7 +22,7 @@ export const initialProductState: NewProductDTO = {
   sellerId: "",
   title: "",
   price: 0,
-  quantity: 0,
+  stock: 0,
   description: "",
   publishedDate: "",
   author: "",

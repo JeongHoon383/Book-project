@@ -1,27 +1,26 @@
 import { useToastStore } from "@/store/toast/useToastStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IProduct, NewProductDTO } from "../types";
-import { addProductAPI } from "../api";
 import { PRODUCT_KEY } from "../key";
+import { addProductAPI } from "../api";
 import { useProductStore } from "@/store/product/useProductStore";
+// 리액트 쿼리로 데이터 요청 API 호출
 
 export const useAddProduct = () => {
   const queryClient = useQueryClient();
+  // 데이터를 보여줄 때 캐싱된 데이터를 보여주기 위함
+  // 데이터를 불러올 때 캐싱된 데이터를 무효화
   const { addToast } = useToastStore();
-
-  // Zustand의 products 상태와 상태 갱신 함수
-  const products = useProductStore((state) => state.products);
-  const setProducts = useProductStore((state) => state.setProducts);
+  const { addProduct } = useProductStore();
 
   return useMutation<IProduct, Error, NewProductDTO>({
+    // IProduct - 서버한테 받는 데이터 타입
+    // NewProductDTO - 서버로 보내는 데이터 타입
     mutationFn: addProductAPI, // 상품 등록 API 호출
-    onSuccess: (newProduct) => {
-      addToast("상품 등록 성공", "success");
-
-      // React Query 캐시 무효화
+    onSuccess: (products) => {
+      addToast("상품 등록 성공!", "success");
       queryClient.invalidateQueries({ queryKey: [PRODUCT_KEY] });
-      // 상태 업데이트 - 상품을 목록의 가장 앞에 추가
-      setProducts([newProduct, ...products]);
+      addProduct(products);
     },
     onError: (error: Error) => {
       addToast("상품 등록에 실패하였습니다.", "error");

@@ -6,69 +6,42 @@ import {
   limit,
   orderBy,
   query,
-  QueryDocumentSnapshot,
   runTransaction,
   serverTimestamp,
   setDoc,
-  startAfter,
   where,
 } from "firebase/firestore";
-import { IProduct, NewProductDTO, PaginatedProductsDTO } from "./types";
+import { IProduct, NewProductDTO } from "./types";
 import { db } from "@/firebase";
+import { PRODUCT_KEY } from "./key";
 
 // 상품 조회
-export const fetchAllProducts = async (
-  pageSize: number,
-  pageParam: QueryDocumentSnapshot | null
-): Promise<PaginatedProductsDTO> => {
+export const fetchProducts = async () => {
   try {
-    console.log("Starting fetch with:", {
-      pageSize,
-      hasPageParam: !!pageParam,
-    });
-
-    const productsRef = collection(db, "products");
-
-    // 쿼리 구성
-    let q = query(productsRef, orderBy("createdAt", "desc"), limit(pageSize));
-
-    if (pageParam) {
-      q = query(
-        productsRef,
-        orderBy("createdAt", "desc"),
-        startAfter(pageParam),
-        limit(pageSize)
-      );
-    }
-
+    const q = query(collection(db, PRODUCT_KEY), orderBy("id", "desc"));
     const querySnapshot = await getDocs(q);
-    const products = querySnapshot.docs.map(
-      (doc) =>
-        ({
-          docId: doc.id,
-          ...doc.data(),
-          createdAt: doc.data().createdAt?.toDate().toISOString(),
-          updatedAt: doc.data().updatedAt?.toDate().toISOString(),
-        } as IProduct)
-    );
 
-    const lastVisible =
-      querySnapshot.docs[querySnapshot.docs.length - 1] || null;
-    const hasNextPage = querySnapshot.docs.length === pageSize;
+    const products = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: String(data.id),
+        sellerId: data.sellerId,
+        title: data.title,
+        price: Number(data.price),
+        stock: data.stock,
+        description: data.description,
+        category: data.category,
+        author: data.author,
+        publishedDate: data.publishedDate,
+        image: data.image || "",
+        createdAt: data.createdAt?.toDate().toISOString(),
+        updatedAt: data.updatedAt?.toDate().toISOString(),
+      };
+    }) as IProduct[];
 
-    console.log("Query result:", {
-      fetchedCount: products.length,
-      hasNextPage,
-      hasLastVisible: !!lastVisible,
-    });
-
-    return {
-      products,
-      hasNextPage,
-      lastVisible,
-    };
+    return products;
   } catch (error) {
-    console.error("Error in fetchAllProducts:", error);
+    console.error("Error fetching products: ", error);
     throw error;
   }
 };
@@ -77,55 +50,53 @@ export const fetchAllProducts = async (
 export const addProductAPI = async (
   productData: NewProductDTO
 ): Promise<IProduct> => {
+  // Promise<IProduct> 추가된 데이터를 받았을 때 받는 데이터의 타입
+  // 데이터를 다시 반환하는 이유 : 1. 추가가 잘 되었는지 확인, 2. 반환된 데이터를 즉시 client측에 반영 - 추후 데이터를 다시 부를 필요가 없음 성능면에서 효율적
   try {
     return await runTransaction(db, async (transcation) => {
-      const productsRef = collection(db, "products");
-      const q = query(productsRef, orderBy("id", "desc"), limit(1));
-      const querySnapshot = await getDocs(q); // 최신 데이터 가져오기
+      const productsRef = collection(db, PRODUCT_KEY); // db 내의 PRODUCT_KEY 라는 컬렉션 접근
+      const q = query(productsRef, orderBy("id", "desc"), limit(1)); // productRef 라는 컬렉션 안에 가장 최신화된 문서(id 기준 내림차순 정렬시 가장 높은값이 최신에 추가된 것) 1개를 가져옴
+      const querySnapshot = await getDocs(q); // q에 해당하는 데이터를 querySnapshot에 저장
 
       let maxId = 0;
       if (!querySnapshot.empty) {
         maxId = querySnapshot.docs[0].data().id;
       }
-      // 만약 상품이 하나도 없으면 empty, maxId를 0으로 설정하고,
-      // 상품이 있을 경우 가장 큰 ID를 가져와 새 상품 ID를 계산
+      // 데이터가 비어있을 때를 대비
+      // 아이디값을 저장하는 이유 : 가장 최신화된 아이디를 저장함으로써 문서의 id 값을 순차적으로 배치 할 수 있음
 
       const newId = maxId + 1;
 
       const newProductData = {
         ...productData,
         id: String(newId),
-        image: String(productData.image),
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
-      };
-      // 새로운 상품 데이터 생성, 상품이 생성된 시간과 수정된 시간 기록
+      }; // 데이터를 어떻게 추가할건지 세팅
 
-      const newDocRef = doc(productsRef); // 새로운 문서 참조 생성
-      transcation.set(newDocRef, newProductData);
-      // 트랜잭션을 통해 FireStore에 새 상품 데이터를 저장, 이때 newProductData가 저장
+      const newDocRef = doc(productsRef); // 문서를 저장할 위치 설정
+      transcation.set(newDocRef, newProductData); // 데이터 저장
 
       const newProduct: IProduct = {
-        docId: newDocRef.id,
         ...newProductData,
         id: String(newId),
-        image: String(productData.image),
+        image: "", // 왜 이미지를 초기화?
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
-        // 클라이언트에서 사용하기 위해 시간 값 추가로 반환
       };
-      return newProduct; // 새로 추가된 상품 반환
+
+      return newProduct;
     });
   } catch (error) {
-    console.error("Error adding product:", error);
+    console.error("Error adding product", error);
     throw error;
   }
 };
 
-// 특정 상품을 삭제하는 API
+// 상품 삭제
 export const deleteProductAPI = async (productId: string): Promise<void> => {
   try {
-    const productDocRef = collection(db, "products");
+    const productDocRef = collection(db, PRODUCT_KEY);
     const q = query(productDocRef, where("id", "==", productId));
     const querySnapshot = await getDocs(q);
 
@@ -134,34 +105,36 @@ export const deleteProductAPI = async (productId: string): Promise<void> => {
     }
 
     const docToDelete = querySnapshot.docs[0];
-    await deleteDoc(docToDelete.ref);
+    await deleteDoc(docToDelete.ref); // 여기서 왜 ref? docToDelete에 문서가 잘 담겨있지 않음?
     console.log("Product deleted successfully");
   } catch (error) {
-    console.error("Error deleting product:", error);
+    console.error("Error deleting product: ", error);
     throw error;
   }
 };
 
-// 상품 수정 API
+// 상품 업데이트
 export const updateProductAPI = async (
   productId: string,
-  updatedData: NewProductDTO
+  updateData: NewProductDTO
 ): Promise<void> => {
   try {
-    // productId는 Firestore 문서의 고유 ID
-    const productDocRef = doc(db, "products", productId);
+    const productDocRef = collection(db, PRODUCT_KEY);
+    const q = query(productDocRef, where("id", "==", productId));
+    const querySnapshot = await getDocs(q);
 
-    // 문서 업데이트, 기존 데이터와 병합 (merge : true)
+    const docToUpdate = querySnapshot.docs[0];
+
     await setDoc(
-      productDocRef,
+      docToUpdate.ref,
       {
-        ...updatedData,
+        ...updateData,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       },
       { merge: true }
     );
-    console.log("Product updated successfully");
+    console.log("product updated successfully");
   } catch (error) {
     console.error("Error updating product", error);
     throw error;
