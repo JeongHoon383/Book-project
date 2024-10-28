@@ -1,3 +1,11 @@
+import { HomeMain } from "./components/HomeMain";
+import { HomeSideBar } from "./components/HomeSideBar";
+
 export const Home = () => {
-  return <div>Home</div>;
+  return (
+    <div className="flex gap-6">
+      <HomeSideBar />
+      <HomeMain />
+    </div>
+  );
 };

@@ -1,14 +1,6 @@
 import { IProduct } from "@/lib/product/types";
 import { create } from "zustand";
-
-interface ProductState {
-  products: IProduct[];
-  addProduct: (product: IProduct) => void;
-  editableProduct: IProduct | null;
-  deleteProduct: (productId: string) => void;
-  setEditableProduct: (product: IProduct) => void;
-  updateProductInStore: (updatedProduct: IProduct) => void;
-}
+import { ProductState } from "./types";
 
 export const useProductStore = create<ProductState>((set) => ({
   products: [],

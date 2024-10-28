@@ -2,8 +2,8 @@ export const pageRoutes = {
   main: "/",
   login: "/login",
   register: "/register",
-  productDetail: "/productDetail/:id",
-  productManageMent: "productManageMent",
+  productDetail: "/productDetail",
+  productManageMent: "/productManageMent/",
   purchase: "/purchase",
-  purchaseHistory: "purchaseHistory",
+  purchaseHistory: "/purchaseHistory",
 };

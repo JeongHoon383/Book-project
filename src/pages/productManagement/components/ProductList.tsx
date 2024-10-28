@@ -14,6 +14,8 @@ import {
 import { useFetchProducts } from "@/lib/product/hooks/useFetchProduct";
 import { useDeleteProduct } from "@/lib/product/hooks/useDeleteProduct";
 import { useProductStore } from "@/store/product/useProductStore";
+import { PRODUCT_PAGE_SIZE } from "@/constants";
+import { useInfiniteScroll } from "@/lib/product/hooks/useInfiniteScroll";
 
 const ProductRegistrationModal = lazy(() =>
   import("./ProductRegistrationModal").then((module) => ({
@@ -21,47 +23,63 @@ const ProductRegistrationModal = lazy(() =>
   }))
 );
 
-export const ProductList = () => {
+interface HomeProductListProps {
+  pageSize?: number;
+}
+
+export const ProductList: React.FC<HomeProductListProps> = ({
+  pageSize = PRODUCT_PAGE_SIZE,
+}) => {
   const deleteMutation = useDeleteProduct();
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
   const [sortOption, setSortOption] = useState<string>("latest");
   const { isOpen, openModal, closeModal } = useModal();
   const { user } = useAuthStore();
-  const { data } = useFetchProducts();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
+    useFetchProducts({ pageSize });
   const { setEditableProduct } = useProductStore();
 
-  if (!data) {
+  const products = data ? data.pages.flatMap((page) => page.products) : [];
+  const { ref } = useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  }); //
+
+  if (isLoading) {
     <div>로딩중...</div>;
   }
 
   // 상품 목록 정렬 함수
   const sortedProducts = () => {
-    if (!data) return [];
+    if (!products) return [];
     switch (sortOption) {
       case "latest":
-        return [...data].sort((a, b) => {
+        return [...products].sort((a, b) => {
           // undefined 처리: createdAt이 undefined인 경우 null 날짜를 대체하도록 처리
           const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
           const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
           return dateB - dateA; // 최신순으로 정렬
         });
       case "priceLow":
-        return [...data].sort((a, b) => a.price - b.price);
+        return [...products].sort((a, b) => a.price - b.price);
       case "priceHigh":
-        return [...data].sort((a, b) => b.price - a.price);
+        return [...products].sort((a, b) => b.price - a.price);
       default:
-        return data;
+        return products;
     }
   };
 
+  const sortedProductList = sortedProducts();
+
   // 전체 선택 체크박스 클릭 시 호출
   const handleSelectAll = () => {
-    if (!data) return [];
+    if (!products) return [];
     if (isAllSelected) {
       setSelectedProductIds([]); // 전체 해제 시, 선택 목록 초기화
     } else {
-      setSelectedProductIds(data.map((product) => product.id)); // 전체 선택시, 모든 상품의 ID 추가
+      setSelectedProductIds(products.map((product) => product.id)); // 전체 선택시, 모든 상품의 ID 추가
     }
     setIsAllSelected(!isAllSelected); // 전체 선택 상태 반전
   };
@@ -93,7 +111,7 @@ export const ProductList = () => {
       alert("하나의 상품만 선택해 주세요.");
       return;
     }
-    const selectedProduct = data?.find(
+    const selectedProduct = products?.find(
       (product) => product.id === selectedProductIds[0]
     );
     if (selectedProduct) {
@@ -162,13 +180,14 @@ export const ProductList = () => {
         </div>
       </div>
       <div>
-        {data &&
-          sortedProducts().map((product, index) => (
+        {products &&
+          sortedProductList.map((product, index) => (
             <ProductManageList
-              key={`${product.id}_${index}}`}
+              key={product.id}
               product={product}
               onToggleSelect={() => toggleSelectProduct(product.id)}
               isSelected={selectedProductIds.includes(product.id)}
+              ref={index === sortedProductList.length - 1 ? ref : undefined}
             />
           ))}
       </div>

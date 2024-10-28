@@ -70,7 +70,7 @@ const router = createBrowserRouter([
     children: [
       { path: pageRoutes.main, element: <Home />, errorElement: <ErrorPage /> },
       {
-        path: pageRoutes.productDetail,
+        path: `${pageRoutes.productDetail}/:id`,
         element: <ProductDetail />,
         errorElement: <ErrorPage />,
       },

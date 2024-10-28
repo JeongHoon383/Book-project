@@ -1,5 +1,4 @@
-// UI 담당
-
+import * as React from "react";
 import { IProduct } from "@/lib/product/types";
 
 interface ProductManageListProps {
@@ -8,11 +7,10 @@ interface ProductManageListProps {
   isSelected: boolean;
 }
 
-export const ProductManageList: React.FC<ProductManageListProps> = ({
-  product,
-  onToggleSelect,
-  isSelected,
-}) => {
+export const ProductManageList = React.forwardRef<
+  HTMLDivElement,
+  ProductManageListProps
+>(({ product, onToggleSelect, isSelected }, ref) => {
   const {
     author,
     category,
@@ -25,7 +23,10 @@ export const ProductManageList: React.FC<ProductManageListProps> = ({
   } = product;
 
   return (
-    <div className="flex items-center py-10 border-b border-borderGray">
+    <div
+      className="flex items-center py-10 border-b border-borderGray"
+      ref={ref}
+    >
       <div className="flex items-center basis-5/12">
         <div className="w-10">
           <input
@@ -35,8 +36,8 @@ export const ProductManageList: React.FC<ProductManageListProps> = ({
           />
         </div>
         <div className="flex gap-5">
-          <div>
-            <img src={image} className="w-24 h-24 object-cover" />
+          <div className="w-[100px] h-[100px]">
+            <img src={image} className="w-full h-full object-contain" />
           </div>
           <div className="min-w-[300px]">
             <div className="flex flex-col justify-center max-w-[300px] h-full gap-2 ">
@@ -52,7 +53,7 @@ export const ProductManageList: React.FC<ProductManageListProps> = ({
         </div>
       </div>
       <div className="flex basis-7/12 justify-between">
-        <div className="w-[10%] text-center">{price}</div>
+        <div className="w-[10%] text-center">{price.toLocaleString()}원</div>
         <div className="w-[15%] text-center">{category.name}</div>
         <div className="w-[10%] text-center">판매중</div>{" "}
         {/* 판매중 넣어야됨 */}
@@ -70,4 +71,6 @@ export const ProductManageList: React.FC<ProductManageListProps> = ({
       </div>
     </div>
   );
-};
+});
+
+ProductManageList.displayName = "ProductManageList";

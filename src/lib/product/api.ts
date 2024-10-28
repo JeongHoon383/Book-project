@@ -2,24 +2,63 @@ import {
   collection,
   deleteDoc,
   doc,
+  DocumentData,
   getDocs,
   limit,
   orderBy,
   query,
+  QueryDocumentSnapshot,
   runTransaction,
   serverTimestamp,
   setDoc,
+  startAfter,
   where,
 } from "firebase/firestore";
-import { IProduct, NewProductDTO } from "./types";
+import {
+  DetailProduct,
+  IProduct,
+  NewProductDTO,
+  PaginatedProductsDTO,
+} from "./types";
 import { db } from "@/firebase";
 import { PRODUCT_KEY } from "./key";
+import { ALL_CATEGORY_ID } from "@/constants";
+import { ProductFilter } from "@/store/product/types";
+
+let lastVisibleDocument: QueryDocumentSnapshot<DocumentData> | null = null; // 페이지네이션 상태 관리
 
 // 상품 조회
-export const fetchProducts = async () => {
+export const fetchProductsAPI = async (
+  filter: ProductFilter,
+  pageSize: number,
+  page: number
+): Promise<PaginatedProductsDTO> => {
   try {
-    const q = query(collection(db, PRODUCT_KEY), orderBy("id", "desc"));
+    let q = query(
+      collection(db, PRODUCT_KEY),
+      orderBy("id", "desc"),
+      limit(pageSize)
+    );
+    // 특정 카테고리가 선택된 경우 해당 카테고리로 필터링
+    if (filter.categoryId && filter.categoryId !== ALL_CATEGORY_ID) {
+      q = query(
+        q,
+        where("category.id", "==", filter.categoryId),
+        limit(pageSize)
+      );
+    }
+
+    // 페이지가 1 이상일 경우 startAfter로 페이지네이션 설정
+    if (page > 1 && lastVisibleDocument) {
+      q = query(q, startAfter(lastVisibleDocument));
+    }
+
     const querySnapshot = await getDocs(q);
+
+    // 현재 페이지의 마지막 문서를 저장하여 다음 페이지 시작점을 결정
+    if (!querySnapshot.empty) {
+      lastVisibleDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
+    }
 
     const products = querySnapshot.docs.map((doc) => {
       const data = doc.data();
@@ -39,7 +78,12 @@ export const fetchProducts = async () => {
       };
     }) as IProduct[];
 
-    return products;
+    const hasNextPage = querySnapshot.size === pageSize;
+    const nextPage = hasNextPage ? page + 1 : undefined;
+
+    console.log(hasNextPage, nextPage);
+
+    return { products, hasNextPage, nextPage };
   } catch (error) {
     console.error("Error fetching products: ", error);
     throw error;
@@ -137,6 +181,33 @@ export const updateProductAPI = async (
     console.log("product updated successfully");
   } catch (error) {
     console.error("Error updating product", error);
+    throw error;
+  }
+};
+
+export const fetchProductByIdAPI = async (
+  productId: string
+): Promise<DetailProduct> => {
+  try {
+    const productDocRef = collection(db, PRODUCT_KEY);
+    const q = query(productDocRef, where("id", "==", productId));
+    const querySnapshot = await getDocs(q);
+
+    const products = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        title: data.title,
+        price: Number(data.price),
+        description: data.description,
+        category: data.category,
+        author: data.author,
+        publishedDate: data.publishedDate,
+        image: data.image,
+      } as DetailProduct;
+    });
+    return products[0];
+  } catch (error) {
+    console.error("Error fetching products: ", error);
     throw error;
   }
 };

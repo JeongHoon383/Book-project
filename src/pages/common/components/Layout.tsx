@@ -70,7 +70,9 @@ export const Layout: React.FC<LayoutProps> = ({
       <Navbar />
       <div className="flex flex-col min-h-screen p-10">
         <main className="flex-grow">
-          <div className={`container mx-auto px-4 ${containerClassName}`}>
+          <div
+            className={`container mx-auto px-4 h-screen${containerClassName}`}
+          >
             <Toast />
             {children}
           </div>
