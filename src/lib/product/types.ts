@@ -32,6 +32,7 @@ export interface NewProductDTO {
 }
 
 export interface DetailProduct {
+  id: string;
   title: string;
   price: number;
   description?: string;

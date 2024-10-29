@@ -1,20 +1,23 @@
+import { IProduct } from "@/lib/product/types";
 import React, { useState } from "react";
 
-interface Book {
-  image: string;
-  title: string;
-  author: string;
-  publishedDate: string;
-  description: string;
-  price: number;
-}
-
 interface CarouselProps {
-  items: Book[];
+  items: IProduct[];
   itemsPerPage: number;
+  renderItem: (item: IProduct) => React.ReactNode;
+  renderPrevArrow?: () => React.ReactNode; // 커스텀 이전 화살표 렌더링 함수
+  renderNextArrow?: () => React.ReactNode; // 커스텀 다음 화살표 렌더링 함수
+  showArrowsOnHover?: boolean; // hover 상태에서 화살표 표시 여부
 }
 
-export const Carousel: React.FC<CarouselProps> = ({ items, itemsPerPage }) => {
+export const Carousel: React.FC<CarouselProps> = ({
+  items,
+  itemsPerPage,
+  renderItem,
+  renderPrevArrow,
+  renderNextArrow,
+  showArrowsOnHover = true, // 기본값을 hover 상태에서 표시로 설정
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(items.length / itemsPerPage);
 
@@ -30,45 +33,41 @@ export const Carousel: React.FC<CarouselProps> = ({ items, itemsPerPage }) => {
 
   return (
     <div
-      className="relative"
+      className="relative border border-borderGray p-5"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="flex justify-end pr-4">
+      <div className="flex justify-end pr-4 mb-5">
         {currentPage} / {totalPages}
       </div>
       <div className="grid grid-cols-5 gap-4 overflow-hidden">
         {items
           .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
           .map((item, index) => (
-            <div key={index} className="flex flex-col items-center">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-auto object-contain"
-              />
-              <div className="text-center mt-2">{item.title}</div>
-              <div className="text-sm text-gray-500">{item.author}</div>
-              <div className="text-sm">{item.price.toLocaleString()}원</div>
-            </div>
+            <div key={index}>{renderItem(item)}</div>
           ))}
       </div>
-      {isHovered && (
+      {/* 화살표 렌더링 */}
+      {(showArrowsOnHover ? isHovered : true) && (
         <>
           <button
             onClick={handlePrev}
             className="absolute left-0 top-1/2 transform -translate-y-1/2"
           >
-            &#9664;
+            {renderPrevArrow ? renderPrevArrow() : <DefaultPrevArrow />}
           </button>
           <button
             onClick={handleNext}
             className="absolute right-0 top-1/2 transform -translate-y-1/2"
           >
-            &#9654;
+            {renderNextArrow ? renderNextArrow() : <DefaultNextArrow />}
           </button>
         </>
       )}
     </div>
   );
 };
+
+// 기본 화살표 컴포넌트
+const DefaultPrevArrow = () => <span className="text-2xl">&#9664;</span>;
+const DefaultNextArrow = () => <span className="text-2xl">&#9654;</span>;

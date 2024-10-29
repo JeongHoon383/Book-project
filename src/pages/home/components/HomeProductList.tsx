@@ -30,7 +30,6 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
     hasNextPage,
     isFetchingNextPage,
   });
-  console.log("isFetchingNextPage", isFetchingNextPage);
 
   if (isLoading) {
     <div>로딩중...</div>;

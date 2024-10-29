@@ -10,12 +10,21 @@ import { CartButton } from "./CartButton";
 import { LogoutButton } from "./LogoutButton.";
 import { LoginButton } from "./LoginButton";
 import { ConfirmModal } from "./ConfirmModal";
+import { CartModal } from "./CartModal";
 
 export const Navbar = () => {
   const navigate = useNavigate();
-  const { isOpen, openModal, closeModal } = useModal();
+  const {
+    isOpen: isConfirmModalOpen,
+    openModal: openConfirmModal,
+    closeModal: closeConfirmModal,
+  } = useModal(); // ConfirmModal 상태
+  const {
+    isOpen: isCartModalOpen,
+    openModal: openCartModal,
+    closeModal: closeCartModal,
+  } = useModal(); // CartModal 상태
   const isLogin = useAuthStore((state) => state.isLogin);
-  // const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const checkLoginStatus = useAuthStore((state) => state.checkLoginStatus);
 
@@ -24,17 +33,21 @@ export const Navbar = () => {
   }, [checkLoginStatus]);
 
   const handleLogout = () => {
-    openModal();
+    openConfirmModal();
   };
 
   const handleConfirmLogout = () => {
     logout();
     Cookies.remove("accessToken");
-    closeModal();
+    closeConfirmModal();
   };
 
   const handleClickLogo = () => {
     navigate(pageRoutes.main);
+  };
+
+  const handleClickCart = () => {
+    openCartModal();
   };
 
   return (
@@ -52,7 +65,7 @@ export const Navbar = () => {
               {isLogin ? (
                 <ApiErrorBoundary>
                   <Suspense fallback={<Skeleton className="w-24 h-8" />}>
-                    <CartButton />
+                    <CartButton onClick={handleClickCart} />
                     <LogoutButton onClick={handleLogout} />
                   </Suspense>
                 </ApiErrorBoundary>
@@ -66,9 +79,13 @@ export const Navbar = () => {
       <ConfirmModal
         title="로그아웃 확인"
         description="로그아웃 하시겠습니까?"
-        handleClickDisagree={closeModal}
+        handleClickDisagree={closeConfirmModal}
         handleClickAgree={handleConfirmLogout}
-        isModalOpened={isOpen}
+        isModalOpened={isConfirmModalOpen}
+      />
+      <CartModal
+        isModalOpened={isCartModalOpen}
+        handleClickDisagree={closeCartModal}
       />
     </>
   );

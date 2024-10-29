@@ -27,7 +27,40 @@ import { ProductFilter } from "@/store/product/types";
 
 let lastVisibleDocument: QueryDocumentSnapshot<DocumentData> | null = null; // 페이지네이션 상태 관리
 
-// 상품 조회
+// 전체 상품 조회
+export const fetchAllProductsAPI = async (): Promise<IProduct[]> => {
+  try {
+    const productDocRef = collection(db, PRODUCT_KEY);
+    const q = query(productDocRef, orderBy("id", "desc"));
+
+    const querySnapshot = await getDocs(q);
+
+    const products = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: String(data.id),
+        sellerId: data.sellerId,
+        title: data.title,
+        price: Number(data.price),
+        stock: data.stock,
+        description: data.description,
+        category: data.category,
+        author: data.author,
+        publishedDate: data.publishedDate,
+        image: data.image || "",
+        createdAt: data.createdAt?.toDate().toISOString(),
+        updatedAt: data.updatedAt?.toDate().toISOString(),
+      } as IProduct;
+    });
+
+    return products;
+  } catch (error) {
+    console.error("Error fetching all products: ", error);
+    throw error;
+  }
+};
+
+// 상품 조회(무한 스크롤)
 export const fetchProductsAPI = async (
   filter: ProductFilter,
   pageSize: number,
@@ -84,6 +117,35 @@ export const fetchProductsAPI = async (
     console.log(hasNextPage, nextPage);
 
     return { products, hasNextPage, nextPage };
+  } catch (error) {
+    console.error("Error fetching products: ", error);
+    throw error;
+  }
+};
+
+// 상품 조회(동일한 아이디 값)
+export const fetchProductByIdAPI = async (
+  productId: string
+): Promise<DetailProduct> => {
+  try {
+    const productDocRef = collection(db, PRODUCT_KEY);
+    const q = query(productDocRef, where("id", "==", productId));
+    const querySnapshot = await getDocs(q);
+
+    const products = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: String(data.id),
+        title: data.title,
+        price: Number(data.price),
+        description: data.description,
+        category: data.category,
+        author: data.author,
+        publishedDate: data.publishedDate,
+        image: data.image,
+      } as DetailProduct;
+    });
+    return products[0];
   } catch (error) {
     console.error("Error fetching products: ", error);
     throw error;
@@ -181,33 +243,6 @@ export const updateProductAPI = async (
     console.log("product updated successfully");
   } catch (error) {
     console.error("Error updating product", error);
-    throw error;
-  }
-};
-
-export const fetchProductByIdAPI = async (
-  productId: string
-): Promise<DetailProduct> => {
-  try {
-    const productDocRef = collection(db, PRODUCT_KEY);
-    const q = query(productDocRef, where("id", "==", productId));
-    const querySnapshot = await getDocs(q);
-
-    const products = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        title: data.title,
-        price: Number(data.price),
-        description: data.description,
-        category: data.category,
-        author: data.author,
-        publishedDate: data.publishedDate,
-        image: data.image,
-      } as DetailProduct;
-    });
-    return products[0];
-  } catch (error) {
-    console.error("Error fetching products: ", error);
     throw error;
   }
 };

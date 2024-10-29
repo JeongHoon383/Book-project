@@ -55,8 +55,12 @@ export const HomeProductItem = React.forwardRef<
         </div>
       </div>
       <div className="basis-1/5 flex flex-col gap-5">
-        <button>장바구니</button>
-        <button>바로구매</button>
+        <button className="px-4 py-2 bg-blue-500 text-white rounded">
+          장바구니
+        </button>
+        <button className="px-4 py-2 bg-green-500 text-white rounded">
+          바로구매
+        </button>
       </div>
     </div>
   );
