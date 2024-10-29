@@ -40,7 +40,9 @@ export const Carousel: React.FC<CarouselProps> = ({
       <div className="flex justify-end pr-4 mb-5">
         {currentPage} / {totalPages}
       </div>
-      <div className="grid grid-cols-5 gap-4 overflow-hidden">
+      <div
+        className={`grid grid-cols-${itemsPerPage} gap-4 w-full h-full overflow-hidden`}
+      >
         {items
           .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
           .map((item, index) => (

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { PRODUCT_PAGE_SIZE } from "@/constants";
 import { useInfiniteScroll } from "@/lib/product/hooks/useInfiniteScroll";
+import { LoadingSpinner } from "@/pages/common/components/LoadingSpinner";
 
 interface HomeProductListProps {
   pageSize?: number;
@@ -25,6 +26,7 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
   const [sortOption, setSortOption] = useState<string>("latest");
 
   const products = data ? data.pages.flatMap((page) => page.products) : [];
+
   const { ref } = useInfiniteScroll({
     fetchNextPage,
     hasNextPage,
@@ -32,7 +34,7 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
   });
 
   if (isLoading) {
-    <div>로딩중...</div>;
+    return <LoadingSpinner size={50} color="#007aff" />; // 초기 로딩 시 스피너 표시
   }
 
   // 전체 선택 체크박스 클릭 시 호출
@@ -116,8 +118,14 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
           />
         ))}
       </div>
-      {isFetchingNextPage && <div>Loading more...</div>}{" "}
-      {/* 무한 스크롤 로딩 상태 */}
+      {isFetchingNextPage && (
+        <div
+          style={{ display: "flex", justifyContent: "center", padding: "20px" }}
+        >
+          <LoadingSpinner size={30} color="#36d7b7" />{" "}
+          {/* 무한 스크롤 로딩 스피너 */}
+        </div>
+      )}
     </div>
   );
 };

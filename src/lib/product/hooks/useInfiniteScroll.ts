@@ -14,7 +14,7 @@ export const useInfiniteScroll = ({
   isFetchingNextPage,
 }: InfiniteScrollOptions) => {
   const { ref, inView } = useInView({
-    threshold: 0.1, // 요소가 10% 보일 때 콜백 실행
+    threshold: 0.9,
   });
 
   useEffect(() => {

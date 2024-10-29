@@ -114,8 +114,6 @@ export const fetchProductsAPI = async (
     const hasNextPage = querySnapshot.size === pageSize;
     const nextPage = hasNextPage ? page + 1 : undefined;
 
-    console.log(hasNextPage, nextPage);
-
     return { products, hasNextPage, nextPage };
   } catch (error) {
     console.error("Error fetching products: ", error);

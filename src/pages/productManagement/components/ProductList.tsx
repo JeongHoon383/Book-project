@@ -16,6 +16,7 @@ import { useDeleteProduct } from "@/lib/product/hooks/useDeleteProduct";
 import { useProductStore } from "@/store/product/useProductStore";
 import { PRODUCT_PAGE_SIZE } from "@/constants";
 import { useInfiniteScroll } from "@/lib/product/hooks/useInfiniteScroll";
+import { LoadingSpinner } from "@/pages/common/components/LoadingSpinner";
 
 const ProductRegistrationModal = lazy(() =>
   import("./ProductRegistrationModal").then((module) => ({
@@ -48,7 +49,7 @@ export const ProductList: React.FC<HomeProductListProps> = ({
   }); //
 
   if (isLoading) {
-    <div>로딩중...</div>;
+    return <LoadingSpinner size={50} color="#007aff" />; // 초기 로딩 시 스피너 표시
   }
 
   // 상품 목록 정렬 함수
@@ -202,6 +203,14 @@ export const ProductList: React.FC<HomeProductListProps> = ({
           />
         )}
       </Suspense>
+      {isFetchingNextPage && (
+        <div
+          style={{ display: "flex", justifyContent: "center", padding: "20px" }}
+        >
+          <LoadingSpinner size={30} color="#36d7b7" />{" "}
+          {/* 무한 스크롤 로딩 스피너 */}
+        </div>
+      )}
     </div>
   );
 };
