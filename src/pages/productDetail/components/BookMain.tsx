@@ -1,8 +1,8 @@
-import { DetailProduct } from "@/lib/product/types";
+import { IProduct } from "@/lib/product/types";
 import React from "react";
 
 interface BookMainProps {
-  product: DetailProduct;
+  product: IProduct;
 }
 
 export const BookMain: React.FC<BookMainProps> = ({ product }) => {

@@ -7,19 +7,30 @@ interface ProductManageListProps {
   product: IProduct;
   onToggleSelect: () => void; // 체크박스 선택/해제 핸들러
   isSelected: boolean;
+  onClickAddCartButton: (
+    e: React.MouseEvent<HTMLButtonElement>,
+    product: IProduct
+  ) => void;
 }
 
 // forwardRef를 사용하여 ref를 전달받음
 export const HomeProductItem = React.forwardRef<
   HTMLDivElement,
   ProductManageListProps
->(({ product, onToggleSelect, isSelected }, ref) => {
+>(({ product, onToggleSelect, isSelected, onClickAddCartButton }, ref) => {
   const navigate = useNavigate();
   const { id, title, author, publishedDate, price, image, description } =
     product;
 
   const handleNavigate = () => {
     navigate(`${pageRoutes.productDetail}/${id}`);
+  };
+
+  const handleClickAddCartButton = (
+    e: React.MouseEvent<HTMLButtonElement>
+  ): void => {
+    e.stopPropagation();
+    onClickAddCartButton(e, product);
   };
 
   return (
@@ -55,7 +66,10 @@ export const HomeProductItem = React.forwardRef<
         </div>
       </div>
       <div className="basis-1/5 flex flex-col gap-5">
-        <button className="px-4 py-2 bg-blue-500 text-white rounded">
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded"
+          onClick={handleClickAddCartButton}
+        >
           장바구니
         </button>
         <button className="px-4 py-2 bg-green-500 text-white rounded">

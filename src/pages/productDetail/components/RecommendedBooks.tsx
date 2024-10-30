@@ -19,7 +19,10 @@ export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
         itemsPerPage={5}
         renderItem={(item) => (
           <div className="grid grid-rows-[8fr_2fr] items-center">
-            <img src={item.image} className="w-full h-full object-cover" />
+            <img
+              src={item.image}
+              className="w-full h-full max-h-[320px] object-contain"
+            />
             <div className="flex flex-col items-center gap-1">
               <div className="text-center mt-2">{item.title}</div>
               <div className="text-sm text-gray-500">{item.author}</div>

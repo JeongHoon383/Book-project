@@ -1,6 +1,6 @@
 import { useFetchProducts } from "@/lib/product/hooks/useFetchProduct";
 import { HomeProductItem } from "./HomeProductItem";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -11,6 +11,13 @@ import {
 import { PRODUCT_PAGE_SIZE } from "@/constants";
 import { useInfiniteScroll } from "@/lib/product/hooks/useInfiniteScroll";
 import { LoadingSpinner } from "@/pages/common/components/LoadingSpinner";
+import { IProduct } from "@/lib/product/types";
+import { useAuthStore } from "@/store/auth/useAuthStore";
+import { useToastStore } from "@/store/toast/useToastStore";
+import { useCartStore } from "@/store/cart/useCartStore";
+import { CartItem } from "@/store/cart/types";
+import { useNavigate } from "react-router-dom";
+import { pageRoutes } from "@/apiRoutes";
 
 interface HomeProductListProps {
   pageSize?: number;
@@ -19,8 +26,14 @@ interface HomeProductListProps {
 export const HomeProductList: React.FC<HomeProductListProps> = ({
   pageSize = PRODUCT_PAGE_SIZE,
 }) => {
+  const navigate = useNavigate();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useFetchProducts({ pageSize });
+  const user = useAuthStore((state) => state.user);
+  const isLogin = useAuthStore((state) => state.isLogin);
+  const addToast = useToastStore((state) => state.addToast);
+  const addCartItem = useCartStore((state) => state.addCartItem);
+
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
   const [sortOption, setSortOption] = useState<string>("latest");
@@ -32,10 +45,6 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
     hasNextPage,
     isFetchingNextPage,
   });
-
-  if (isLoading) {
-    return <LoadingSpinner size={50} color="#007aff" />; // 초기 로딩 시 스피너 표시
-  }
 
   // 전체 선택 체크박스 클릭 시 호출
   const handleSelectAll = () => {
@@ -76,7 +85,24 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
     }
   };
 
+  const handleCartAction = useCallback(
+    (product: IProduct): void => {
+      if (isLogin && user) {
+        const cartItem: CartItem = { ...product, count: 1 };
+        addCartItem(cartItem, user.id, 1);
+        addToast("상품이 장바구니에 담겼습니다.", "success");
+      } else {
+        navigate(pageRoutes.login);
+      }
+    },
+    [isLogin, user, addCartItem, addToast, navigate]
+  );
+
   const sortedProductList = sortedProducts();
+
+  if (isLoading) {
+    return <LoadingSpinner size={50} color="#007aff" />; // 초기 로딩 시 스피너 표시
+  }
 
   return (
     <div>
@@ -115,6 +141,10 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
             onToggleSelect={() => toggleSelectProduct(product.id)}
             isSelected={selectedProductIds.includes(product.id)}
             ref={index === sortedProductList.length - 1 ? ref : undefined} // 마지막 요소에 ref 할당
+            onClickAddCartButton={(e: React.MouseEvent) => {
+              e.stopPropagation();
+              handleCartAction(product);
+            }}
           />
         ))}
       </div>

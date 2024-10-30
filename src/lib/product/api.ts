@@ -14,12 +14,7 @@ import {
   startAfter,
   where,
 } from "firebase/firestore";
-import {
-  DetailProduct,
-  IProduct,
-  NewProductDTO,
-  PaginatedProductsDTO,
-} from "./types";
+import { IProduct, NewProductDTO, PaginatedProductsDTO } from "./types";
 import { db } from "@/firebase";
 import { PRODUCT_KEY } from "./key";
 import { ALL_CATEGORY_ID } from "@/constants";
@@ -124,7 +119,7 @@ export const fetchProductsAPI = async (
 // 상품 조회(동일한 아이디 값)
 export const fetchProductByIdAPI = async (
   productId: string
-): Promise<DetailProduct> => {
+): Promise<IProduct> => {
   try {
     const productDocRef = collection(db, PRODUCT_KEY);
     const q = query(productDocRef, where("id", "==", productId));
@@ -134,14 +129,18 @@ export const fetchProductByIdAPI = async (
       const data = doc.data();
       return {
         id: String(data.id),
+        sellerId: data.sellerId,
         title: data.title,
         price: Number(data.price),
+        stock: data.stock,
         description: data.description,
         category: data.category,
         author: data.author,
         publishedDate: data.publishedDate,
-        image: data.image,
-      } as DetailProduct;
+        image: data.image || "",
+        createdAt: data.createdAt?.toDate().toISOString(),
+        updatedAt: data.updatedAt?.toDate().toISOString(),
+      } as IProduct;
     });
     return products[0];
   } catch (error) {
@@ -173,7 +172,7 @@ export const addProductAPI = async (
 
       const newProductData = {
         ...productData,
-        id: String(newId),
+        id: newId,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       }; // 데이터를 어떻게 추가할건지 세팅

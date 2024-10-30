@@ -1,8 +1,15 @@
 import { Button } from "@/components/ui/button";
+import { CartItem } from "@/store/cart/types";
 import { ShoppingCart } from "lucide-react";
 
-export const CartButton = ({ onClick }: { onClick: () => void }) => {
-  const cartItemCount = 1;
+export const CartButton = ({
+  onClick,
+  cart,
+}: {
+  onClick: () => void;
+  cart: CartItem[];
+}) => {
+  const cartItemCount = cart.length;
 
   // cart hover시 장바구니 컴포넌트 나오게
 

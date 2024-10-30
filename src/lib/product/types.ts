@@ -30,14 +30,3 @@ export interface NewProductDTO {
   publishedDate: string;
   image: File | string | null;
 }
-
-export interface DetailProduct {
-  id: string;
-  title: string;
-  price: number;
-  description?: string;
-  category: { id: string; name: string };
-  author: string;
-  publishedDate: string;
-  image: string;
-}

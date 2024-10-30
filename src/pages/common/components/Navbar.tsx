@@ -11,6 +11,7 @@ import { LogoutButton } from "./LogoutButton.";
 import { LoginButton } from "./LoginButton";
 import { ConfirmModal } from "./ConfirmModal";
 import { CartModal } from "./CartModal";
+import { useCartStore } from "@/store/cart/useCartStore";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -25,12 +26,22 @@ export const Navbar = () => {
     closeModal: closeCartModal,
   } = useModal(); // CartModal 상태
   const isLogin = useAuthStore((state) => state.isLogin);
+  const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const checkLoginStatus = useAuthStore((state) => state.checkLoginStatus);
+
+  const cart = useCartStore((state) => state.cart);
+  const initCart = useCartStore((state) => state.initCart);
 
   useEffect(() => {
     checkLoginStatus();
   }, [checkLoginStatus]);
+
+  useEffect(() => {
+    if (isLogin && user?.id) {
+      initCart(user.id);
+    }
+  }, [isLogin, user, initCart]);
 
   const handleLogout = () => {
     openConfirmModal();
@@ -65,7 +76,7 @@ export const Navbar = () => {
               {isLogin ? (
                 <ApiErrorBoundary>
                   <Suspense fallback={<Skeleton className="w-24 h-8" />}>
-                    <CartButton onClick={handleClickCart} />
+                    <CartButton onClick={handleClickCart} cart={cart} />
                     <LogoutButton onClick={handleLogout} />
                   </Suspense>
                 </ApiErrorBoundary>

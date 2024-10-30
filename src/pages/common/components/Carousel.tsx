@@ -1,6 +1,5 @@
 import { IProduct } from "@/lib/product/types";
 import React, { useState } from "react";
-
 interface CarouselProps {
   items: IProduct[];
   itemsPerPage: number;
@@ -8,6 +7,7 @@ interface CarouselProps {
   renderPrevArrow?: () => React.ReactNode; // 커스텀 이전 화살표 렌더링 함수
   renderNextArrow?: () => React.ReactNode; // 커스텀 다음 화살표 렌더링 함수
   showArrowsOnHover?: boolean; // hover 상태에서 화살표 표시 여부
+  direction?: "row" | "column"; // 가로 또는 세로 방향 설정 추가
 }
 
 export const Carousel: React.FC<CarouselProps> = ({
@@ -17,6 +17,7 @@ export const Carousel: React.FC<CarouselProps> = ({
   renderPrevArrow,
   renderNextArrow,
   showArrowsOnHover = true, // 기본값을 hover 상태에서 표시로 설정
+  direction = "row", // 기본 방향을 "row"로 설정
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(items.length / itemsPerPage);
@@ -37,17 +38,31 @@ export const Carousel: React.FC<CarouselProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="flex justify-end pr-4 mb-5">
-        {currentPage} / {totalPages}
-      </div>
-      <div
-        className={`grid grid-cols-${itemsPerPage} gap-4 w-full h-full overflow-hidden`}
-      >
-        {items
-          .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-          .map((item, index) => (
-            <div key={index}>{renderItem(item)}</div>
-          ))}
+      <div className="w-full h-full flex flex-col justify-between">
+        <div className="flex justify-end mb-5">
+          {currentPage} / {totalPages}
+        </div>
+        <div
+          className={`grid gap-4 w-full h-full overflow-hidden ${
+            direction === "row" ? `grid-cols-${itemsPerPage}` : "grid-rows-1"
+          }`} // direction에 따라 가로 또는 세로 grid 설정
+          style={{
+            gridTemplateColumns:
+              direction === "row"
+                ? `repeat(${itemsPerPage}, minmax(0, 1fr))`
+                : undefined, // direction이 "row"일 때만 gridTemplateColumns 설정
+            gridTemplateRows:
+              direction === "column"
+                ? `repeat(${itemsPerPage}, minmax(0, 1fr))`
+                : undefined, // direction이 "column"일 때만 gridTemplateRows 설정
+          }}
+        >
+          {items
+            .slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+            .map((item, index) => (
+              <div key={index}>{renderItem(item)}</div>
+            ))}
+        </div>
       </div>
       {/* 화살표 렌더링 */}
       {(showArrowsOnHover ? isHovered : true) && (

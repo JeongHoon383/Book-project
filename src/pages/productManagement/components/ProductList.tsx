@@ -97,7 +97,7 @@ export const ProductList: React.FC<HomeProductListProps> = ({
   // 개별 상품 선택, 삭제 기능
   const handleDelete = () => {
     if (selectedProductIds.length === 0) {
-      alert("삭제할 항목을 선택해주세요."); // 삭제 알림창 수정 필요
+      alert(); // 삭제 알림창 수정 필요
       return;
     }
     if (window.confirm("선택한 항목을 삭제하시겠습니까?")) {
