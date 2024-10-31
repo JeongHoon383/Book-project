@@ -1,5 +1,6 @@
 import { IProduct } from "@/lib/product/types";
 import { Carousel } from "@/pages/common/components/Carousel";
+import { useEffect, useState } from "react";
 
 interface RecommendedBooksProps {
   books: IProduct[];
@@ -8,22 +9,44 @@ interface RecommendedBooksProps {
 export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
   books,
 }) => {
+  const [itemsPerPage, setItemsPerPage] = useState(5); // itemsPerPage 상태 추가
+
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth < 640) {
+        setItemsPerPage(1);
+      } else if (window.innerWidth < 1024) {
+        setItemsPerPage(3);
+      } else {
+        setItemsPerPage(5);
+      }
+    };
+
+    updateItemsPerPage();
+    window.addEventListener("resize", updateItemsPerPage);
+
+    return () => {
+      window.removeEventListener("resize", updateItemsPerPage);
+    };
+  }, []);
+
   return (
-    <div className="p-2.5 grid grid-rows-[1fr_9fr]">
+    <div className="p-2.5 h-full grid grid-rows-[1fr_9fr]">
       <div className="flex justify-between items-center mb-2.5">
         <div>추천 도서</div>
         <div>추천 상품 더보기</div>
       </div>
       <Carousel
+        key={itemsPerPage}
         items={books}
-        itemsPerPage={5}
+        itemsPerPage={itemsPerPage}
         renderItem={(item) => (
-          <div className="grid grid-rows-[8fr_2fr] items-center">
+          <div className="flex flex-col">
             <img
               src={item.image}
-              className="w-full h-full max-h-[320px] object-contain"
+              className="w-full h-full max-h-[320px] justify-center object-contain"
             />
-            <div className="flex flex-col items-center gap-1">
+            <div className="flex flex-col items-center h-full justify-center gap-1">
               <div className="text-center mt-2">{item.title}</div>
               <div className="text-sm text-gray-500">{item.author}</div>
               <div className="text-sm">{item.price.toLocaleString()}원</div>

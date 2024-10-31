@@ -1,8 +1,11 @@
-import { useFetchAllProducts } from "@/lib/product/hooks/useFetchAllProducts";
 import { useEffect, useState } from "react";
 import { Carousel } from "./Carousel";
 import { LoadingSpinner } from "./LoadingSpinner";
-import { Trash } from "lucide-react"; // Trash 아이콘 추가
+import { Trash2 } from "lucide-react"; // Trash 아이콘 추가
+import { useCartStore } from "@/store/cart/useCartStore";
+import { convertCartItemToIProduct } from "@/utils/convertToCarouselType";
+import { useFetchAllProducts } from "@/lib/product/hooks/useFetchAllProducts";
+import { useAuthStore } from "@/store/auth/useAuthStore";
 
 interface CartModalProps {
   isModalOpened: boolean;
@@ -13,61 +16,45 @@ export const CartModal: React.FC<CartModalProps> = ({
   isModalOpened,
   handleClickDisagree,
 }) => {
-  const { data, isLoading } = useFetchAllProducts(); // 전체 도서 목록 가져오기
-  const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
-  const [orderPrice, setOrderPrice] = useState(0); // 주문 가격 상태 추가
-  const [shippingFee, setShippingFee] = useState(3000); // 기본 배송비 설정
-  const [totalPrice, setTotalPrice] = useState(0); // 총 가격 상태 추가
+  const { data, isLoading } = useFetchAllProducts();
+  const user = useAuthStore((state) => state.user);
+  const cartProduct = useCartStore((state) => state.cart);
+  const totalPrice = useCartStore((state) => state.totalPrice);
+  const totalCount = useCartStore((state) => state.totalCount);
+  const increaseItemCount = useCartStore((state) => state.increaseItemCount);
+  const decreaseItemCount = useCartStore((state) => state.decreaseItemCount);
+  const removeCartItem = useCartStore((state) => state.removeCartItem);
 
-  useEffect(() => {
-    if (data) {
-      setQuantities(
-        data.reduce((acc, item) => {
-          acc[item.id] = 1;
-          return acc;
-        }, {} as { [key: string]: number })
-      );
-    }
-  }, [data]);
+  const [shippingFee, setShippingFee] = useState(3000); // 기본 배송비 설정
 
   const handleIncrease = (id: string) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: prev[id] + 1,
-    }));
+    increaseItemCount(id); // store의 수량 증가 함수 호출
   };
 
   const handleDecrease = (id: string) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: prev[id] > 1 ? prev[id] - 1 : 1,
-    }));
+    decreaseItemCount(id); // store의 수량 감소 함수 호출
   };
 
-  // 주문 가격 및 배송비, 합계 계산 로직 추가
+  const handleClickDeleteItem = (id: string) => {
+    removeCartItem(id, user!.id);
+  };
+
+  // 배송비 조건 적용
   useEffect(() => {
-    if (data) {
-      const newOrderPrice = data.reduce((acc, item) => {
-        const itemQuantity = quantities[item.id] || 1;
-        return acc + item.price * itemQuantity; // 각 아이템의 수량과 가격을 곱하여 총 주문 가격 계산
-      }, 0);
-
-      setOrderPrice(newOrderPrice); // 주문 가격 상태 업데이트
-
-      // 배송비 조건 적용
-      if (newOrderPrice >= 50000) {
-        setShippingFee(0); // 50,000원 이상이면 무료 배송
-      } else {
-        setShippingFee(3000); // 50,000원 미만이면 3,000원 부과
-      }
-
-      setTotalPrice(newOrderPrice + (newOrderPrice >= 50000 ? 0 : 3000)); // 총 합계 계산
+    if (totalPrice >= 50000) {
+      setShippingFee(0); // 50,000원 이상이면 무료 배송
+    } else {
+      setShippingFee(3000); // 50,000원 미만이면 3,000원 부과
     }
-  }, [data, quantities]); // data와 quantities가 변경될 때마다 재계산
+  }, [totalPrice]);
 
-  if (isLoading) {
-    return <LoadingSpinner size={50} color="#007aff" />; // 초기 로딩 시 스피너 표시
+  if (isLoading || !data) {
+    return <LoadingSpinner size={50} color="#007aff" />;
   }
+
+  const carouselItems = data
+    ? convertCartItemToIProduct(cartProduct, data)
+    : [];
 
   return (
     <>
@@ -89,11 +76,11 @@ export const CartModal: React.FC<CartModalProps> = ({
           <h2 className="text-xl font-bold mb-4">장바구니</h2>
           <div className="flex-1 overflow-y-auto">
             <Carousel
-              items={data || []}
+              items={carouselItems}
               itemsPerPage={2}
               direction="column" // 세로 배치 설정
               renderItem={(item) => (
-                <div className="w-full h-full grid grid-cols-[1fr_1fr] justify-center gap-5">
+                <div className="w-full h-full grid grid-cols-[1fr_1fr] justify-center">
                   <img
                     className="w-[200px] h-[200px] object-contain"
                     src={item.image}
@@ -110,7 +97,13 @@ export const CartModal: React.FC<CartModalProps> = ({
                         >
                           -
                         </button>
-                        <span>{quantities[item.id]}</span>
+                        <span>
+                          {
+                            cartProduct.find(
+                              (cartItem) => cartItem.id === item.id
+                            )?.count
+                          }
+                        </span>
                         <button
                           onClick={() => handleIncrease(item.id)}
                           className="px-2 py-1 bg-gray-200 rounded"
@@ -121,8 +114,8 @@ export const CartModal: React.FC<CartModalProps> = ({
                     </div>
                     <div>
                       {/* 삭제 버튼 추가 */}
-                      <button className="">
-                        <Trash size={16} /> {/* Trash 아이콘 표시 */}
+                      <button onClick={() => handleClickDeleteItem(item.id)}>
+                        <Trash2 size={16} /> {/* Trash 아이콘 표시 */}
                       </button>
                     </div>
                   </div>
@@ -133,7 +126,7 @@ export const CartModal: React.FC<CartModalProps> = ({
               <div className="border-b border-borderGray py-5 flex flex-col gap-5">
                 <div className="flex justify-between">
                   <div>주문 가격</div>
-                  <div>{orderPrice.toLocaleString()}원</div>
+                  <div>{totalPrice.toLocaleString()}원</div>
                 </div>
                 <div className="flex justify-between">
                   <div>배송비</div>
@@ -143,10 +136,10 @@ export const CartModal: React.FC<CartModalProps> = ({
               <div className="py-5 flex flex-col gap-10">
                 <div className="flex justify-between">
                   <div>합계</div>
-                  <div>{totalPrice.toLocaleString()}원</div>
+                  <div>{(totalPrice + shippingFee).toLocaleString()}원</div>
                 </div>
                 <button className="px-4 py-2 bg-black text-white rounded">
-                  결제
+                  주문하기 ({totalCount})
                 </button>
               </div>
             </div>

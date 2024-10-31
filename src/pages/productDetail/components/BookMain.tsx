@@ -1,14 +1,31 @@
 import { IProduct } from "@/lib/product/types";
+import { CartTextButton } from "@/pages/common/components/CartTextButton";
 import React from "react";
 
 interface BookMainProps {
   product: IProduct;
+  onClickAddCartButton: (
+    e: React.MouseEvent<HTMLButtonElement>,
+    product: IProduct
+  ) => void;
+  onClickViewCart: () => void;
 }
 
-export const BookMain: React.FC<BookMainProps> = ({ product }) => {
+export const BookMain: React.FC<BookMainProps> = ({
+  product,
+  onClickAddCartButton,
+  onClickViewCart,
+}) => {
+  const handleClickAddCartButton = (
+    e: React.MouseEvent<HTMLButtonElement>
+  ): void => {
+    e.stopPropagation();
+    onClickAddCartButton(e, product);
+  };
+
   return (
     <div className="flex flex-col md:flex-row h-full gap-10 pb-10 border-b border-borderGray">
-      <div className="w-full h-full md:w-2/5">
+      <div className="w-full max-h-[600px] md:w-2/5">
         <img
           src={product.image}
           className="w-full h-full object-contain"
@@ -27,9 +44,11 @@ export const BookMain: React.FC<BookMainProps> = ({ product }) => {
           <div className="text-gray-600">{product.description}</div>
         </div>
         <div className="flex justify-end gap-4">
-          <button className="px-4 py-2 bg-blue-500 text-white rounded">
-            장바구니
-          </button>
+          <CartTextButton
+            onClickAdd={handleClickAddCartButton} // 장바구니에 추가
+            onClickView={onClickViewCart}
+            id={product.id}
+          />
           <button className="px-4 py-2 bg-green-500 text-white rounded">
             바로구매
           </button>

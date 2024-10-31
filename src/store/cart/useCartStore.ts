@@ -64,4 +64,54 @@ export const useCartStore = create<CartStore>((set) => ({
       };
     });
   },
+
+  increaseItemCount: (itemId: string) => {
+    set((state) => {
+      const updatedCart = state.cart.map((item) =>
+        item.id === itemId ? { ...item, count: item.count + 1 } : item
+      );
+      const total = calculateTotal(updatedCart);
+
+      return {
+        cart: updatedCart,
+        totalCount: total.totalCount,
+        totalPrice: total.totalPrice,
+      };
+    });
+  },
+
+  decreaseItemCount: (itemId: string) => {
+    set((state) => {
+      const updatedCart = state.cart.map((item) =>
+        item.id === itemId && item.count > 1
+          ? { ...item, count: item.count - 1 }
+          : item
+      );
+      const total = calculateTotal(updatedCart);
+
+      return {
+        cart: updatedCart,
+        totalCount: total.totalCount,
+        totalPrice: total.totalPrice,
+      };
+    });
+  },
+
+  removeCartItem: (itemId: string, userId: string) => {
+    set((state) => {
+      const updatedCart = state.cart.filter(
+        (cartItem) => cartItem.id !== itemId
+      );
+
+      const total = calculateTotal(updatedCart);
+
+      setCartToLocalStorage(updatedCart, userId);
+
+      return {
+        cart: updatedCart,
+        totalCount: total.totalCount,
+        totalPrice: total.totalPrice,
+      };
+    });
+  },
 }));

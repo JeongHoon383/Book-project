@@ -1,6 +1,6 @@
 import { useFetchProducts } from "@/lib/product/hooks/useFetchProduct";
 import { HomeProductItem } from "./HomeProductItem";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -11,13 +11,9 @@ import {
 import { PRODUCT_PAGE_SIZE } from "@/constants";
 import { useInfiniteScroll } from "@/lib/product/hooks/useInfiniteScroll";
 import { LoadingSpinner } from "@/pages/common/components/LoadingSpinner";
-import { IProduct } from "@/lib/product/types";
-import { useAuthStore } from "@/store/auth/useAuthStore";
-import { useToastStore } from "@/store/toast/useToastStore";
-import { useCartStore } from "@/store/cart/useCartStore";
-import { CartItem } from "@/store/cart/types";
-import { useNavigate } from "react-router-dom";
-import { pageRoutes } from "@/apiRoutes";
+import { useModal } from "@/hooks/useModal";
+import { CartModal } from "@/pages/common/components/CartModal";
+import { useAddToCart } from "@/hooks/useAddToCart";
 
 interface HomeProductListProps {
   pageSize?: number;
@@ -26,13 +22,13 @@ interface HomeProductListProps {
 export const HomeProductList: React.FC<HomeProductListProps> = ({
   pageSize = PRODUCT_PAGE_SIZE,
 }) => {
-  const navigate = useNavigate();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useFetchProducts({ pageSize });
-  const user = useAuthStore((state) => state.user);
-  const isLogin = useAuthStore((state) => state.isLogin);
-  const addToast = useToastStore((state) => state.addToast);
-  const addCartItem = useCartStore((state) => state.addCartItem);
+  const {
+    isOpen: isCartModalOpen,
+    openModal: openCartModal,
+    closeModal: closeCartModal,
+  } = useModal();
 
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
@@ -85,18 +81,7 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
     }
   };
 
-  const handleCartAction = useCallback(
-    (product: IProduct): void => {
-      if (isLogin && user) {
-        const cartItem: CartItem = { ...product, count: 1 };
-        addCartItem(cartItem, user.id, 1);
-        addToast("상품이 장바구니에 담겼습니다.", "success");
-      } else {
-        navigate(pageRoutes.login);
-      }
-    },
-    [isLogin, user, addCartItem, addToast, navigate]
-  );
+  const handleCartAction = useAddToCart();
 
   const sortedProductList = sortedProducts();
 
@@ -145,8 +130,13 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
               e.stopPropagation();
               handleCartAction(product);
             }}
+            onClickViewCart={openCartModal} // 장바구니 보기 클릭 시 모달 열기
           />
         ))}
+        <CartModal
+          isModalOpened={isCartModalOpen}
+          handleClickDisagree={closeCartModal}
+        />
       </div>
       {isFetchingNextPage && (
         <div
