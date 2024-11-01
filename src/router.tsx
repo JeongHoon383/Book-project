@@ -15,11 +15,6 @@ import { RootErrorBoundary } from "@/pages/common/components/RootErrorHandler";
 import { RootSuspense } from "@/pages/common/components/RootSuspense";
 import { authStatusType } from "./pages/common/components/Layout";
 
-// 현재 상태
-// 구매자 : 정상적으로 작동, 판매 관리 페이지 접근 불가, 구매 관리 페이지 접근 가능
-// 판매자 : 에러, 판매관리 페이지 못감, 구매페이지 접근하면 구매 관리 페이지 잠깐 보이고 판매자 페이지로 이동
-// useAuthStore에서 판매자, 구매자 로그인시 isSeller 값 ture, false로 잘 출력됨
-
 // 로그인한 사용자에게 공통적으로 적용되는 레이아웃
 const ProtectedLayout = () => (
   <RootErrorBoundary>

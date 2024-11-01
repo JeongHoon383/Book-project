@@ -49,7 +49,7 @@ export const ProductList: React.FC<HomeProductListProps> = ({
   }); //
 
   if (isLoading) {
-    return <LoadingSpinner size={50} color="#007aff" />; // 초기 로딩 시 스피너 표시
+    return <LoadingSpinner size={50} color="#007aff" centered={true} />; // 초기 로딩 시 스피너 표시
   }
 
   // 상품 목록 정렬 함수
