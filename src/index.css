@@ -7,6 +7,8 @@ body {
   margin: 0px;
   width: 100%;
   background-color: #f0f3f4;
+  font-family: "Roboto", "Noto Sans KR", "PingFang SC", "Apple SD Gothic Neo",
+    "Microsoft YaHei UI", "Malgun Gothic", sans-serif;
 }
 /* 최상단  */
 
@@ -22,11 +24,6 @@ body {
   overflow: scroll;
 }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+.input-style {
+  @apply w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-black transition-all duration-200;
 }

@@ -86,7 +86,7 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
   const sortedProductList = sortedProducts();
 
   if (isLoading) {
-    return <LoadingSpinner size={50} color="#007aff" />; // 초기 로딩 시 스피너 표시
+    return <LoadingSpinner size={50} color="#007aff" centered={true} />; // 초기 로딩 시 스피너 표시
   }
 
   return (

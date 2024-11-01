@@ -46,11 +46,18 @@ export const useCartStore = create<CartStore>((set) => ({
       if (existingItemIndex !== -1) {
         updatedCart = state.cart.map((cartItem, index) =>
           index === existingItemIndex
-            ? { ...cartItem, count: cartItem.count + count }
+            ? {
+                ...cartItem,
+                count: cartItem.count + count,
+                stock: cartItem.stock - 1,
+              }
             : cartItem
         ); // 중복이 된다면
       } else {
-        updatedCart = [...state.cart, { ...item, count }];
+        updatedCart = [
+          ...state.cart,
+          { ...item, count, stock: item.stock - 1 },
+        ];
       }
 
       const total = calculateTotal(updatedCart);
@@ -68,7 +75,9 @@ export const useCartStore = create<CartStore>((set) => ({
   increaseItemCount: (itemId: string) => {
     set((state) => {
       const updatedCart = state.cart.map((item) =>
-        item.id === itemId ? { ...item, count: item.count + 1 } : item
+        item.id === itemId
+          ? { ...item, count: item.count + 1, stock: item.stock - 1 }
+          : item
       );
       const total = calculateTotal(updatedCart);
 
@@ -84,7 +93,7 @@ export const useCartStore = create<CartStore>((set) => ({
     set((state) => {
       const updatedCart = state.cart.map((item) =>
         item.id === itemId && item.count > 1
-          ? { ...item, count: item.count - 1 }
+          ? { ...item, count: item.count - 1, stock: item.stock + 1 }
           : item
       );
       const total = calculateTotal(updatedCart);

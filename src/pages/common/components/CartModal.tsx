@@ -6,6 +6,9 @@ import { useCartStore } from "@/store/cart/useCartStore";
 import { convertCartItemToIProduct } from "@/utils/convertToCarouselType";
 import { useFetchAllProducts } from "@/lib/product/hooks/useFetchAllProducts";
 import { useAuthStore } from "@/store/auth/useAuthStore";
+import { useNavigate } from "react-router-dom";
+import { pageRoutes } from "@/apiRoutes";
+import { useToastStore } from "@/store/toast/useToastStore";
 
 interface CartModalProps {
   isModalOpened: boolean;
@@ -16,6 +19,7 @@ export const CartModal: React.FC<CartModalProps> = ({
   isModalOpened,
   handleClickDisagree,
 }) => {
+  const navigate = useNavigate();
   const { data, isLoading } = useFetchAllProducts();
   const user = useAuthStore((state) => state.user);
   const cartProduct = useCartStore((state) => state.cart);
@@ -24,11 +28,20 @@ export const CartModal: React.FC<CartModalProps> = ({
   const increaseItemCount = useCartStore((state) => state.increaseItemCount);
   const decreaseItemCount = useCartStore((state) => state.decreaseItemCount);
   const removeCartItem = useCartStore((state) => state.removeCartItem);
+  const { addToast } = useToastStore();
 
   const [shippingFee, setShippingFee] = useState(3000); // 기본 배송비 설정
 
   const handleIncrease = (id: string) => {
-    increaseItemCount(id); // store의 수량 증가 함수 호출
+    const productInCart = cartProduct.find((item) => item.id === id);
+
+    if (productInCart) {
+      if (productInCart.stock === 0) {
+        addToast("재고가 부족합니다.", "error");
+        return;
+      }
+      increaseItemCount(id);
+    }
   };
 
   const handleDecrease = (id: string) => {
@@ -37,6 +50,11 @@ export const CartModal: React.FC<CartModalProps> = ({
 
   const handleClickDeleteItem = (id: string) => {
     removeCartItem(id, user!.id);
+  };
+
+  const handleClickOrder = () => {
+    navigate(pageRoutes.purchase);
+    handleClickDisagree();
   };
 
   // 배송비 조건 적용
@@ -49,7 +67,7 @@ export const CartModal: React.FC<CartModalProps> = ({
   }, [totalPrice]);
 
   if (isLoading || !data) {
-    return <LoadingSpinner size={50} color="#007aff" />;
+    return <LoadingSpinner size={50} color="#007aff" centered={true} />;
   }
 
   const carouselItems = data
@@ -138,7 +156,10 @@ export const CartModal: React.FC<CartModalProps> = ({
                   <div>합계</div>
                   <div>{(totalPrice + shippingFee).toLocaleString()}원</div>
                 </div>
-                <button className="px-4 py-2 bg-black text-white rounded">
+                <button
+                  onClick={handleClickOrder}
+                  className="px-4 py-2 bg-black text-white rounded"
+                >
                   주문하기 ({totalCount})
                 </button>
               </div>
