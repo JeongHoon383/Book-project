@@ -12,6 +12,7 @@ import { LoginButton } from "./LoginButton";
 import { ConfirmModal } from "./ConfirmModal";
 import { CartModal } from "./CartModal";
 import { useCartStore } from "@/store/cart/useCartStore";
+import { useToastStore } from "@/store/toast/useToastStore";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -32,6 +33,8 @@ export const Navbar = () => {
 
   const cart = useCartStore((state) => state.cart);
   const initCart = useCartStore((state) => state.initCart);
+
+  const { addToast } = useToastStore();
 
   useEffect(() => {
     checkLoginStatus();
@@ -58,6 +61,13 @@ export const Navbar = () => {
   };
 
   const handleClickCart = () => {
+    if (user?.isSeller === true) {
+      addToast(
+        "구매 전용 기능입니다. 구매자 계정으로 로그인하여 이용해 주세요",
+        "error"
+      );
+      return;
+    }
     openCartModal();
   };
 

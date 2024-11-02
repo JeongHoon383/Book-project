@@ -172,7 +172,7 @@ export const addProductAPI = async (
 
       const newProductData = {
         ...productData,
-        id: newId,
+        id: Number(newId),
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       }; // 데이터를 어떻게 추가할건지 세팅

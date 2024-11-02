@@ -1,10 +1,13 @@
 import React from "react";
 import { Building, CreditCard, Smartphone, Wallet } from "lucide-react";
+import { useCartStore } from "@/store/cart/useCartStore";
+import { useFormContext } from "react-hook-form";
 
 export const PaymentInfo: React.FC = () => {
-  const totalProductPrice = 43200; // 예시로 설정한 상품 가격
-  const shippingFee = totalProductPrice >= 50000 ? 0 : 3000; // 50,000원 이상 무료 배송
-  const totalPrice = totalProductPrice + shippingFee;
+  const { register } = useFormContext();
+  const totalPrice = useCartStore((state) => state.totalPrice);
+  const shippingFee = totalPrice >= 50000 ? 0 : 3000;
+  const totalPayment = totalPrice + shippingFee;
 
   return (
     <div className="border border-borderGray rounded-xl shadow-sm">
@@ -17,7 +20,7 @@ export const PaymentInfo: React.FC = () => {
         <div className="flex text-sm md:text-lg gap-12 p-6 border-b border-borderGray">
           <div className="font-bold min-w-[70px]">총 상품 가격</div>
           <div className="min-w-[60px] font-medium">
-            {totalProductPrice.toLocaleString()}원
+            {totalPrice.toLocaleString()}원
           </div>
         </div>
 
@@ -25,7 +28,7 @@ export const PaymentInfo: React.FC = () => {
         <div className="flex text-sm md:text-lg gap-[90px] p-6 border-b border-borderGray">
           <div className="font-bold min-w-[40px]">배송비</div>
           <div className="min-w-[50px] font-medium">
-            {shippingFee === 0 ? "무료" : `${shippingFee.toLocaleString()}원`}
+            {shippingFee.toLocaleString()}원
           </div>
         </div>
 
@@ -33,7 +36,7 @@ export const PaymentInfo: React.FC = () => {
         <div className="flex text-sm md:text-lg gap-12 p-6 border-b border-borderGray">
           <div className="font-bold min-w-[70px]">총 결제 금액</div>
           <div className="min-w-[60px] font-medium">
-            {totalPrice.toLocaleString()}원
+            {totalPayment.toLocaleString()}원
           </div>
         </div>
 
@@ -44,28 +47,33 @@ export const PaymentInfo: React.FC = () => {
             결제 방법
           </div>
           <label className="flex items-center font-medium space-x-2">
-            <input type="radio" name="paymentMethod" value="계좌이체" />
+            <input
+              type="radio"
+              value="accountTransfer"
+              {...register("payment", {
+                required: "결제 방법을 선택해 주세요.",
+              })}
+            />
             <Building className="mr-2 h-4 w-4" />
             <span>계좌이체</span>
           </label>
           <label className="flex items-center font-medium space-x-2">
-            <input type="radio" name="paymentMethod" value="신용/체크카드" />
+            <input type="radio" value="creditCard" {...register("payment")} />
             <CreditCard className="mr-2 h-4 w-4" />
             <span>신용/체크카드</span>
           </label>
           <label className="flex items-center font-medium space-x-2">
-            <input type="radio" name="paymentMethod" value="휴대폰" />
+            <input type="radio" value="phone" {...register("payment")} />
             <Smartphone className="mr-2 h-4 w-4" />
             <span>휴대폰</span>
           </label>
           <label className="flex items-center font-medium space-x-2">
-            <input type="radio" name="paymentMethod" value="무통장입금" />
+            <input type="radio" value="bankDeposit" {...register("payment")} />
             <Wallet className="mr-2 h-4 w-4" />
             <span>무통장입금</span>
           </label>
         </div>
       </div>
-      {/* 주문하기 버튼 */}
     </div>
   );
 };

@@ -69,12 +69,6 @@ const router = createBrowserRouter([
         element: <ProductDetail />,
         errorElement: <ErrorPage />,
       },
-      {
-        path: pageRoutes.purchase,
-        element: <Purchase />,
-        errorElement: <ErrorPage />,
-      },
-      { path: "*", element: <NotFoundPage /> },
     ],
   },
   {
@@ -95,6 +89,12 @@ const router = createBrowserRouter([
         element: <PurchaseHistory />,
         errorElement: <ErrorPage />,
       },
+      {
+        path: pageRoutes.purchase,
+        element: <Purchase />,
+        errorElement: <ErrorPage />,
+      },
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
   {
