@@ -5,8 +5,8 @@ export interface CartStore {
   initCart: (userId: string) => void;
   resetCart: (userId: string) => void;
   addCartItem: (item: CartItem, userId: string, count: number) => void;
-  increaseItemCount: (userId: string) => void;
-  decreaseItemCount: (userId: string) => void;
+  increaseItemCount: (itemId: string, userId: string) => void;
+  decreaseItemCount: (itemId: string, userId: string) => void;
   removeCartItem: (itemId: string, userId: string) => void;
 }
 
