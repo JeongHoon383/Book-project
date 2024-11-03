@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { pageRoutes } from "@/apiRoutes";
 import { useToastStore } from "@/store/toast/useToastStore";
 
+// 수량 데이터가 다른 페이지로 이동할 때 저장되지 않음
+
 interface CartModalProps {
   isModalOpened: boolean;
   handleClickDisagree: () => void;
@@ -40,12 +42,12 @@ export const CartModal: React.FC<CartModalProps> = ({
         addToast("재고가 부족합니다.", "error");
         return;
       }
-      increaseItemCount(id);
+      increaseItemCount(id, user!.id);
     }
   };
 
   const handleDecrease = (id: string) => {
-    decreaseItemCount(id); // store의 수량 감소 함수 호출
+    decreaseItemCount(id, user!.id); // store의 수량 감소 함수 호출
   };
 
   const handleClickDeleteItem = (id: string) => {

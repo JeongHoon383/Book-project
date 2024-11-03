@@ -72,7 +72,7 @@ export const useCartStore = create<CartStore>((set) => ({
     });
   },
 
-  increaseItemCount: (itemId: string) => {
+  increaseItemCount: (itemId: string, userId: string) => {
     set((state) => {
       const updatedCart = state.cart.map((item) =>
         item.id === itemId
@@ -80,6 +80,8 @@ export const useCartStore = create<CartStore>((set) => ({
           : item
       );
       const total = calculateTotal(updatedCart);
+
+      setCartToLocalStorage(updatedCart, userId);
 
       return {
         cart: updatedCart,
@@ -89,7 +91,7 @@ export const useCartStore = create<CartStore>((set) => ({
     });
   },
 
-  decreaseItemCount: (itemId: string) => {
+  decreaseItemCount: (itemId: string, userId: string) => {
     set((state) => {
       const updatedCart = state.cart.map((item) =>
         item.id === itemId && item.count > 1
@@ -97,6 +99,8 @@ export const useCartStore = create<CartStore>((set) => ({
           : item
       );
       const total = calculateTotal(updatedCart);
+
+      setCartToLocalStorage(updatedCart, userId);
 
       return {
         cart: updatedCart,
