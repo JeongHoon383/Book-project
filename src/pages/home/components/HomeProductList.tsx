@@ -14,6 +14,11 @@ import { LoadingSpinner } from "@/pages/common/components/LoadingSpinner";
 import { useModal } from "@/hooks/useModal";
 import { CartModal } from "@/pages/common/components/CartModal";
 import { useAddToCart } from "@/hooks/useAddToCart";
+import { useNavigate } from "react-router-dom";
+import { pageRoutes } from "@/apiRoutes";
+import { useOrderStore } from "@/store/order/useOrderStore";
+import { IProduct } from "@/lib/product/types";
+import { CartItem } from "@/store/cart/types";
 
 interface HomeProductListProps {
   pageSize?: number;
@@ -22,6 +27,8 @@ interface HomeProductListProps {
 export const HomeProductList: React.FC<HomeProductListProps> = ({
   pageSize = PRODUCT_PAGE_SIZE,
 }) => {
+  const navigate = useNavigate();
+  const setDirectPurchase = useOrderStore((state) => state.setDirectPurchase);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useFetchProducts({ pageSize });
   const {
@@ -83,6 +90,17 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
 
   const handleCartAction = useAddToCart();
 
+  const handleOrderAction = (product: IProduct) => {
+    if (product) {
+      const directItem: CartItem = {
+        ...product,
+        count: 1,
+      };
+      setDirectPurchase(directItem); // product가 있을 때만 호출
+      navigate(pageRoutes.purchase);
+    }
+  };
+
   const sortedProductList = sortedProducts();
 
   if (isLoading) {
@@ -130,6 +148,7 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
               e.stopPropagation();
               handleCartAction(product);
             }}
+            onClickAddOrderButton={() => handleOrderAction(product)}
             onClickViewCart={openCartModal} // 장바구니 보기 클릭 시 모달 열기
           />
         ))}

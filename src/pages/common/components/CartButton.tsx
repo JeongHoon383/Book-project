@@ -2,13 +2,12 @@ import { Button } from "@/components/ui/button";
 import { CartItem } from "@/store/cart/types";
 import { ShoppingCart } from "lucide-react";
 
-export const CartButton = ({
-  onClick,
-  cart,
-}: {
+interface CartButtonProps {
   onClick: () => void;
   cart: CartItem[];
-}) => {
+}
+
+export const CartButton: React.FC<CartButtonProps> = ({ onClick, cart }) => {
   const cartItemCount = cart.length;
 
   // cart hover시 장바구니 컴포넌트 나오게

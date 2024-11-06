@@ -1,13 +1,35 @@
 import React from "react";
 import { Building, CreditCard, Smartphone, Wallet } from "lucide-react";
-import { useCartStore } from "@/store/cart/useCartStore";
 import { useFormContext } from "react-hook-form";
+import { CartItem } from "@/store/cart/types";
 
-export const PaymentInfo: React.FC = () => {
+interface PaymentInfoProps {
+  product: CartItem | CartItem[] | null;
+  totalPrice: number;
+  isDirectPurchase: boolean;
+}
+
+export const PaymentInfo: React.FC<PaymentInfoProps> = ({
+  product,
+  totalPrice,
+  isDirectPurchase,
+}) => {
+  // 로건부 렌더링
+  // isDirectPurchase가 true일때 단일 product 데이터 출력
+  // isDirectPurchase가 false일때 product[] 데이터 출력
   const { register } = useFormContext();
-  const totalPrice = useCartStore((state) => state.totalPrice);
-  const shippingFee = totalPrice >= 50000 ? 0 : 3000;
-  const totalPayment = totalPrice + shippingFee;
+  // 배송비 계산: 단일 product인 경우 product.price를 기준으로 계산
+  // 총 상품 가격 계산: 단일 product인 경우 단일 상품 가격 사용, 배열일 경우 totalPrice 사용
+  const productPrice =
+    isDirectPurchase && product && !Array.isArray(product)
+      ? product.price * product.count
+      : totalPrice;
+
+  // 배송비 계산
+  const shippingFee = productPrice >= 50000 ? 0 : 3000;
+
+  // 총 결제 금액 계산
+  const totalPayment = productPrice + shippingFee;
 
   return (
     <div className="border border-borderGray rounded-xl shadow-sm">
@@ -20,7 +42,7 @@ export const PaymentInfo: React.FC = () => {
         <div className="flex text-sm md:text-lg gap-12 p-6 border-b border-borderGray">
           <div className="font-bold min-w-[70px]">총 상품 가격</div>
           <div className="min-w-[60px] font-medium">
-            {totalPrice.toLocaleString()}원
+            {productPrice.toLocaleString()}원
           </div>
         </div>
 
