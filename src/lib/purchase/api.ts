@@ -40,7 +40,7 @@ export const makePurchaseAPI = async (
       const cartItemDTOs: CartItemDTO[] = cartData.map((item) => ({
         productId: item.id,
         sellerId: item.sellerId,
-        quantity: item.count,
+        count: item.count,
         price: item.price,
         title: item.title,
       }));

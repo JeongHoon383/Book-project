@@ -8,6 +8,9 @@ import { useCallback, useEffect } from "react";
 import { useMakePurchase } from "@/lib/purchase/hooks/useMakePurchase";
 import { calculateTotal } from "@/store/cart/cartUtils";
 import { Loader2 } from "lucide-react";
+import { useOrderStore } from "@/store/order/useOrderStore";
+
+// orderStore 데이터 초기화
 
 export interface FormData {
   name: string;
@@ -25,8 +28,8 @@ export interface FormErrors {
 
 export const Purchase: React.FC = () => {
   const user = useAuthStore((state) => state.user);
-  const cart = useCartStore((state) => state.cart);
-  const initCart = useCartStore((state) => state.initCart);
+  const { product, isDirectPurchase, initOrder, resetOrder } = useOrderStore();
+  const { cart, totalCount, totalPrice, initCart } = useCartStore();
 
   const methods = useForm<FormData>({
     defaultValues: {
@@ -45,6 +48,19 @@ export const Purchase: React.FC = () => {
       initCart(user.id);
     }
   }, [user, initCart]);
+
+  useEffect(() => {
+    // 페이지 진입 시 주문 정보 초기화
+    initOrder();
+
+    // 페이지 떠날 때 로컬스토리지 초기화
+    return () => {
+      resetOrder();
+    };
+  }, [initOrder, resetOrder]);
+
+  // 주문 데이터를 서버 데이터에 저장해야됨
+  //
 
   const { mutate: makePurchaseMutation, isPending: isLoading } =
     useMakePurchase();
@@ -70,7 +86,7 @@ export const Purchase: React.FC = () => {
     makePurchaseMutation({
       purchaseData,
       userId: user.id,
-      cartData: cartItems,
+      orderData: cartItems,
     });
   }, [cart, makePurchaseMutation, user]);
 
@@ -80,8 +96,16 @@ export const Purchase: React.FC = () => {
         <div className="flex flex-col gap-5">
           <p className="text-3xl font-bold">주문/결제</p>
           <ShippingInfo />
-          <OrderItems />
-          <PaymentInfo />
+          <OrderItems
+            product={product}
+            totalCount={totalCount}
+            isDirectPurchase={isDirectPurchase}
+          />
+          <PaymentInfo
+            product={product}
+            totalPrice={totalPrice}
+            isDirectPurchase={isDirectPurchase}
+          />
           <div className="flex justify-end mb-10">
             <button
               type="submit"

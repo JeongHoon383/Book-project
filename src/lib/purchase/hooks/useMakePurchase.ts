@@ -6,23 +6,26 @@ import { useToastStore } from "@/store/toast/useToastStore";
 import { useMutation } from "@tanstack/react-query";
 import { makePurchaseAPI } from "../api";
 import { pageRoutes } from "@/apiRoutes";
+import { useOrderStore } from "@/store/order/useOrderStore";
 
 interface MakePurchaseVariables {
   purchaseData: PurchaseDTO;
   userId: string;
-  cartData: CartItem[];
+  orderData: CartItem[];
 }
 
 export const useMakePurchase = () => {
   const navigate = useNavigate();
+  const { resetOrder } = useOrderStore();
   const { resetCart } = useCartStore();
   const { addToast } = useToastStore();
 
   return useMutation<void, Error, MakePurchaseVariables>({
-    mutationFn: ({ purchaseData, userId, cartData }) =>
-      makePurchaseAPI(purchaseData, userId, cartData),
+    mutationFn: ({ purchaseData, userId, orderData }) =>
+      makePurchaseAPI(purchaseData, userId, orderData),
     onSuccess: (_, variables) => {
       resetCart(variables.userId);
+      resetOrder();
       addToast("구매 성공!", "success");
       navigate(pageRoutes.main);
     },
@@ -32,20 +35,3 @@ export const useMakePurchase = () => {
     },
   });
 };
-
-// 각 상품의 재고 업데이트
-// for (const item of cartData) {
-//   const productRef = collection(db, PRODUCT_KEY);
-//   const productQuery = query(productRef, where("id", "==", item.id));
-//   const productSnapshot = await getDocs(productQuery);
-
-//   if (!productSnapshot.empty) {
-//     const productDoc = productSnapshot.docs[0];
-//     const newStock = item.stock - item.count;
-//     transcation.update(doc(db, PRODUCT_KEY, productDoc.id), {
-//       stock: newStock,
-//     });
-//   } else {
-//     console.error(`상품이 존재하지 않습니다: ID ${item.id}`);
-//   }
-// }

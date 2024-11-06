@@ -1,5 +1,6 @@
 import { IProduct } from "@/lib/product/types";
 import { CartTextButton } from "@/pages/common/components/CartTextButton";
+import { OrderTextButton } from "@/pages/common/components/OrderTextButton";
 import React from "react";
 
 interface BookMainProps {
@@ -8,12 +9,14 @@ interface BookMainProps {
     e: React.MouseEvent<HTMLButtonElement>,
     product: IProduct
   ) => void;
+  onClickAddOrderButton: () => void;
   onClickViewCart: () => void;
 }
 
 export const BookMain: React.FC<BookMainProps> = ({
   product,
   onClickAddCartButton,
+  onClickAddOrderButton,
   onClickViewCart,
 }) => {
   const handleClickAddCartButton = (
@@ -49,9 +52,7 @@ export const BookMain: React.FC<BookMainProps> = ({
             onClickView={onClickViewCart}
             id={product.id}
           />
-          <button className="px-4 py-2 bg-green-500 text-white rounded">
-            바로구매
-          </button>
+          <OrderTextButton onClick={onClickAddOrderButton} />
         </div>
       </div>
     </div>

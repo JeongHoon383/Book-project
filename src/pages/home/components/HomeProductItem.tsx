@@ -3,6 +3,7 @@ import { pageRoutes } from "@/apiRoutes";
 import { IProduct } from "@/lib/product/types";
 import { useNavigate } from "react-router-dom";
 import { CartTextButton } from "@/pages/common/components/CartTextButton";
+import { OrderTextButton } from "@/pages/common/components/OrderTextButton";
 
 interface ProductManageListProps {
   product: IProduct;
@@ -12,6 +13,7 @@ interface ProductManageListProps {
     e: React.MouseEvent<HTMLButtonElement>,
     product: IProduct
   ) => void;
+  onClickAddOrderButton: () => void;
   onClickViewCart: () => void;
 }
 
@@ -27,6 +29,7 @@ export const HomeProductItem = React.forwardRef<
       isSelected,
       onClickAddCartButton,
       onClickViewCart,
+      onClickAddOrderButton,
     },
     ref
   ) => {
@@ -83,9 +86,7 @@ export const HomeProductItem = React.forwardRef<
             onClickView={onClickViewCart} // 장바구니 보기 모달 열기
             id={id}
           />
-          <button className="px-4 py-2 bg-green-500 text-white rounded">
-            바로구매
-          </button>
+          <OrderTextButton onClick={onClickAddOrderButton} />
         </div>
       </div>
     );
