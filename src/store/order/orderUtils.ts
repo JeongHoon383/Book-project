@@ -30,12 +30,26 @@ export const resetOrderAtLocalStorage = (): void => {
   setItem(ORDER_LOCAL_STORAGE_KEY, { product: null, isDirectPurchase: false });
 };
 
-export const calculateTotal = (order: CartItem[]): Total => {
-  return order.reduce(
-    (acc: Total, item: CartItem) => ({
-      totalCount: acc.totalCount + item.count,
-      totalPrice: acc.totalPrice + item.price * item.count,
-    }),
-    { totalCount: 0, totalPrice: 0 }
-  );
+export const calculateTotal = (
+  orderData: CartItem[] | CartItem | null
+): Total => {
+  if (Array.isArray(orderData)) {
+    // cart가 배열인 경우
+    return orderData.reduce(
+      (acc: Total, item: CartItem) => ({
+        totalCount: acc.totalCount + item.count,
+        totalPrice: acc.totalPrice + item.price * item.count,
+      }),
+      { totalCount: 0, totalPrice: 0 }
+    );
+  } else if (orderData) {
+    // cart가 단일 객체인 경우
+    return {
+      totalCount: orderData.count,
+      totalPrice: orderData.price * orderData.count,
+    };
+  } else {
+    // cart가 null인 경우 기본값 반환
+    return { totalCount: 0, totalPrice: 0 };
+  }
 };

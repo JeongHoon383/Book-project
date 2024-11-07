@@ -6,9 +6,9 @@ import { useCartStore } from "@/store/cart/useCartStore";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { useCallback, useEffect } from "react";
 import { useMakePurchase } from "@/lib/purchase/hooks/useMakePurchase";
-import { calculateTotal } from "@/store/cart/cartUtils";
 import { Loader2 } from "lucide-react";
 import { useOrderStore } from "@/store/order/useOrderStore";
+import { calculateTotal } from "@/store/order/orderUtils";
 
 // orderStore 데이터 초기화
 
@@ -68,27 +68,45 @@ export const Purchase: React.FC = () => {
   const onSubmit: SubmitHandler<FormData> = useCallback(() => {
     if (!user) return;
 
-    const cartItems = Object.values(cart);
-    const total = calculateTotal(cart);
+    const orderData = isDirectPurchase
+      ? product // 바로 구매 : 단일 상품
+      : Object.values(cart); // 장바구니 구매 : 장바구니의 모든 상품
+
+    const total = calculateTotal(orderData);
     const totalAmount = total.totalPrice;
 
+    // 배송비 계산
+    const shippingFee = totalAmount >= 50000 ? 0 : 3000;
+    const totalPayment = totalAmount + shippingFee;
+
     const purchaseData = {
-      totalAmount,
-      items: cartItems.map((item) => ({
-        productId: item.id,
-        sellerId: item.sellerId,
-        quantity: item.count,
-        price: item.price,
-        title: item.title,
-      })),
+      totalPayment,
+      items: Array.isArray(orderData)
+        ? orderData.map((item) => ({
+            productId: item.id,
+            sellerId: item.sellerId,
+            quantity: item.count,
+            price: item.price,
+            title: item.title,
+          }))
+        : [
+            // orderData가 단일 CartItem일 경우
+            {
+              productId: orderData?.id,
+              sellerId: orderData?.sellerId,
+              quantity: orderData?.count,
+              price: orderData?.price,
+              title: orderData?.title,
+            },
+          ],
     };
 
     makePurchaseMutation({
       purchaseData,
       userId: user.id,
-      orderData: cartItems,
+      orderData,
     });
-  }, [cart, makePurchaseMutation, user]);
+  }, [cart, product, isDirectPurchase, makePurchaseMutation, user]);
 
   return (
     <FormProvider {...methods}>

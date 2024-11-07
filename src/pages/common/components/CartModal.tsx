@@ -11,10 +11,6 @@ import { pageRoutes } from "@/apiRoutes";
 import { useToastStore } from "@/store/toast/useToastStore";
 import { useOrderStore } from "@/store/order/useOrderStore";
 
-// 수량 데이터가 다른 페이지로 이동할 때 저장되지 않음
-
-// 수량 데이터가 다른 페이지로 이동할 때 저장되지 않음
-
 interface CartModalProps {
   isModalOpened: boolean;
   handleClickDisagree: () => void;
