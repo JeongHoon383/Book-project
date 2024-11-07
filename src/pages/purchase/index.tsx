@@ -80,6 +80,8 @@ export const Purchase: React.FC = () => {
     const totalPayment = totalAmount + shippingFee;
 
     const purchaseData = {
+      totalAmount,
+      shippingFee,
       totalPayment,
       items: Array.isArray(orderData)
         ? orderData.map((item) => ({
@@ -88,6 +90,7 @@ export const Purchase: React.FC = () => {
             quantity: item.count,
             price: item.price,
             title: item.title,
+            image: item.image,
           }))
         : [
             // orderData가 단일 CartItem일 경우
@@ -97,6 +100,7 @@ export const Purchase: React.FC = () => {
               quantity: orderData?.count,
               price: orderData?.price,
               title: orderData?.title,
+              image: orderData?.image,
             },
           ],
     };

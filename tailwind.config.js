@@ -15,6 +15,7 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         borderGray: "#d5d5d5",
+        title: "#799EF1",
         main: {
           DEFAULT: "#4AAF70",
         },
