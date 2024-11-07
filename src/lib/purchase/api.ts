@@ -14,7 +14,46 @@ import {
 } from "firebase/firestore";
 import { db } from "@/firebase";
 import { PRODUCT_KEY } from "../product/key";
+import { Item, OrderItem } from "@/store/order/types";
 
+// 주문 상품 조회
+export const fetchPurchaseAPI = async (): Promise<OrderItem[]> => {
+  try {
+    const productDocRef = collection(db, "purchases");
+    const q = query(productDocRef, orderBy("id", "desc"));
+
+    const querySnapshot = await getDocs(q);
+
+    const products = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: data.id,
+        buyerId: data.buyerId,
+        status: data.status,
+        items: (data.items || []).map((item: Item) => ({
+          count: item.count,
+          price: item.price,
+          productId: item.productId,
+          sellerId: item.sellerId,
+          title: item.title,
+          image: item.image,
+        })),
+        shippingFee: data.shippingFee,
+        totalAmount: data.totalAmount,
+        totalPayment: data.totalPayment,
+        createdAt: data.createdAt?.toDate().toISOString(),
+        updatedAt: data.updatedAt?.toDate().toISOString(),
+      } as OrderItem;
+    });
+
+    return products;
+  } catch (error) {
+    console.error("Error fetching purchases", error);
+    throw error;
+  }
+};
+
+// 주문상품 추가
 export const makePurchaseAPI = async (
   purchaseData: PurchaseDTO,
   userId: string,

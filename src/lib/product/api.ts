@@ -16,7 +16,6 @@ import {
 } from "firebase/firestore";
 import { IProduct, NewProductDTO, PaginatedProductsDTO } from "./types";
 import { db } from "@/firebase";
-import { PRODUCT_KEY } from "./key";
 import { ALL_CATEGORY_ID } from "@/constants";
 import { ProductFilter } from "@/store/product/types";
 
@@ -25,7 +24,7 @@ let lastVisibleDocument: QueryDocumentSnapshot<DocumentData> | null = null; // �
 // 전체 상품 조회
 export const fetchAllProductsAPI = async (): Promise<IProduct[]> => {
   try {
-    const productDocRef = collection(db, PRODUCT_KEY);
+    const productDocRef = collection(db, "products");
     const q = query(productDocRef, orderBy("id", "desc"));
 
     const querySnapshot = await getDocs(q);
@@ -63,7 +62,7 @@ export const fetchProductsAPI = async (
 ): Promise<PaginatedProductsDTO> => {
   try {
     let q = query(
-      collection(db, PRODUCT_KEY),
+      collection(db, "products"),
       orderBy("id", "desc"),
       limit(pageSize)
     );
@@ -121,7 +120,7 @@ export const fetchProductByIdAPI = async (
   productId: string
 ): Promise<IProduct> => {
   try {
-    const productDocRef = collection(db, PRODUCT_KEY);
+    const productDocRef = collection(db, "products");
     const q = query(productDocRef, where("id", "==", productId));
     const querySnapshot = await getDocs(q);
 
@@ -157,7 +156,7 @@ export const addProductAPI = async (
   // 데이터를 다시 반환하는 이유 : 1. 추가가 잘 되었는지 확인, 2. 반환된 데이터를 즉시 client측에 반영 - 추후 데이터를 다시 부를 필요가 없음 성능면에서 효율적
   try {
     return await runTransaction(db, async (transcation) => {
-      const productsRef = collection(db, PRODUCT_KEY); // db 내의 PRODUCT_KEY 라는 컬렉션 접근
+      const productsRef = collection(db, "products"); // db 내의 "products" 라는 컬렉션 접근
       const q = query(productsRef, orderBy("id", "desc"), limit(1)); // productRef 라는 컬렉션 안에 가장 최신화된 문서(id 기준 내림차순 정렬시 가장 높은값이 최신에 추가된 것) 1개를 가져옴
       const querySnapshot = await getDocs(q); // q에 해당하는 데이터를 querySnapshot에 저장
 
@@ -199,7 +198,7 @@ export const addProductAPI = async (
 // 상품 삭제
 export const deleteProductAPI = async (productId: string): Promise<void> => {
   try {
-    const productDocRef = collection(db, PRODUCT_KEY);
+    const productDocRef = collection(db, "products");
     const q = query(productDocRef, where("id", "==", productId));
     const querySnapshot = await getDocs(q);
 
@@ -222,7 +221,7 @@ export const updateProductAPI = async (
   updateData: NewProductDTO
 ): Promise<void> => {
   try {
-    const productDocRef = collection(db, PRODUCT_KEY);
+    const productDocRef = collection(db, "products");
     const q = query(productDocRef, where("id", "==", productId));
     const querySnapshot = await getDocs(q);
 

@@ -6,19 +6,24 @@ interface Option {
   value: string;
 }
 
+interface CustomSelectProps {
+  setSortOption: (value: string) => void;
+}
+
 const options: Option[] = [
   { label: "최신순", value: "latest" },
-  { label: "가격 낮은순", value: "price-low" },
-  { label: "가격 높은순", value: "price-high" },
+  { label: "가격 낮은순", value: "priceLow" },
+  { label: "가격 높은순", value: "priceHigh" },
 ];
 
-const CustomSelect: React.FC = () => {
+const CustomSelect: React.FC<CustomSelectProps> = ({ setSortOption }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<Option | null>(null);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const handleOptionClick = (option: Option) => {
+    setSortOption(option.value);
     setSelectedOption(option);
     setIsOpen(false);
   };

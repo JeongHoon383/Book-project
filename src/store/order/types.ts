@@ -11,14 +11,25 @@ export interface OrderStore {
   resetOrder: () => void;
 }
 
-export interface orderItem {
+export interface Item {
+  count: number;
+  price: number;
   productId: string;
   sellerId: string;
-  quantity: number;
-  price: number;
   title: string;
-  count: string;
+  image: string;
+}
+
+export interface OrderItem {
   id: string;
+  buyerId: string;
+  status: string;
+  totalPayment: number;
+  items: Item[]; // Item 타입의 배열로 정의
+  shippingFee: number;
+  totalAmount: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Total {
