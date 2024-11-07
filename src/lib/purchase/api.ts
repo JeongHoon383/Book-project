@@ -18,11 +18,11 @@ import { PRODUCT_KEY } from "../product/key";
 export const makePurchaseAPI = async (
   purchaseData: PurchaseDTO,
   userId: string,
-  cartData: CartItem[]
+  orderData: CartItem[] | CartItem | null
 ): Promise<void> => {
   try {
     await runTransaction(db, async (transcation) => {
-      if (!cartData || cartData.length === 0) {
+      if (!orderData || (Array.isArray(orderData) && orderData.length === 0)) {
         throw new Error("장바구니가 비어 있습니다.");
       }
 
@@ -37,13 +37,23 @@ export const makePurchaseAPI = async (
 
       const newId = maxId + 1;
 
-      const cartItemDTOs: CartItemDTO[] = cartData.map((item) => ({
-        productId: item.id,
-        sellerId: item.sellerId,
-        count: item.count,
-        price: item.price,
-        title: item.title,
-      }));
+      const cartItemDTOs: CartItemDTO[] = Array.isArray(orderData)
+        ? orderData.map((item) => ({
+            productId: item.id,
+            sellerId: item.sellerId,
+            count: item.count,
+            price: item.price,
+            title: item.title,
+          }))
+        : [
+            {
+              productId: orderData.id,
+              sellerId: orderData.sellerId,
+              count: orderData.count,
+              price: orderData.price,
+              title: orderData.title,
+            },
+          ];
 
       const newPurchaseData = {
         ...purchaseData,
@@ -60,15 +70,37 @@ export const makePurchaseAPI = async (
 
       // 각 상품의 재고 업데이트: 읽기 후 쓰기
       const stockUpdates: { ref: DocumentReference; newStock: number }[] = [];
-      for (const item of cartData) {
+
+      if (Array.isArray(orderData)) {
+        for (const item of orderData) {
+          const productRef = collection(db, PRODUCT_KEY);
+          const productQuery = query(productRef, where("id", "==", item.id));
+          const productSnapshot = await getDocs(productQuery);
+
+          if (!productSnapshot.empty) {
+            const productDoc = productSnapshot.docs[0];
+            const currentStock = productDoc.data().stock;
+            const newStock = currentStock - item.count;
+
+            // 업데이트할 상품과 새 재고를 저장
+            stockUpdates.push({
+              ref: doc(db, PRODUCT_KEY, productDoc.id),
+              newStock,
+            });
+          } else {
+            console.error(`상품이 존재하지 않습니다: ID ${item.id}`);
+          }
+        }
+      } else if (orderData) {
+        // 단일 객체일 경우 직접 처리
         const productRef = collection(db, PRODUCT_KEY);
-        const productQuery = query(productRef, where("id", "==", item.id));
+        const productQuery = query(productRef, where("id", "==", orderData.id));
         const productSnapshot = await getDocs(productQuery);
 
         if (!productSnapshot.empty) {
           const productDoc = productSnapshot.docs[0];
           const currentStock = productDoc.data().stock;
-          const newStock = currentStock - item.count;
+          const newStock = currentStock - orderData.count;
 
           // 업데이트할 상품과 새 재고를 저장
           stockUpdates.push({
@@ -76,7 +108,7 @@ export const makePurchaseAPI = async (
             newStock,
           });
         } else {
-          console.error(`상품이 존재하지 않습니다: ID ${item.id}`);
+          console.error(`상품이 존재하지 않습니다: ID ${orderData.id}`);
         }
       }
 

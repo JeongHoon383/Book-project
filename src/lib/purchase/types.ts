@@ -5,5 +5,5 @@ export interface CartItemDTO {
 }
 
 export interface PurchaseDTO {
-  totalAmount: number;
+  totalPayment: number;
 }
