@@ -44,6 +44,7 @@ export const makePurchaseAPI = async (
             count: item.count,
             price: item.price,
             title: item.title,
+            image: item.image,
           }))
         : [
             {
@@ -52,6 +53,7 @@ export const makePurchaseAPI = async (
               count: orderData.count,
               price: orderData.price,
               title: orderData.title,
+              image: orderData.image,
             },
           ];
 
