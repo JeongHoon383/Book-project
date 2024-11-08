@@ -140,7 +140,7 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
         {sortedProductList.map((product, index) => (
           <HomeProductItem
             product={product}
-            key={product.id}
+            key={`${product.id}_${index}`}
             onToggleSelect={() => toggleSelectProduct(product.id)}
             isSelected={selectedProductIds.includes(product.id)}
             ref={index === sortedProductList.length - 1 ? ref : undefined} // 마지막 요소에 ref 할당

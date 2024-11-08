@@ -17,6 +17,7 @@ import { useProductStore } from "@/store/product/useProductStore";
 import { PRODUCT_PAGE_SIZE } from "@/constants";
 import { useInfiniteScroll } from "@/lib/product/hooks/useInfiniteScroll";
 import { LoadingSpinner } from "@/pages/common/components/LoadingSpinner";
+import { useFilterStore } from "@/store/filter/useFilterStore";
 
 const ProductRegistrationModal = lazy(() =>
   import("./ProductRegistrationModal").then((module) => ({
@@ -24,11 +25,11 @@ const ProductRegistrationModal = lazy(() =>
   }))
 );
 
-interface HomeProductListProps {
+interface ProductListProps {
   pageSize?: number;
 }
 
-export const ProductList: React.FC<HomeProductListProps> = ({
+export const ProductList: React.FC<ProductListProps> = ({
   pageSize = PRODUCT_PAGE_SIZE,
 }) => {
   const deleteMutation = useDeleteProduct();
@@ -37,8 +38,9 @@ export const ProductList: React.FC<HomeProductListProps> = ({
   const [sortOption, setSortOption] = useState<string>("latest");
   const { isOpen, openModal, closeModal } = useModal();
   const { user } = useAuthStore();
+  const { searchTerm } = useFilterStore();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useFetchProducts({ pageSize });
+    useFetchProducts({ pageSize, searchTerm });
   const { setEditableProduct } = useProductStore();
 
   const products = data ? data.pages.flatMap((page) => page.products) : [];
