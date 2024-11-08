@@ -75,6 +75,13 @@ export const fetchProductsAPI = async (
       );
     }
 
+    // 검색어 필터
+    if (filter.searchTerm) {
+      const start = filter.searchTerm;
+      const end = filter.searchTerm + "\uf8ff"; // 접두사 기반 부분 일치
+      q = query(q, where("title", ">=", start), where("title", "<=", end));
+    }
+
     // 페이지가 1 이상일 경우 startAfter로 페이지네이션 설정
     if (page > 1 && lastVisibleDocument) {
       q = query(q, startAfter(lastVisibleDocument));
@@ -182,7 +189,7 @@ export const addProductAPI = async (
       const newProduct: IProduct = {
         ...newProductData,
         id: String(newId),
-        image: "", // 왜 이미지를 초기화?
+        image: "",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };

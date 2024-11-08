@@ -10,6 +10,6 @@ export interface ProductState {
 }
 
 export interface ProductFilter {
-  title?: string;
   categoryId: string;
+  searchTerm: string;
 }

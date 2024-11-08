@@ -55,8 +55,12 @@ export const ProductManageList = React.forwardRef<
       <div className="flex basis-7/12 justify-between">
         <div className="w-[10%] text-center">{price.toLocaleString()}원</div>
         <div className="w-[15%] text-center">{category.name}</div>
-        <div className="w-[10%] text-center">판매중</div>{" "}
-        {/* 판매중 넣어야됨 */}
+        {stock > 0 ? (
+          <div className="w-[10%] text-center">판매중</div>
+        ) : (
+          <div className="w-[10%] text-center text-blue-600">판매 완료</div>
+        )}
+        {/* <div className="w-[10%] text-center">{stock}</div> */}
         <div className="w-[5%] text-center">{stock}</div>
         <div className="w-[15%] text-center">
           {product.createdAt

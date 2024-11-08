@@ -13,6 +13,7 @@ import { ConfirmModal } from "./ConfirmModal";
 import { CartModal } from "./CartModal";
 import { useCartStore } from "@/store/cart/useCartStore";
 import { useToastStore } from "@/store/toast/useToastStore";
+import SearchBar from "./SearchBar";
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -27,8 +28,8 @@ export const Navbar = () => {
     closeModal: closeCartModal,
   } = useModal(); // CartModal 상태
   const isLogin = useAuthStore((state) => state.isLogin);
-  const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user);
   const checkLoginStatus = useAuthStore((state) => state.checkLoginStatus);
 
   const cart = useCartStore((state) => state.cart);
@@ -82,6 +83,7 @@ export const Navbar = () => {
             >
               경향 문고
             </h1>
+            <SearchBar />
             <div className="flex items-center space-x-4">
               {isLogin ? (
                 <ApiErrorBoundary>
