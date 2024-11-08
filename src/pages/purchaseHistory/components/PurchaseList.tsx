@@ -3,11 +3,11 @@ import { useFetchPurchase } from "@/lib/purchase/hooks/useFetchPurchase";
 import { LoadingSpinner } from "@/pages/common/components/LoadingSpinner";
 import { PurchaseItem } from "./PurchaseItem";
 import { useState } from "react";
-import { db } from "@/firebase";
-import { doc, updateDoc } from "firebase/firestore";
+import { useCancelPurchase } from "@/lib/purchase/hooks/useCancelPurchase";
 
 export const PurchaseList = () => {
   const { data, isLoading } = useFetchPurchase();
+  const cancelMutation = useCancelPurchase();
 
   const [sortOption, setSortOption] = useState<string>("latest");
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
@@ -58,26 +58,16 @@ export const PurchaseList = () => {
       return;
     }
 
-    if (window.confirm("선택한 항목을 취소하시겠습니까?")) {
-      selectedProductIds.forEach(async (orderId) => {
-        const orderDocRef = doc(db, "purchases", orderId);
-        await updateDoc(orderDocRef, {
-          status: "주문 취소",
-        });
-      });
+    if (window.confirm("선택한 상품을 주문 취소하시겠습니까?")) {
+      selectedProductIds.forEach((id) => cancelMutation.mutate(id));
       setSelectedProductIds([]);
     }
-    // 주문 취소부분 다시 구현해야됨
-    // api, react-query hook 로직 작성
-    // 주문 취소시 DB에서 삭제는 하지 않되 status : "주문 취소"로 변경
-    // 해당 items의 count 만큼 stock 다시 올려주기
-
-    try {
-      console.log("주문이 취소되었습니다.");
-    } catch (error) {
-      console.error("Error cancelling order", error);
-    }
   };
+
+  // 주문 취소를 눌렀을 때 바로 주문 취소가 적용되게 --> 질문할 것, 상품관리 페이지에서 delete 와 로직이 같은데 왜 여기서만 적용이 안됨?
+  // 새로고침 또는 브라우저를 벗어났을 때 UI에 반영됨
+  // 주문 취소 글씨 색깔 바꾸기 -> 주문 취소가 되었을 때 색상 -- o
+  // 주문 취소가 되었을 때 해당 items의 count 만큼 기존 product의 stock이 올라가게 -- o
 
   if (isLoading || !data) {
     return <LoadingSpinner size={50} color="#007aff" centered={true} />;

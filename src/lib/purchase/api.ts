@@ -13,7 +13,6 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "@/firebase";
-import { PRODUCT_KEY } from "../product/key";
 import { Item, OrderItem } from "@/store/order/types";
 
 // 주문 상품 조회
@@ -114,7 +113,7 @@ export const makePurchaseAPI = async (
 
       if (Array.isArray(orderData)) {
         for (const item of orderData) {
-          const productRef = collection(db, PRODUCT_KEY);
+          const productRef = collection(db, "products");
           const productQuery = query(productRef, where("id", "==", item.id));
           const productSnapshot = await getDocs(productQuery);
 
@@ -125,7 +124,7 @@ export const makePurchaseAPI = async (
 
             // 업데이트할 상품과 새 재고를 저장
             stockUpdates.push({
-              ref: doc(db, PRODUCT_KEY, productDoc.id),
+              ref: doc(db, "products", productDoc.id),
               newStock,
             });
           } else {
@@ -134,7 +133,7 @@ export const makePurchaseAPI = async (
         }
       } else if (orderData) {
         // 단일 객체일 경우 직접 처리
-        const productRef = collection(db, PRODUCT_KEY);
+        const productRef = collection(db, "products");
         const productQuery = query(productRef, where("id", "==", orderData.id));
         const productSnapshot = await getDocs(productQuery);
 
@@ -145,7 +144,7 @@ export const makePurchaseAPI = async (
 
           // 업데이트할 상품과 새 재고를 저장
           stockUpdates.push({
-            ref: doc(db, PRODUCT_KEY, productDoc.id),
+            ref: doc(db, "products", productDoc.id),
             newStock,
           });
         } else {
@@ -161,5 +160,50 @@ export const makePurchaseAPI = async (
   } catch (error) {
     console.error("Error making purchase: ", error);
     throw error;
+  }
+};
+
+// 상품 상태 취소 변경
+export const cancelPurchaseAPI = async (productId: string): Promise<void> => {
+  try {
+    await runTransaction(db, async (transaction) => {
+      const productDocRef = collection(db, "purchases");
+      const q = query(productDocRef, where("id", "==", productId));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        throw new Error("해당 상품을 찾을 수 없습니다");
+      }
+
+      const orderDoc = querySnapshot.docs[0];
+      const orderData = orderDoc.data();
+
+      // 주문 상태를 "주문 취소"로 업데이트
+      transaction.update(orderDoc.ref, { status: "주문 취소" });
+
+      // 주문에 포함된 각 상품의 stock 업데이트
+      const items = orderData.items as Item[];
+      for (const item of items) {
+        const productRef = collection(db, "products");
+        const productQuery = query(
+          productRef,
+          where("id", "==", item.productId)
+        );
+        const productSnapshot = await getDocs(productQuery);
+
+        if (!productSnapshot.empty) {
+          const productDoc = productSnapshot.docs[0];
+          const currentStock = productDoc.data().stock;
+          const newStock = currentStock + item.count; // stock 증가
+
+          // Transaction을 통해 stock 업데이트
+          transaction.update(productDoc.ref, { stock: newStock });
+        } else {
+          console.error(`상품이 존재하지 않습니다 : ID ${item.productId}`);
+        }
+      }
+    });
+  } catch (error) {
+    console.error("주문 취소 중 오류 발생", error);
   }
 };
