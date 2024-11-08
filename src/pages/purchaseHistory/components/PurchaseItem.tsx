@@ -41,7 +41,14 @@ export const PurchaseItem: React.FC<PurchaseItem> = ({
           <td className="p-2 hidden md:table-cell max-w-[100px] truncate overflow-hidden whitespace-nowrap">
             {item.sellerId}
           </td>
-          <td className="p-2 hidden md:table-cell">{data.status}</td>
+          {data.status === "주문 취소" ? (
+            <td className="p-2 hidden md:table-cell text-red-500">
+              {data.status}
+            </td>
+          ) : (
+            <td className="p-2 hidden md:table-cell">{data.status}</td>
+          )}
+          {/*  */}
           <td className="p-2">{item.count}</td>
           <td className="p-2 hidden md:table-cell">
             {data.shippingFee.toLocaleString()}원

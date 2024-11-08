@@ -12,9 +12,9 @@ export const useDeleteProduct = () => {
   return useMutation({
     mutationFn: deleteProductAPI,
     onSuccess: (_, deleteProductId: string) => {
-      addToast("상품이 삭제되었습니다.", "success");
       queryClient.invalidateQueries({ queryKey: [PRODUCT_KEY] });
       deleteProduct(deleteProductId);
+      addToast("상품이 삭제되었습니다.", "success");
     },
     onError: (error) => {
       addToast("상품 삭제에 실패하였습니다.", "error");
