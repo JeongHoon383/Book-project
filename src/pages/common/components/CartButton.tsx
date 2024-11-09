@@ -10,8 +10,6 @@ interface CartButtonProps {
 export const CartButton: React.FC<CartButtonProps> = ({ onClick, cart }) => {
   const cartItemCount = cart.length;
 
-  // cart hover시 장바구니 컴포넌트 나오게
-
   return (
     <Button variant="ghost" className="relative" onClick={onClick}>
       <ShoppingCart className="h-5 w-5" />

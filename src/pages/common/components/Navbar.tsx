@@ -14,9 +14,16 @@ import { CartModal } from "./CartModal";
 import { useCartStore } from "@/store/cart/useCartStore";
 import { useToastStore } from "@/store/toast/useToastStore";
 import SearchBar from "./SearchBar";
+import { Menu } from "lucide-react";
+import { MenuModal } from "./MenuModal";
 
 export const Navbar = () => {
   const navigate = useNavigate();
+  const {
+    isOpen: isMenuModalOPen,
+    openModal: openMenuModal,
+    closeModal: closeMenuMOdal,
+  } = useModal();
   const {
     isOpen: isConfirmModalOpen,
     openModal: openConfirmModal,
@@ -72,17 +79,26 @@ export const Navbar = () => {
     openCartModal();
   };
 
+  const handleClickMenu = () => {
+    openMenuModal();
+  };
+
+  // menu바 클릭했을 때 메뉴 모달 나오게
+
   return (
     <>
       <nav className="h-32 flex items-center justify-between px-4 md:px-52 border-b border-borderGray">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center h-16">
-            <h1
-              className="text-xl font-bold cursor-pointer"
-              onClick={handleClickLogo}
-            >
-              경향 문고
-            </h1>
+            <div className="flex gap-2 items-center">
+              <Menu className="block md:hidden" onClick={handleClickMenu} />
+              <h1
+                className="text-xl font-bold cursor-pointer"
+                onClick={handleClickLogo}
+              >
+                경향 문고
+              </h1>
+            </div>
             <SearchBar />
             <div className="flex items-center space-x-4">
               {isLogin ? (
@@ -109,6 +125,10 @@ export const Navbar = () => {
       <CartModal
         isModalOpened={isCartModalOpen}
         handleClickDisagree={closeCartModal}
+      />
+      <MenuModal
+        isModalOpened={isMenuModalOPen}
+        handleClickDisagree={closeMenuMOdal}
       />
     </>
   );

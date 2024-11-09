@@ -14,10 +14,6 @@ export const CartTextButton: React.FC<CartTextButtonProps> = ({
   const cart = useCartStore((state) => state.cart);
   const isInCart = cart.some((item) => item.id === id);
 
-  // 장바구니 보기는 됨
-  // 장바구니에 추가가 되면 안됨
-  // 장바구니 보기를 눌렀을 때 장바구니 모달이 나와야됨
-
   return (
     <button
       onClick={isInCart ? onClickView : onClickAdd}

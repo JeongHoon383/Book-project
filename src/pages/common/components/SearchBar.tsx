@@ -21,7 +21,7 @@ export const SearchBar: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center border border-gray-300 w-[500px] h-[40px] rounded-[25px] p-6">
+    <div className="hidden md:flex items-center border border-gray-300 w-[500px] h-[40px] rounded-[25px] p-6">
       <input
         type="text"
         value={searchInput}
