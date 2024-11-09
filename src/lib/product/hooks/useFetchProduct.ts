@@ -17,7 +17,6 @@ export const useFetchProducts = ({
 
   const filter = { categoryId, searchTerm };
   const queryKey = [PRODUCT_KEY, filter] as const;
-  console.log(filter.searchTerm);
 
   return useInfiniteQuery<PaginatedProductsDTO, Error>({
     queryKey,

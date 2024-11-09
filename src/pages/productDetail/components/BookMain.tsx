@@ -38,13 +38,13 @@ export const BookMain: React.FC<BookMainProps> = ({
       <div className="flex flex-col justify-between gap-10 w-full md:w-3/5 max-w-full">
         <div className="flex flex-col gap-4">
           <div className="text-lg font-semibold">{product.title}</div>
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-info">
             {product.author} | {product.publishedDate}
           </div>
           <div className="text-xl font-bold">
             {product.price.toLocaleString()}원
           </div>
-          <div className="text-gray-600">{product.description}</div>
+          <div className="text-info">{product.description}</div>
         </div>
         <div className="flex justify-end gap-4">
           <CartTextButton

@@ -68,14 +68,25 @@ export const HomeProductItem = React.forwardRef<
             </div>
           </div>
           <div className="max-w-[500px] flex flex-col justify-center gap-5">
-            <div onClick={handleNavigate} className="cursor-pointer">
+            <div
+              onClick={handleNavigate}
+              className="cursor-pointer text-lg font-bold hover:underline"
+            >
               {title}
             </div>
-            <div>
+            <div className="text-info">
               {author} | {publishedDate}
             </div>
-            <div>{price.toLocaleString()}원</div>
-            <div className="overflow-hidden text-ellipsis whitespace-normal line-clamp-2">
+            <div className="flex gap-2 items-center">
+              <div className="font-bold text-lg text-title">10%</div>
+              <div className="font-bold text-lg">
+                {price.toLocaleString()}원
+              </div>
+              <div className="text-gray-400 line-through">
+                {Math.round(price * 1.1).toLocaleString()}원
+              </div>
+            </div>
+            <div className="overflow-hidden text-ellipsis whitespace-normal line-clamp-2 text-info">
               {description}
             </div>
           </div>

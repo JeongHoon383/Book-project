@@ -51,7 +51,6 @@ export const OrderItems: React.FC<OrderItemsProps> = ({
                     src={image}
                     className="hidden md:block w-[82px] h-[122px]"
                   />
-                  {/* 화면이 줄어들었을 때는 100px, 화면이 커졌을 때는 w-full로 되게 */}
                   <div className="text-sm max-w-[80px] md:max-w-full md:text-lg font-semibold truncate overflow-hidden">
                     {title}
                   </div>
