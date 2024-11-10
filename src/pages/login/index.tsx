@@ -105,7 +105,7 @@ export const Login: React.FC = () => {
               <div className="flex items-center">
                 <Checkbox
                   id="rememberMe"
-                  className="h-4 w-4 text-[#4AAF70] focus:ring-[#4AAF70] border-gray-300 rounded"
+                  className="h-4 w-4 text-[#4AAF70] focus:ring-[#4AAF70] border-gray-300 rounded-lg"
                   {...register("rememberMe")}
                 />
                 <Label

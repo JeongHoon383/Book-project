@@ -132,7 +132,7 @@ export const Purchase: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="px-12 py-3 rounded bg-[#5055B1] text-white font-medium hover:bg-[#2C307B]"
+              className="px-12 py-3 rounded-lg bg-[#5055B1] text-white font-medium hover:bg-[#2C307B]"
             >
               {isLoading ? (
                 <>

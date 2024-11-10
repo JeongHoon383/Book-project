@@ -17,7 +17,7 @@ export const CartTextButton: React.FC<CartTextButtonProps> = ({
   return (
     <button
       onClick={isInCart ? onClickView : onClickAdd}
-      className="px-4 py-2 bg-blue-500 text-white rounded"
+      className="w-full py-2 bg-blue-500 text-white text-sm md:text-base rounded-lg"
     >
       {isInCart ? "장바구니 보기" : "장바구니"}
     </button>

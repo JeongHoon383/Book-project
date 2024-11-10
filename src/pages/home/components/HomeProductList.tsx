@@ -1,13 +1,6 @@
 import { useFetchProducts } from "@/lib/product/hooks/useFetchProduct";
 import { HomeProductItem } from "./HomeProductItem";
 import { useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { PRODUCT_PAGE_SIZE } from "@/constants";
 import { useInfiniteScroll } from "@/lib/product/hooks/useInfiniteScroll";
 import { LoadingSpinner } from "@/pages/common/components/LoadingSpinner";
@@ -19,6 +12,8 @@ import { pageRoutes } from "@/apiRoutes";
 import { useOrderStore } from "@/store/order/useOrderStore";
 import { IProduct } from "@/lib/product/types";
 import { CartItem } from "@/store/cart/types";
+import { Heart, ShoppingCart } from "lucide-react";
+import CustomSelect from "@/pages/common/components/CustomSelect";
 
 interface HomeProductListProps {
   pageSize?: number;
@@ -107,32 +102,29 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
     return <LoadingSpinner size={50} color="#007aff" centered={true} />; // 초기 로딩 시 스피너 표시
   }
 
+  // 모바일일때 글씨 제거, 아이콘만 나오게
+
   return (
     <div>
-      <div className="flex justify-between items-center border-b border-borderGray pb-5">
-        <div>페이지네이션</div>
-        <div className="flex gap-10 items-center">
-          <div className="flex gap-2">
+      <div className="text-sm md:text-base flex justify-end items-center border-b border-borderGray pb-5">
+        <div className="flex gap-1 md:gap-2 items-center">
+          <div className="flex gap-2 mr-4">
             <input
               type="checkbox"
               checked={isAllSelected}
               onChange={handleSelectAll}
             />
-            <span>전체선택</span>
+            <span className="hidden md:block">전체선택</span>
           </div>
-          <div>찜하기</div>
-          <div>장바구니</div>
+          <div className="p-2 border border-borderGray rounded-lg cursor-pointer">
+            <Heart className="w-5 h-5" />
+          </div>
+          <div className="flex gap-2 py-2 px-2 md:px-4 font-bold cursor-pointer border border-borderGray rounded-lg">
+            <ShoppingCart className="w-5 h-5" />
+            <span className="hidden md:block">장바구니</span>
+          </div>
           <div>
-            <Select onValueChange={(value) => setSortOption(value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="정렬 기준 선택" />
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                <SelectItem value="latest">최신순</SelectItem>
-                <SelectItem value="priceLow">가격 낮은 순</SelectItem>
-                <SelectItem value="priceHigh">가격 높은 순</SelectItem>
-              </SelectContent>
-            </Select>
+            <CustomSelect setSortOption={setSortOption} />
           </div>
         </div>
       </div>

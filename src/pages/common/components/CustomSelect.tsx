@@ -32,13 +32,13 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ setSortOption }) => {
     <div className="relative inline-block w-36">
       <button
         onClick={toggleDropdown}
-        className="flex justify-between items-center w-full p-2 border border-gray-300 rounded text-left"
+        className="w-full flex justify-between gap-1 items-center p-2 font-medium border border-gray-300 rounded-lg"
       >
         {selectedOption ? selectedOption.label : "정렬 기준 선택"}
         <ChevronDown className="w-5 h-5" />
       </button>
       {isOpen && (
-        <div className="absolute top-full left-0 w-full mt-1 border border-gray-300 bg-white rounded shadow-md z-10">
+        <div className="absolute top-full left-0 w-full mt-1 border border-gray-300 bg-white rounded-lg shadow-md z-10">
           {options.map((option) => (
             <div
               key={option.value}
