@@ -114,7 +114,7 @@ export const CartModal: React.FC<CartModalProps> = ({
                       <div className="flex items-center gap-2 mt-2">
                         <button
                           onClick={() => handleDecrease(item.id)}
-                          className="px-2 py-1 bg-gray-200 rounded"
+                          className="px-2 py-1 bg-gray-200 rounded-lg"
                         >
                           -
                         </button>
@@ -127,7 +127,7 @@ export const CartModal: React.FC<CartModalProps> = ({
                         </span>
                         <button
                           onClick={() => handleIncrease(item.id)}
-                          className="px-2 py-1 bg-gray-200 rounded"
+                          className="px-2 py-1 bg-gray-200 rounded-lg"
                         >
                           +
                         </button>
@@ -161,7 +161,7 @@ export const CartModal: React.FC<CartModalProps> = ({
                 </div>
                 <button
                   onClick={handleClickOrder}
-                  className="px-4 py-2 bg-black text-white rounded"
+                  className="px-4 py-2 bg-black text-white rounded-lg"
                 >
                   주문하기 ({totalCount})
                 </button>

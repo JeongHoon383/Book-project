@@ -34,7 +34,7 @@ export const Carousel: React.FC<CarouselProps> = ({
 
   return (
     <div
-      className="relative border border-borderGray p-5"
+      className="relative border border-borderGray p-5 rounded-lg"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
