@@ -76,6 +76,12 @@ export const Navbar = () => {
       );
       return;
     }
+
+    if (cart.length === 0) {
+      addToast("장바구니에 상품을 담아주세요", "error");
+      return;
+    }
+
     openCartModal();
   };
 

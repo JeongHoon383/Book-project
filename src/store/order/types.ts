@@ -3,10 +3,8 @@ import { CartItem } from "../cart/types";
 export interface OrderStore {
   // orderStore에 담겨야 할 데이터의 타입
   // 카트 데이터와 바로구매시
-  product: CartItem | CartItem[] | null;
-  isDirectPurchase: boolean;
-  setDirectPurchase: (product: CartItem) => void;
-  setCartOrder: (cartProducts: CartItem[]) => void;
+  product: CartItem[] | null;
+  setOrder: (products: CartItem | CartItem[]) => void;
   initOrder: () => void;
   resetOrder: () => void;
 }

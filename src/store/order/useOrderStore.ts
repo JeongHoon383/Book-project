@@ -9,36 +9,24 @@ import { OrderStore } from "./types";
 
 export const useOrderStore = create<OrderStore>((set) => ({
   product: null, // "바로 구매" 또는 "장바구니 주문" 상품을 저장
-  isDirectPurchase: false,
 
   // 초기화 함수 : 로컬스토리지에서 상태 불러오기
   initOrder: () => {
-    const { product, isDirectPurchase } = getOrderFromLocalStorage();
-    set({ product, isDirectPurchase });
+    const { product } = getOrderFromLocalStorage();
+    set({ product });
   },
 
-  // "바로 구매" 설정 함수
-  setDirectPurchase: (product: CartItem) => {
+  setOrder: (products: CartItem | CartItem[]) => {
+    const productArray = Array.isArray(products) ? products : [products];
     set({
-      product,
-      isDirectPurchase: true,
+      product: productArray,
     });
-    setOrderToLocalStorage(product, true);
-  },
-
-  // "장바구니 주문" 설정 함수
-  setCartOrder: (cartProducts: CartItem[]) => {
-    set({
-      product: cartProducts,
-      isDirectPurchase: false,
-    });
-    setOrderToLocalStorage(cartProducts, false);
+    setOrderToLocalStorage(productArray);
   },
 
   resetOrder: () => {
     set({
       product: null,
-      isDirectPurchase: false,
     });
     resetOrderAtLocalStorage();
   },

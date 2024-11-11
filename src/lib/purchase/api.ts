@@ -56,7 +56,7 @@ export const fetchPurchaseAPI = async (): Promise<OrderItem[]> => {
 export const makePurchaseAPI = async (
   purchaseData: PurchaseDTO,
   userId: string,
-  orderData: CartItem[] | CartItem | null
+  orderData: CartItem[] | null
 ): Promise<void> => {
   try {
     await runTransaction(db, async (transcation) => {
@@ -75,25 +75,14 @@ export const makePurchaseAPI = async (
 
       const newId = maxId + 1;
 
-      const cartItemDTOs: CartItemDTO[] = Array.isArray(orderData)
-        ? orderData.map((item) => ({
-            productId: item.id,
-            sellerId: item.sellerId,
-            count: item.count,
-            price: item.price,
-            title: item.title,
-            image: item.image,
-          }))
-        : [
-            {
-              productId: orderData.id,
-              sellerId: orderData.sellerId,
-              count: orderData.count,
-              price: orderData.price,
-              title: orderData.title,
-              image: orderData.image,
-            },
-          ];
+      const cartItemDTOs: CartItemDTO[] = orderData.map((item) => ({
+        productId: item.id,
+        sellerId: item.sellerId,
+        count: item.count,
+        price: item.price,
+        title: item.title,
+        image: item.image,
+      }));
 
       const newPurchaseData = {
         ...purchaseData,
@@ -111,36 +100,15 @@ export const makePurchaseAPI = async (
       // 각 상품의 재고 업데이트: 읽기 후 쓰기
       const stockUpdates: { ref: DocumentReference; newStock: number }[] = [];
 
-      if (Array.isArray(orderData)) {
-        for (const item of orderData) {
-          const productRef = collection(db, "products");
-          const productQuery = query(productRef, where("id", "==", item.id));
-          const productSnapshot = await getDocs(productQuery);
-
-          if (!productSnapshot.empty) {
-            const productDoc = productSnapshot.docs[0];
-            const currentStock = productDoc.data().stock;
-            const newStock = currentStock - item.count;
-
-            // 업데이트할 상품과 새 재고를 저장
-            stockUpdates.push({
-              ref: doc(db, "products", productDoc.id),
-              newStock,
-            });
-          } else {
-            console.error(`상품이 존재하지 않습니다: ID ${item.id}`);
-          }
-        }
-      } else if (orderData) {
-        // 단일 객체일 경우 직접 처리
+      for (const item of orderData) {
         const productRef = collection(db, "products");
-        const productQuery = query(productRef, where("id", "==", orderData.id));
+        const productQuery = query(productRef, where("id", "==", item.id));
         const productSnapshot = await getDocs(productQuery);
 
         if (!productSnapshot.empty) {
           const productDoc = productSnapshot.docs[0];
           const currentStock = productDoc.data().stock;
-          const newStock = currentStock - orderData.count;
+          const newStock = currentStock - item.count;
 
           // 업데이트할 상품과 새 재고를 저장
           stockUpdates.push({
@@ -148,7 +116,7 @@ export const makePurchaseAPI = async (
             newStock,
           });
         } else {
-          console.error(`상품이 존재하지 않습니다: ID ${orderData.id}`);
+          console.error(`상품이 존재하지 않습니다: ID ${item.id}`);
         }
       }
 

@@ -4,32 +4,20 @@ import { useFormContext } from "react-hook-form";
 import { CartItem } from "@/store/cart/types";
 
 interface PaymentInfoProps {
-  product: CartItem | CartItem[] | null;
-  totalPrice: number;
-  isDirectPurchase: boolean;
+  product: CartItem[] | null;
 }
 
-export const PaymentInfo: React.FC<PaymentInfoProps> = ({
-  product,
-  totalPrice,
-  isDirectPurchase,
-}) => {
-  // 로건부 렌더링
-  // isDirectPurchase가 true일때 단일 product 데이터 출력
-  // isDirectPurchase가 false일때 product[] 데이터 출력
+export const PaymentInfo: React.FC<PaymentInfoProps> = ({ product }) => {
   const { register } = useFormContext();
-  // 배송비 계산: 단일 product인 경우 product.price를 기준으로 계산
-  // 총 상품 가격 계산: 단일 product인 경우 단일 상품 가격 사용, 배열일 경우 totalPrice 사용
-  const productPrice =
-    isDirectPurchase && product && !Array.isArray(product)
-      ? product.price * product.count
-      : totalPrice;
+
+  // 총 상품 가격
+  const totalProductPrice = product?.reduce((acc, item) => acc + item.price, 0);
 
   // 배송비 계산
-  const shippingFee = productPrice >= 50000 ? 0 : 3000;
+  const shippingFee = totalProductPrice! >= 50000 ? 0 : 3000;
 
   // 총 결제 금액 계산
-  const totalPayment = productPrice + shippingFee;
+  const totalPayment = totalProductPrice! + shippingFee;
 
   return (
     <div className="border border-borderGray rounded-xl shadow-sm">
@@ -42,7 +30,7 @@ export const PaymentInfo: React.FC<PaymentInfoProps> = ({
         <div className="flex text-sm md:text-lg gap-12 p-6 border-b border-borderGray">
           <div className="font-bold min-w-[70px]">총 상품 가격</div>
           <div className="min-w-[60px] font-medium">
-            {productPrice.toLocaleString()}원
+            {totalProductPrice?.toLocaleString()}원
           </div>
         </div>
 

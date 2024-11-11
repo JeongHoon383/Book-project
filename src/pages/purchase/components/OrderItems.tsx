@@ -3,23 +3,10 @@ import { ShoppingCart } from "lucide-react";
 import { CartItem } from "@/store/cart/types";
 
 export interface OrderItemsProps {
-  product: CartItem | CartItem[] | null;
-  totalCount: number;
-  isDirectPurchase: boolean;
+  product: CartItem[] | null;
 }
 
-export const OrderItems: React.FC<OrderItemsProps> = ({
-  product,
-  totalCount,
-  isDirectPurchase,
-}) => {
-  // product가 단일 CartItem인 경우 배열로 변환하여 처리
-  const productList = Array.isArray(product)
-    ? product
-    : product
-    ? [product]
-    : [];
-
+export const OrderItems: React.FC<OrderItemsProps> = ({ product }) => {
   return (
     <div className="border border-borderGray rounded-xl shadow-sm">
       {/* 헤더 */}
@@ -31,9 +18,7 @@ export const OrderItems: React.FC<OrderItemsProps> = ({
         <div>
           <span>총</span>
           <span className="text-base md:text-xl font-bold px-1 text-[#474C98]">
-            {isDirectPurchase && product && !Array.isArray(product)
-              ? product.count
-              : totalCount}
+            {product?.length}
           </span>
           <span>개</span>
         </div>
@@ -43,7 +28,7 @@ export const OrderItems: React.FC<OrderItemsProps> = ({
       <table className="w-full">
         <tbody>
           {/* 추가 상품들 */}
-          {productList.map(({ id, title, image, count, price }) => (
+          {product?.map(({ id, title, image, count, price }) => (
             <tr key={id} className="border-b border-dotted border-borderGray">
               <td className="p-4 md:p-10">
                 <div className="flex items-center gap-4 md:gap-10">

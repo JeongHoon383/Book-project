@@ -11,7 +11,7 @@ import { useOrderStore } from "@/store/order/useOrderStore";
 interface MakePurchaseVariables {
   purchaseData: PurchaseDTO;
   userId: string;
-  orderData: CartItem[] | CartItem | null;
+  orderData: CartItem[] | null;
 }
 
 export const useMakePurchase = () => {

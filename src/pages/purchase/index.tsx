@@ -28,8 +28,8 @@ export interface FormErrors {
 
 export const Purchase: React.FC = () => {
   const user = useAuthStore((state) => state.user);
-  const { product, isDirectPurchase, initOrder, resetOrder } = useOrderStore();
-  const { cart, totalCount, totalPrice, initCart } = useCartStore();
+  const { product, initOrder, resetOrder } = useOrderStore();
+  const { initCart } = useCartStore();
 
   const methods = useForm<FormData>({
     defaultValues: {
@@ -59,20 +59,13 @@ export const Purchase: React.FC = () => {
     };
   }, [initOrder, resetOrder]);
 
-  // 주문 데이터를 서버 데이터에 저장해야됨
-  //
-
   const { mutate: makePurchaseMutation, isPending: isLoading } =
     useMakePurchase();
 
   const onSubmit: SubmitHandler<FormData> = useCallback(() => {
     if (!user) return;
 
-    const orderData = isDirectPurchase
-      ? product // 바로 구매 : 단일 상품
-      : Object.values(cart); // 장바구니 구매 : 장바구니의 모든 상품
-
-    const total = calculateTotal(orderData);
+    const total = calculateTotal(product);
     const totalAmount = total.totalPrice;
 
     // 배송비 계산
@@ -83,34 +76,22 @@ export const Purchase: React.FC = () => {
       totalAmount,
       shippingFee,
       totalPayment,
-      items: Array.isArray(orderData)
-        ? orderData.map((item) => ({
-            productId: item.id,
-            sellerId: item.sellerId,
-            quantity: item.count,
-            price: item.price,
-            title: item.title,
-            image: item.image,
-          }))
-        : [
-            // orderData가 단일 CartItem일 경우
-            {
-              productId: orderData?.id,
-              sellerId: orderData?.sellerId,
-              quantity: orderData?.count,
-              price: orderData?.price,
-              title: orderData?.title,
-              image: orderData?.image,
-            },
-          ],
+      items: product?.map((item) => ({
+        productId: item.id,
+        sellerId: item.sellerId,
+        quantity: item.count,
+        price: item.price,
+        title: item.title,
+        image: item.image,
+      })),
     };
 
     makePurchaseMutation({
       purchaseData,
       userId: user.id,
-      orderData,
+      orderData: product,
     });
-  }, [cart, product, isDirectPurchase, makePurchaseMutation, user]);
+  }, [product, makePurchaseMutation, user]);
 
   return (
     <FormProvider {...methods}>
@@ -118,16 +99,8 @@ export const Purchase: React.FC = () => {
         <div className="flex flex-col gap-5">
           <p className="text-3xl font-bold">주문/결제</p>
           <ShippingInfo />
-          <OrderItems
-            product={product}
-            totalCount={totalCount}
-            isDirectPurchase={isDirectPurchase}
-          />
-          <PaymentInfo
-            product={product}
-            totalPrice={totalPrice}
-            isDirectPurchase={isDirectPurchase}
-          />
+          <OrderItems product={product} />
+          <PaymentInfo product={product} />
           <div className="flex justify-end mb-10">
             <button
               type="submit"

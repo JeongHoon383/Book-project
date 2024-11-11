@@ -23,19 +23,22 @@ export const CartModal: React.FC<CartModalProps> = ({
   const navigate = useNavigate();
   const { data, isLoading } = useFetchAllProducts();
   const user = useAuthStore((state) => state.user);
-  const cartProduct = useCartStore((state) => state.cart);
-  const setCartOrder = useOrderStore((state) => state.setCartOrder);
-  const totalPrice = useCartStore((state) => state.totalPrice);
-  const totalCount = useCartStore((state) => state.totalCount);
-  const increaseItemCount = useCartStore((state) => state.increaseItemCount);
-  const decreaseItemCount = useCartStore((state) => state.decreaseItemCount);
-  const removeCartItem = useCartStore((state) => state.removeCartItem);
+  const setOrder = useOrderStore((state) => state.setOrder);
+
+  const {
+    cart,
+    totalPrice,
+    totalCount,
+    increaseItemCount,
+    decreaseItemCount,
+    removeCartItem,
+  } = useCartStore();
   const { addToast } = useToastStore();
 
   const [shippingFee, setShippingFee] = useState(3000); // 기본 배송비 설정
 
   const handleIncrease = (id: string) => {
-    const productInCart = cartProduct.find((item) => item.id === id);
+    const productInCart = cart.find((item) => item.id === id);
 
     if (productInCart) {
       if (productInCart.stock === 0) {
@@ -55,7 +58,7 @@ export const CartModal: React.FC<CartModalProps> = ({
   };
 
   const handleClickOrder = () => {
-    setCartOrder(cartProduct);
+    setOrder(cart);
     navigate(pageRoutes.purchase);
     handleClickDisagree();
   };
@@ -73,9 +76,7 @@ export const CartModal: React.FC<CartModalProps> = ({
     return <LoadingSpinner size={50} color="#007aff" centered={true} />;
   }
 
-  const carouselItems = data
-    ? convertCartItemToIProduct(cartProduct, data)
-    : [];
+  const carouselItems = data ? convertCartItemToIProduct(cart, data) : [];
 
   return (
     <>
@@ -126,9 +127,8 @@ export const CartModal: React.FC<CartModalProps> = ({
                         </button>
                         <span>
                           {
-                            cartProduct.find(
-                              (cartItem) => cartItem.id === item.id
-                            )?.count
+                            cart.find((cartItem) => cartItem.id === item.id)
+                              ?.count
                           }
                         </span>
                         <button

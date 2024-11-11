@@ -23,7 +23,7 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
   pageSize = PRODUCT_PAGE_SIZE,
 }) => {
   const navigate = useNavigate();
-  const setDirectPurchase = useOrderStore((state) => state.setDirectPurchase);
+  const setOrder = useOrderStore((state) => state.setOrder);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useFetchProducts({ pageSize });
   const {
@@ -85,13 +85,26 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
 
   const handleCartAction = useAddToCart();
 
+  const handleAddSelectedToCart = () => {
+    if (selectedProductIds.length === 0) return;
+
+    const selectedProducts = products.filter((product) =>
+      selectedProductIds.includes(product.id)
+    );
+
+    selectedProducts.forEach((product) => handleCartAction(product));
+
+    setSelectedProductIds([]);
+    setIsAllSelected(false);
+  };
+
   const handleOrderAction = (product: IProduct) => {
     if (product) {
       const directItem: CartItem = {
         ...product,
         count: 1,
       };
-      setDirectPurchase(directItem); // product가 있을 때만 호출
+      setOrder(directItem); // product가 있을 때만 호출
       navigate(pageRoutes.purchase);
     }
   };
@@ -119,7 +132,10 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
           <div className="p-2 border border-borderGray rounded-lg cursor-pointer">
             <Heart className="w-5 h-5" />
           </div>
-          <div className="flex gap-2 py-2 px-2 md:px-4 font-bold cursor-pointer border border-borderGray rounded-lg">
+          <div
+            onClick={handleAddSelectedToCart}
+            className="flex gap-2 py-2 px-2 md:px-4 font-bold cursor-pointer border border-borderGray rounded-lg"
+          >
             <ShoppingCart className="w-5 h-5" />
             <span className="hidden md:block">장바구니</span>
           </div>
