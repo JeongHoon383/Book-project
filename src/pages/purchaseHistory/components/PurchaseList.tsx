@@ -80,13 +80,13 @@ export const PurchaseList = () => {
         </div>
       </div>
       <div className="flex justify-end gap-2">
-        <CustomSelect setSortOption={setSortOption} />
         <button
           onClick={handleCancelOrder}
           className="border border-borderGray py-2 px-4 rounded-lg"
         >
           주문 취소
         </button>
+        <CustomSelect setSortOption={setSortOption} />
       </div>
       {/* 여기부터 시작 */}
       <div className="container mx-auto">
