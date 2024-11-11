@@ -21,7 +21,7 @@ export const PurchaseItem: React.FC<PurchaseItem> = ({
           <td className="p-2">
             <input
               type="checkbox"
-              aria-label="주문 항목 선택"
+              aria-label="개별 항목 선택"
               checked={isSelected}
               onChange={onToggleSelect}
             />

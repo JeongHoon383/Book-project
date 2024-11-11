@@ -70,16 +70,25 @@ export const PurchaseList = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="border-b border-borderGray py-5 px-2">전체</div>
+      <div className="flex gap-2 border-b border-borderGray py-5 px-2 font-medium">
+        <div>전체 {data.length}</div>
+        <div>
+          주문 완료 {data.filter((item) => item.status === "주문 완료").length}
+        </div>
+        <div>
+          주문 취소 {data.filter((item) => item.status === "주문 취소").length}
+        </div>
+      </div>
       <div className="flex justify-end gap-2">
+        <CustomSelect setSortOption={setSortOption} />
         <button
           onClick={handleCancelOrder}
           className="border border-borderGray py-2 px-4 rounded-lg"
         >
           주문 취소
         </button>
-        <CustomSelect setSortOption={setSortOption} />
       </div>
+      {/* 여기부터 시작 */}
       <div className="container mx-auto">
         <table className="w-full border-collapse">
           {/* 테이블 헤더 */}

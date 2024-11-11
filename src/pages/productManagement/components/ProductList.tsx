@@ -1,16 +1,7 @@
-import { Button } from "@/components/ui/button";
 import { ProductManageList } from "./ProductManageList";
-import { Plus } from "lucide-react";
 import { useModal } from "@/hooks/useModal";
 import { useAuthStore } from "@/store/auth/useAuthStore";
 import { lazy, Suspense, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useFetchProducts } from "@/lib/product/hooks/useFetchProduct";
 import { useDeleteProduct } from "@/lib/product/hooks/useDeleteProduct";
 import { useProductStore } from "@/store/product/useProductStore";
@@ -18,6 +9,8 @@ import { PRODUCT_PAGE_SIZE } from "@/constants";
 import { useInfiniteScroll } from "@/lib/product/hooks/useInfiniteScroll";
 import { LoadingSpinner } from "@/pages/common/components/LoadingSpinner";
 import { useFilterStore } from "@/store/filter/useFilterStore";
+import CustomSelect from "@/pages/common/components/CustomSelect";
+import { Button } from "@/pages/common/components/Button";
 
 const ProductRegistrationModal = lazy(() =>
   import("./ProductRegistrationModal").then((module) => ({
@@ -126,42 +119,63 @@ export const ProductList: React.FC<ProductListProps> = ({
   return (
     <div>
       <div className="flex flex-col">
-        <div className="flex justify-between items-center border-b border-borderGray pb-10">
-          <div className="flex gap-32">
-            <div>전체 5</div>
+        <div className="flex justify-between items-center border-b border-borderGray pb-5">
+          <div className="flex items-center gap-2 md:gap-4 font-bold text-sm md:text-base">
+            <div>전체 {products.length}</div>
             <div>판매중 1</div>
             <div>판매완료 1</div>
           </div>
           <div>
-            {user?.isSeller && (
-              <Button onClick={openModal}>
-                <Plus className=" h-4 w-4" />
-                상품 등록
-              </Button>
-            )}
+            {user?.isSeller && <Button text="상품 등록" onClick={openModal} />}
           </div>
         </div>
-        <div className="flex justify-end items-center p-5">
-          <div className="flex gap-2">
-            <Select onValueChange={(value) => setSortOption(value)}>
-              <SelectTrigger>
-                <SelectValue placeholder="정렬 기준 선택" />
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                <SelectItem value="latest">최신순</SelectItem>
-                <SelectItem value="priceLow">가격 낮은 순</SelectItem>
-                <SelectItem value="priceHigh">가격 높은 순</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button variant="outline" onClick={handleEdit}>
-              수정
-            </Button>
-            <Button variant="outline" onClick={handleDelete}>
-              삭제
-            </Button>
-          </div>
+        <div className="flex gap-2 justify-center md:justify-end items-center py-5">
+          <CustomSelect setSortOption={setSortOption} />
+          <Button text="수정" onClick={handleEdit} />
+          <Button text="삭제" onClick={handleDelete} />
         </div>
-        <div className="flex justify-between items-center pb-5 border-b border-borderGray">
+        {/* 여기부터 시작 */}
+        <div className="container mx-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="text-gray-700 border-b border-borderGray text-sm md:text-lg">
+                <th className="p-2 text-center w-8">
+                  <input
+                    type="checkbox"
+                    aria-label="전체 선택"
+                    checked={isAllSelected}
+                    onChange={handleSelectAll}
+                  />
+                </th>
+                <th className="p-2 text-left w-1/3">상품명</th>
+                <th className="p-2 text-center">판매가</th>
+                <th className="p-2 text-center hidden md:table-cell">
+                  카테고리
+                </th>
+                <th className="p-2 text-center">상태</th>
+                <th className="p-2 text-center hidden md:table-cell">재고</th>
+                <th className="p-2 text-center hidden md:table-cell">등록일</th>
+                <th className="p-2 text-center hidden md:table-cell">수정일</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products &&
+                sortedProductList.map((product, index) => (
+                  <ProductManageList
+                    key={product.id}
+                    product={product}
+                    onToggleSelect={() => toggleSelectProduct(product.id)}
+                    isSelected={selectedProductIds.includes(product.id)}
+                    ref={
+                      index === sortedProductList.length - 1 ? ref : undefined
+                    }
+                  />
+                ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* <div className="flex justify-between items-center pb-5 border-b border-borderGray">
           <div className="flex items-center basis-5/12">
             <div className="w-10">
               <input
@@ -180,19 +194,7 @@ export const ProductList: React.FC<ProductListProps> = ({
             <div className="w-[15%] text-center">등록일</div>
             <div className="w-[15%] text-center">수정일</div>
           </div>
-        </div>
-      </div>
-      <div>
-        {products &&
-          sortedProductList.map((product, index) => (
-            <ProductManageList
-              key={product.id}
-              product={product}
-              onToggleSelect={() => toggleSelectProduct(product.id)}
-              isSelected={selectedProductIds.includes(product.id)}
-              ref={index === sortedProductList.length - 1 ? ref : undefined}
-            />
-          ))}
+        </div> */}
       </div>
       <Suspense fallback={<div>Loading...</div>}>
         {isOpen && (

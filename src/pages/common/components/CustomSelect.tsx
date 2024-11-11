@@ -32,7 +32,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ setSortOption }) => {
     <div className="relative inline-block w-36">
       <button
         onClick={toggleDropdown}
-        className="w-full flex justify-between gap-1 items-center p-2 font-medium border border-gray-300 rounded-lg"
+        className="w-full flex justify-between gap-1 items-center p-2 text-sm md:text-base font-medium border border-gray-300 rounded-lg"
       >
         {selectedOption ? selectedOption.label : "정렬 기준 선택"}
         <ChevronDown className="w-5 h-5" />
