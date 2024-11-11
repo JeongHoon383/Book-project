@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Carousel } from "./Carousel";
 import { LoadingSpinner } from "./LoadingSpinner";
-import { Trash2 } from "lucide-react"; // Trash 아이콘 추가
+import { Trash2, X } from "lucide-react"; // Trash 아이콘 추가
 import { useCartStore } from "@/store/cart/useCartStore";
 import { convertCartItemToIProduct } from "@/utils/convertToCarouselType";
 import { useFetchAllProducts } from "@/lib/product/hooks/useFetchAllProducts";
@@ -91,7 +91,7 @@ export const CartModal: React.FC<CartModalProps> = ({
         }`}
       >
         <button onClick={handleClickDisagree} className="p-4">
-          닫기
+          <X />
         </button>
         <div className="p-4 h-full flex flex-col">
           <h2 className="text-xl font-bold mb-4">장바구니</h2>
@@ -108,9 +108,15 @@ export const CartModal: React.FC<CartModalProps> = ({
                   />
                   <div className="flex justify-between items-center">
                     <div className="flex flex-col gap-5">
-                      <div>{item.title}</div>
-                      <div>{item.author}</div>
-                      <div>{item.price.toLocaleString()}원</div>
+                      <div className="font-bold text-xl overflow-hidden text-ellipsis whitespace-normal line-clamp-1">
+                        {item.title}
+                      </div>
+                      <div className="text-info overflow-hidden text-ellipsis whitespace-normal line-clamp-1">
+                        {item.author}
+                      </div>
+                      <div className="font-bold">
+                        {item.price.toLocaleString()}원
+                      </div>
                       <div className="flex items-center gap-2 mt-2">
                         <button
                           onClick={() => handleDecrease(item.id)}
@@ -155,13 +161,13 @@ export const CartModal: React.FC<CartModalProps> = ({
                 </div>
               </div>
               <div className="py-5 flex flex-col gap-10">
-                <div className="flex justify-between">
+                <div className="flex justify-between text-xl font-bold">
                   <div>합계</div>
                   <div>{(totalPrice + shippingFee).toLocaleString()}원</div>
                 </div>
                 <button
                   onClick={handleClickOrder}
-                  className="px-4 py-2 bg-black text-white rounded-lg"
+                  className="px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-black transition-colors duration-300"
                 >
                   주문하기 ({totalCount})
                 </button>

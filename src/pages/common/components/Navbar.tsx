@@ -93,7 +93,7 @@ export const Navbar = () => {
             <div className="flex gap-2 items-center">
               <Menu className="block md:hidden" onClick={handleClickMenu} />
               <h1
-                className="text-xl font-bold cursor-pointer"
+                className="text-2xl font-bold cursor-pointer"
                 onClick={handleClickLogo}
               >
                 경향 문고

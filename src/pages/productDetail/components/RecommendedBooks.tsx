@@ -31,10 +31,9 @@ export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
   }, []);
 
   return (
-    <div className="p-2.5 h-full grid grid-rows-[1fr_9fr]">
-      <div className="flex justify-between items-center mb-2.5">
+    <div className="p-2.5 h-full grid grid-rows-[1fr_9fr] mb-10">
+      <div className="flex items-center text-xl font-bold mb-2.5">
         <div>추천 도서</div>
-        <div>추천 상품 더보기</div>
       </div>
       <Carousel
         key={itemsPerPage}
@@ -44,10 +43,12 @@ export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
           <div className="flex flex-col">
             <img
               src={item.image}
-              className="w-full h-full max-h-[320px] justify-center object-contain"
+              className="w-full h-full max-h-[280px] justify-center object-contain"
             />
             <div className="flex flex-col items-center h-full justify-center gap-1">
-              <div className="text-center mt-2">{item.title}</div>
+              <div className="text-center mt-2 overflow-hidden text-ellipsis whitespace-normal line-clamp-1">
+                {item.title}
+              </div>
               <div className="text-sm text-gray-500">{item.author}</div>
               <div className="text-sm">{item.price.toLocaleString()}원</div>
             </div>

@@ -10,10 +10,6 @@ import { pageRoutes } from "@/apiRoutes";
 import { useOrderStore } from "@/store/order/useOrderStore";
 import { CartItem } from "@/store/cart/types";
 
-// 궁금한점
-// '바로 구매'로 전달 할 데이터가 count 속성이 없을 때
-// count를 임시로 추가해서 데이터를 넘겨줌?
-
 export const ProductDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>(); // URL 파라미터에서 ID 가져오기
@@ -52,7 +48,7 @@ export const ProductDetail = () => {
   }
 
   return (
-    <div className="flex flex-col min-h-screen h-full">
+    <div className="flex flex-col">
       {product ? (
         <BookMain
           product={product}
