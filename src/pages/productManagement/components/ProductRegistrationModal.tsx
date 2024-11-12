@@ -147,7 +147,6 @@ export const ProductRegistrationModal: React.FC<
         await addProductMutate(newProduct);
       }
       reset();
-      reset();
       onClose();
     } catch (error: unknown) {
       if (error instanceof Error) {
