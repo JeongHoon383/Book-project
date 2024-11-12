@@ -162,7 +162,7 @@ export const ProductList: React.FC<ProductListProps> = ({
               {products &&
                 sortedProductList.map((product, index) => (
                   <ProductManageList
-                    key={product.id}
+                    key={`${product.id}_${index}`}
                     product={product}
                     onToggleSelect={() => toggleSelectProduct(product.id)}
                     isSelected={selectedProductIds.includes(product.id)}
@@ -174,27 +174,6 @@ export const ProductList: React.FC<ProductListProps> = ({
             </tbody>
           </table>
         </div>
-
-        {/* <div className="flex justify-between items-center pb-5 border-b border-borderGray">
-          <div className="flex items-center basis-5/12">
-            <div className="w-10">
-              <input
-                type="checkbox"
-                checked={isAllSelected}
-                onChange={handleSelectAll}
-              />
-            </div>
-            <div>상품명</div>
-          </div>
-          <div className="flex justify-between basis-7/12">
-            <div className="w-[10%] text-center">판매가</div>
-            <div className="w-[15%] text-center">카테고리</div>
-            <div className="w-[10%] text-center">상태</div>
-            <div className="w-[5%] text-center">재고</div>
-            <div className="w-[15%] text-center">등록일</div>
-            <div className="w-[15%] text-center">수정일</div>
-          </div>
-        </div> */}
       </div>
       <Suspense fallback={<div>Loading...</div>}>
         {isOpen && (

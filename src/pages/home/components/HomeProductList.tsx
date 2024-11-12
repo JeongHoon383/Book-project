@@ -109,6 +109,8 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
     }
   };
 
+  // hover 했을 때 해당 상품의 아이디가 담겨야됨
+
   const sortedProductList = sortedProducts();
 
   if (isLoading) {
