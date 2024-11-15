@@ -154,16 +154,199 @@ http://localhost:5173/
 * 설명2
 
 ## 💡 트러블 슈팅
-* 설명1
-* 설명2
+* [캐러셀 컴포넌트 반응형 커스텀마이징 이슈 해결](https://velog.io/@wjdgns383/%EC%BA%90%EB%9F%AC%EC%85%80-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EB%B0%98%EC%9D%91%ED%98%95-%EC%BB%A4%EC%8A%A4%ED%85%80%EB%A7%88%EC%9D%B4%EC%A7%95-%EC%9D%B4%EC%8A%88-%ED%95%B4%EA%B2%B0)
+* [사용자 권한 관리 및 상태 유지 이슈 해결](https://velog.io/@wjdgns383/%EC%82%AC%EC%9A%A9%EC%9E%90-%EA%B6%8C%ED%95%9C-%EA%B4%80%EB%A6%AC-%EB%B0%8F-%EC%83%81%ED%83%9C-%EC%9C%A0%EC%A7%80-%EC%9D%B4%EC%8A%88-%ED%95%B4%EA%B2%B0)
 
 ## 🛠️ 기술적 의사 결정
-* 설명1
+* [Zustand를 사용하여 동적으로 주문페이지 관리](https://velog.io/@wjdgns383/Zustand%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC-%EB%8F%99%EC%A0%81%EC%9C%BC%EB%A1%9C-%EC%A3%BC%EB%AC%B8%ED%8E%98%EC%9D%B4%EC%A7%80-%EA%B4%80%EB%A6%AC)
 * 설명2
 
 ## 🏗️ 아키텍처
 * 설명1
 
 ## 🗂️ 폴더구조
-* 설명 1
+```bash
+📦src
+ ┣ 📂components
+ ┃ ┗ 📂ui
+ ┣ 📂helpers
+ ┣ 📂hooks
+ ┣ 📂lib
+ ┃ ┣ 📂auth
+ ┃ ┃ ┣ 📂hooks
+ ┃ ┃ ┣ 📜api.ts
+ ┃ ┃ ┗ 📜types.ts
+ ┃ ┣ 📂product
+ ┃ ┃ ┣ 📂hooks
+ ┃ ┃ ┣ 📜api.ts
+ ┃ ┃ ┣ 📜key.ts
+ ┃ ┃ ┗ 📜types.ts
+ ┃ ┣ 📂purchase
+ ┃ ┃ ┣ 📂hooks
+ ┃ ┃ ┣ 📜api.ts
+ ┃ ┃ ┣ 📜key.ts
+ ┃ ┃ ┗ 📜types.ts
+ ┃ ┣ 📂utils
+ ┃ ┗ 📜utils.ts
+ ┣ 📂pages
+ ┃ ┣ 📂common
+ ┃ ┃ ┗ 📂components
+ ┃ ┣ 📂error
+ ┃ ┃ ┗ 📂components
+ ┃ ┣ 📂home
+ ┃ ┃ ┣ 📂components
+ ┃ ┃ ┗ 📜index.tsx
+ ┃ ┣ 📂loading
+ ┃ ┃ ┗ 📂components
+ ┃ ┣ 📂login
+ ┃ ┃ ┗ 📜index.tsx
+ ┃ ┣ 📂productDetail
+ ┃ ┃ ┣ 📂components
+ ┃ ┃ ┗ 📜index.tsx
+ ┃ ┣ 📂productManagement
+ ┃ ┃ ┣ 📂components
+ ┃ ┃ ┗ 📜index.tsx
+ ┃ ┣ 📂purchase
+ ┃ ┃ ┣ 📂components
+ ┃ ┃ ┗ 📜index.tsx
+ ┃ ┣ 📂purchaseHistory
+ ┃ ┃ ┣ 📂components
+ ┃ ┃ ┗ 📜index.tsx
+ ┃ ┣ 📂register
+ ┃ ┃ ┗ 📜index.tsx
+ ┃ ┗ 📜.DS_Store
+ ┣ 📂store
+ ┃ ┣ 📂auth
+ ┃ ┣ 📂cart
+ ┃ ┣ 📂filter
+ ┃ ┣ 📂order
+ ┃ ┣ 📂product
+ ┃ ┣ 📂toast
+ ┣ 📂utils
+ ┣ 📜apiRoutes.ts
+ ┣ 📜constants.ts
+ ┣ 📜firebase.ts
+ ┣ 📜index.css
+ ┣ 📜main.tsx
+ ┣ 📜router.tsx
+ ┗ 📜vite-env.d.ts
+```
+<details>
+<summary>
+  <strong>폴더 구조 분석</strong>
+</summary>
 
+<details>
+<summary>components</summary>
+
+* **역할**: 재사용 가능한 UI 컴포넌트를 관리하는 폴더 (shadcn 기반)
+* **하위 구조**:
+  - `ui/`: 버튼, 입력 필드, 모달 등 범용적인 UI 요소를 저장
+* **특징**:
+  - 도메인에 종속되지 않는 공통 컴포넌트들을 모아, 다양한 페이지나 기능에서 재사용 가능
+
+</details>
+
+<details>
+<summary>helpers</summary>
+
+* **역할**: 특정 작업을 돕는 유틸리티 함수들을 저장
+* **예상 파일 내용**:
+  - 에러 처리, 데이터 포맷 변환, 공통 로직 등
+* **특징**:
+  - 코드 중복을 줄이고, 비즈니스 로직을 단순화
+
+</details>
+
+<details>
+<summary>hooks</summary>
+
+* **역할**: React의 상태 관리 및 라이프사이클 관련 커스텀 훅 저장
+* **예상 파일 내용**:
+  - `useModal`: 모달 열기/닫기 상태 관리
+  - `useAddToCart`: 장바구니 추가 로직
+* **특징**:
+  - 재사용 가능한 상태 관리 로직을 추상화하여 코드 가독성과 재사용성을 높임
+
+</details>
+
+<details>
+<summary>lib</summary>
+
+* **역할**: 도메인별 로직(인증, 제품, 구매)을 캡슐화
+* **하위 구조**:
+  - **auth** (인증 관련 로직)
+    - `hooks/`: 로그인, 회원가입 등 인증 커스텀 훅
+    - `api.ts`: 인증 관련 API 호출 함수
+    - `types.ts`: 인증 데이터 모델 정의
+  - **product** (제품 관리 로직)
+    - `hooks/`: 제품 데이터 조회, 추가, 삭제, 업데이트 커스텀 훅
+    - `api.ts`: 제품 CRUD 관련 API 호출 함수
+    - `key.ts`: React Query 쿼리 키 관리
+    - `types.ts`: 제품 데이터 모델 정의
+  - **purchase** (구매 관리 로직)
+    - `hooks/`: 구매 요청, 구매 데이터 조회, 구매 취소 로직
+    - `api.ts`: 구매 관련 API 호출 함수
+    - `key.ts`: React Query 쿼리 키 관리
+    - `types.ts`: 구매 데이터 모델 정의
+  - **utils**
+    - **역할**: 도메인 전반에 걸친 유틸리티 함수 관리
+    - 예: 이미지 업로드, 공통 데이터 처리 로직
+
+</details>
+
+<details>
+<summary>pages</summary>
+
+* **역할**: 프로젝트의 페이지별 구조 관리
+* **하위 구조**:
+  - **common/components**: 공통적으로 사용되는 페이지 관련 컴포넌트(`Navbar`, `Toast` 등)
+  - **error**: 에러 페이지 및 관련 컴포넌트(`ErrorPage`, `NotFoundPage` 등)
+  - **home**: 홈 페이지와 관련된 컴포넌트와 엔트리 파일
+  - **productDetail**: 제품 상세 페이지
+  - **productManagement**: 판매자의 제품 관리 페이지
+  - **purchase**: 구매 페이지(결제, 배송 정보 등)
+  - **purchaseHistory**: 구매 내역 페이지
+  - **register**: 회원가입 페이지
+
+</details>
+
+<details>
+<summary>store</summary>
+
+* **역할**: Zustand를 활용한 전역 상태 관리
+* **하위 구조**:
+  - **auth**: 사용자 인증 상태 관리
+  - **cart**: 장바구니 상태 관리
+  - **filter**: 필터 상태 관리
+  - **order**: 주문 상태 관리
+  - **product**: 제품 상태 관리
+  - **toast**: 알림 메시지 상태 관리
+* **특징**:
+  - 각 도메인별 상태를 독립적으로 관리하여 유지보수성과 확장성 향상
+
+</details>
+
+<details>
+<summary>utils</summary>
+
+* **역할**: 프로젝트 전반에서 사용되는 유틸리티 함수 저장
+* **예상 파일 내용**:
+  - 데이터 변환, 공통 처리 로직, 캐러셀 관련 유틸리티
+
+</details>
+
+<details>
+<summary>루트 파일</summary>
+
+* **apiRoutes.ts**: API 엔드포인트 관리
+* **constants.ts**: 전역 상수 정의
+* **firebase.ts**: Firebase 초기화 및 설정
+* **index.css**: 글로벌 CSS 스타일 정의
+* **main.tsx**: React 애플리케이션의 진입점
+* **router.tsx**: React Router 설정 및 라우팅 정의
+* **vite-env.d.ts**: Vite 환경 설정에 대한 타입 정의
+
+</details>
+
+</details>
