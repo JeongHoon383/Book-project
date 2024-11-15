@@ -4,7 +4,6 @@ import { IProduct } from "@/lib/product/types";
 import { useNavigate } from "react-router-dom";
 import { CartTextButton } from "@/pages/common/components/CartTextButton";
 import { OrderTextButton } from "@/pages/common/components/OrderTextButton";
-// import { usePrefetchProduct } from "@/lib/product/hooks/usePrefetchProduct";
 
 interface ProductManageListProps {
   product: IProduct;
@@ -35,12 +34,11 @@ export const HomeProductItem = React.forwardRef<
     ref
   ) => {
     const navigate = useNavigate();
-    // const prefetchProductData = usePrefetchProduct();
+
     const { id, title, author, publishedDate, price, image, description } =
       product;
 
     const handleNavigate = () => {
-      console.time("ProductDetail Load Time");
       navigate(`${pageRoutes.productDetail}/${id}`);
     };
 
@@ -53,7 +51,6 @@ export const HomeProductItem = React.forwardRef<
 
     return (
       <div
-        // onMouseEnter={() => prefetchProductData(id)}
         className="py-5 border-b border-borderGray flex items-center"
         ref={ref} // ref 할당
       >
@@ -104,7 +101,7 @@ export const HomeProductItem = React.forwardRef<
               onClickView={onClickViewCart} // 장바구니 보기 모달 열기
               id={id}
             />
-            <OrderTextButton onClick={onClickAddOrderButton} />
+            <OrderTextButton onClick={onClickAddOrderButton} id={id} />
           </div>
         </div>
       </div>

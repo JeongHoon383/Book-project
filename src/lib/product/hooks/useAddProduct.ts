@@ -18,13 +18,13 @@ export const useAddProduct = () => {
     // NewProductDTO - 서버로 보내는 데이터 타입
     mutationFn: addProductAPI, // 상품 등록 API 호출
     onSuccess: (products) => {
-      addToast("상품 등록 성공!", "success");
       queryClient.invalidateQueries({ queryKey: [PRODUCT_KEY] });
       addProduct(products);
+      addToast("상품 등록 성공!", "success");
     },
     onError: (error: Error) => {
-      addToast("상품 등록에 실패하였습니다.", "error");
       console.error(error);
+      addToast("상품 등록에 실패하였습니다.", "error");
     },
   });
 };
