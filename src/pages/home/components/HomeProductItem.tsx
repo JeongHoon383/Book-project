@@ -34,7 +34,6 @@ export const HomeProductItem = React.forwardRef<
     ref
   ) => {
     const navigate = useNavigate();
-
     const { id, title, author, publishedDate, price, image, description } =
       product;
 
