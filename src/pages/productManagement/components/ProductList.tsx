@@ -11,6 +11,7 @@ import { LoadingSpinner } from "@/pages/common/components/LoadingSpinner";
 import { useFilterStore } from "@/store/filter/useFilterStore";
 import CustomSelect from "@/pages/common/components/CustomSelect";
 import { Button } from "@/pages/common/components/Button";
+import { useToastStore } from "@/store/toast/useToastStore";
 
 const ProductRegistrationModal = lazy(() =>
   import("./ProductRegistrationModal").then((module) => ({
@@ -35,6 +36,7 @@ export const ProductList: React.FC<ProductListProps> = ({
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useFetchProducts({ pageSize, searchTerm });
   const { setEditableProduct } = useProductStore();
+  const { addToast } = useToastStore();
 
   const products = data ? data.pages.flatMap((page) => page.products) : [];
   const { ref } = useInfiniteScroll({
@@ -90,14 +92,22 @@ export const ProductList: React.FC<ProductListProps> = ({
   };
 
   // 개별 상품 선택, 삭제 기능
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (selectedProductIds.length === 0) {
-      alert(); // 삭제 알림창 수정 필요
+      alert("삭제할 항목이 없습니다."); // 삭제 알림창 수정 필요
       return;
     }
     if (window.confirm("선택한 항목을 삭제하시겠습니까?")) {
-      selectedProductIds.forEach((id) => deleteMutation.mutate(id));
-      setSelectedProductIds([]); // 삭제 후 선택 초기화
+      try {
+        await Promise.all(
+          selectedProductIds.map((id) => deleteMutation.mutateAsync(id))
+        );
+        addToast("상품이 삭제되었습니다.", "success");
+        setSelectedProductIds([]); // 삭제 후 선택 초기화
+      } catch (error) {
+        console.error(error);
+        addToast("상품 삭제에 실패하였습니다.", "error");
+      }
     } // 삭제 알림창 수정 필요
   };
 

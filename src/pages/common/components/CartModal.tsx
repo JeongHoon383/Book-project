@@ -87,7 +87,7 @@ export const CartModal: React.FC<CartModalProps> = ({
         ></div>
       )}
       <div
-        className={`fixed top-0 right-0 h-full w-full sm:w-[500px] bg-white z-50 transition-transform transform ${
+        className={`fixed top-0 right-0 h-full w-full sm:w-[500px] bg-white z-50 transition-transform duration-300 transform ${
           isModalOpened ? "translate-x-0" : "translate-x-full"
         }`}
       >

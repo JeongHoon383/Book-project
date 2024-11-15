@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BookMain } from "./components/BookMain";
-// import { RecommendedBooks } from "./components/RecommendedBooks";
+import { RecommendedBooks } from "./components/RecommendedBooks";
 import { useFetchProductById } from "@/lib/product/hooks/useFetchProductById";
 import { useFetchAllProducts } from "@/lib/product/hooks/useFetchAllProducts";
 import { useModal } from "@/hooks/useModal";
@@ -9,7 +9,6 @@ import { CartModal } from "../common/components/CartModal";
 import { pageRoutes } from "@/apiRoutes";
 import { CartItem } from "@/store/cart/types";
 import { useOrderStore } from "@/store/order/useOrderStore";
-import { useEffect } from "react";
 
 export const ProductDetail = () => {
   const navigate = useNavigate();
@@ -25,12 +24,6 @@ export const ProductDetail = () => {
     openModal: openCartModal,
     closeModal: closeCartModal,
   } = useModal();
-
-  useEffect(() => {
-    if (!isAllProductsLoading) {
-      console.timeEnd("ProductDetail Load Time");
-    }
-  }, [isAllProductsLoading]);
 
   const handleCartAction = useAddToCart();
 
@@ -70,9 +63,8 @@ export const ProductDetail = () => {
         <div>Loading...</div>
       )}
       {filteredBooks ? (
-        <div>Loading...</div>
+        <RecommendedBooks books={filteredBooks} />
       ) : (
-        // <RecommendedBooks books={filteredBooks} />
         <div>Loading...</div>
       )}
       <CartModal

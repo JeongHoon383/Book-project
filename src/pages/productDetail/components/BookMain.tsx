@@ -28,7 +28,7 @@ export const BookMain: React.FC<BookMainProps> = ({
 
   return (
     <div className="flex flex-col md:flex-row h-full gap-10 pb-10 border-b border-borderGray">
-      <div className="w-full max-h-[600px] md:w-2/5">
+      <div className="w-full md:w-2/5">
         <img
           src={product.image}
           className="w-full h-full object-contain"
@@ -52,7 +52,7 @@ export const BookMain: React.FC<BookMainProps> = ({
             onClickView={onClickViewCart}
             id={product.id}
           />
-          <OrderTextButton onClick={onClickAddOrderButton} />
+          <OrderTextButton onClick={onClickAddOrderButton} id={product.id} />
         </div>
       </div>
     </div>

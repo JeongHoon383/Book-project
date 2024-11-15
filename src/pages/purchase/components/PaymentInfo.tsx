@@ -11,7 +11,10 @@ export const PaymentInfo: React.FC<PaymentInfoProps> = ({ product }) => {
   const { register } = useFormContext();
 
   // 총 상품 가격
-  const totalProductPrice = product?.reduce((acc, item) => acc + item.price, 0);
+  const totalProductPrice = product?.reduce(
+    (acc, item) => acc + item.price * item.count,
+    0
+  );
 
   // 배송비 계산
   const shippingFee = totalProductPrice! >= 50000 ? 0 : 3000;

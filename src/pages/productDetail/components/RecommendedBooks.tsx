@@ -11,6 +11,14 @@ export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
 }) => {
   const [itemsPerPage, setItemsPerPage] = useState(5); // itemsPerPage 상태 추가
 
+  function debounce(func: () => void, wait: number) {
+    let timeout: NodeJS.Timeout;
+    return () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(), wait);
+    };
+  }
+
   useEffect(() => {
     const updateItemsPerPage = () => {
       if (window.innerWidth < 640) {
@@ -20,13 +28,16 @@ export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
       } else {
         setItemsPerPage(5);
       }
+      console.log("resize");
     };
 
+    const debouncedResize = debounce(updateItemsPerPage, 200); // 200ms 지연 적용
+
     updateItemsPerPage();
-    window.addEventListener("resize", updateItemsPerPage);
+    window.addEventListener("resize", debouncedResize);
 
     return () => {
-      window.removeEventListener("resize", updateItemsPerPage);
+      window.removeEventListener("resize", debouncedResize);
     };
   }, []);
 

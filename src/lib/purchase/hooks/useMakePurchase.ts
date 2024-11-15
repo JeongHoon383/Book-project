@@ -30,8 +30,8 @@ export const useMakePurchase = () => {
       navigate(pageRoutes.main);
     },
     onError: (error: Error) => {
-      addToast("구매 중 오류가 발생했습니다.", "error");
       console.error("구매 중 오류가 발생했습니다.", error.message);
+      addToast("구매 중 오류가 발생했습니다.", "error");
     },
   });
 };

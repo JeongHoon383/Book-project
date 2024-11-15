@@ -1,5 +1,5 @@
 import { IProduct } from "@/lib/product/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 interface CarouselProps {
   items: IProduct[];
   itemsPerPage: number;
@@ -21,16 +21,24 @@ export const Carousel: React.FC<CarouselProps> = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(items.length / itemsPerPage);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // 페이지 이동 시 요소 개수를 확인하여 요소가 없으면 이전 페이지로 이동
+  useEffect(() => {
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const currentItems = items.slice(startIdx, startIdx + itemsPerPage);
+    if (currentItems.length === 0 && currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }, [items, currentPage, itemsPerPage]);
 
   const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    setCurrentPage((prevPage) => (prevPage < totalPages ? prevPage + 1 : 1));
   };
 
   const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
+    setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : totalPages));
   };
-
-  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div
