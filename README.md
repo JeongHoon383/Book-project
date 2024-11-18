@@ -162,7 +162,7 @@ http://localhost:5173/
 * 설명2
 
 ## 🏗️ 아키텍처
-* 설명1
+<img src="https://github.com/user-attachments/assets/88ded67a-88a7-470f-987d-46b54505af0e" width="1000"/>
 
 ## 🗂️ 폴더구조
 ```bash
