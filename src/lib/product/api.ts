@@ -162,7 +162,7 @@ export const addProductAPI = async (
   // Promise<IProduct> 추가된 데이터를 받았을 때 받는 데이터의 타입
   // 데이터를 다시 반환하는 이유 : 1. 추가가 잘 되었는지 확인, 2. 반환된 데이터를 즉시 client측에 반영 - 추후 데이터를 다시 부를 필요가 없음 성능면에서 효율적
   try {
-    return await runTransaction(db, async (transcation) => {
+    return await runTransaction(db, async (transaction) => {
       const productsRef = collection(db, "products"); // db 내의 "products" 라는 컬렉션 접근
       const q = query(productsRef, orderBy("id", "desc"), limit(1)); // productRef 라는 컬렉션 안에 가장 최신화된 문서(id 기준 내림차순 정렬시 가장 높은값이 최신에 추가된 것) 1개를 가져옴
       const querySnapshot = await getDocs(q); // q에 해당하는 데이터를 querySnapshot에 저장
@@ -175,6 +175,7 @@ export const addProductAPI = async (
       // 아이디값을 저장하는 이유 : 가장 최신화된 아이디를 저장함으로써 문서의 id 값을 순차적으로 배치 할 수 있음
 
       const newId = maxId + 1;
+      const newDocRef = doc(productsRef); // 문서를 저장할 위치 설정
 
       const newProductData = {
         ...productData,
@@ -183,13 +184,15 @@ export const addProductAPI = async (
         updatedAt: serverTimestamp(),
       }; // 데이터를 어떻게 추가할건지 세팅
 
-      const newDocRef = doc(productsRef); // 문서를 저장할 위치 설정
-      transcation.set(newDocRef, newProductData); // 데이터 저장
+      transaction.set(newDocRef, newProductData); // 데이터 저장
 
       const newProduct: IProduct = {
         ...newProductData,
         id: String(newId),
-        image: "",
+        image: {
+          original: "",
+          webp: "",
+        },
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -201,6 +204,28 @@ export const addProductAPI = async (
     throw error;
   }
 };
+
+// const cleanUpDuplicates = async () => {
+//   const productsRef = collection(db, "products");
+//   const productsSnapshot = await getDocs(productsRef);
+
+//   const idMap: Record<string, boolean> = {};
+
+//   productsSnapshot.forEach((doc) => {
+//     const data = doc.data();
+//     const id = data.id;
+
+//     if (idMap[id]) {
+//       // 중복된 문서 삭제
+//       deleteDoc(doc.ref);
+//       console.log(`Deleted duplicate product with id: ${id}`);
+//     } else {
+//       idMap[id] = true; // 고유 ID 저장
+//     }
+//   });
+// };
+
+// cleanUpDuplicates();
 
 // 상품 삭제
 export const deleteProductAPI = async (productId: string): Promise<void> => {

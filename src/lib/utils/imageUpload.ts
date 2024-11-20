@@ -69,7 +69,9 @@ const convertToWebP = async (file: File): Promise<Blob> => {
 };
 
 // 최종적으로 다운로드 가능한 URL을 제공
-export const uploadImage = async (file: File): Promise<string | null> => {
+export const uploadImage = async (
+  file: File
+): Promise<{ original: string; webp: string } | null> => {
   if (!file) return null;
 
   const user = auth.currentUser;
@@ -77,6 +79,30 @@ export const uploadImage = async (file: File): Promise<string | null> => {
     throw new Error("User not authenticated");
   }
 
+  // 원본 파일 이름 생성
+  const originalFileName = `${Date.now()}_${file.name}`;
+  const originalStorageRef = ref(
+    storage,
+    `products/original/${originalFileName}`
+  );
+
+  // WebP 파일 이름 생성
+  const webpFileName = `${Date.now()}_${file.name.split(".")[0]}.webp`;
+  const webpStorageRef = ref(storage, `products/webp/${webpFileName}`);
+
+  const idToken = await user.getIdToken();
+
+  const metadata: UploadMetadata = {
+    contentType: file.type,
+    cacheControl: "public, max-age=31536000",
+    customMetadata: { token: idToken },
+  };
+
+  // 1. 원본 파일 업로드
+  await uploadBytes(originalStorageRef, file, metadata);
+  const originalUrl = await getDownloadURL(originalStorageRef);
+
+  // 2. WebP 파일 생성 및 업로드
   const compressdFile: File = await imageCompression(file, {
     maxSizeMB: MAX_FILE_SIZE_MB,
     maxWidthOrHeight: Math.max(MAX_WIDTH, MAX_HEIGHT),
@@ -84,18 +110,18 @@ export const uploadImage = async (file: File): Promise<string | null> => {
   });
 
   const optimizedFile: Blob = await convertToWebP(compressdFile);
-  const fileName = `${Date.now()}_${file.name.split(".")[0]}.webp`;
-  const storageRef = ref(storage, `products/${fileName}`);
 
-  const idToken = await user.getIdToken();
-
-  const metadata: UploadMetadata = {
+  const webpMetadata: UploadMetadata = {
     contentType: "image/webp",
     cacheControl: "public, max-age=31536000",
     customMetadata: { token: idToken },
   };
 
-  await uploadBytes(storageRef, optimizedFile, metadata);
+  await uploadBytes(webpStorageRef, optimizedFile, webpMetadata);
+  const webpUrl = await getDownloadURL(webpStorageRef);
 
-  return getDownloadURL(storageRef);
+  return {
+    original: originalUrl,
+    webp: webpUrl,
+  };
 };

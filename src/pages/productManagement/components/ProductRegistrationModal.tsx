@@ -106,8 +106,8 @@ export const ProductRegistrationModal: React.FC<
       }
       const imageFile = data.image[0];
 
-      const imageUrl = await uploadImage(imageFile);
-      if (!imageUrl) {
+      const imageUrls = await uploadImage(imageFile);
+      if (!imageUrls) {
         throw new Error("이미지 업로드에 실패했습니다.");
       } // 이미지 파일을 저장하는게 아닌 이미지 URL을 저장
 
@@ -128,7 +128,7 @@ export const ProductRegistrationModal: React.FC<
         category: { id: selectedCategory.id, name: selectedCategory.name },
         author: data.author,
         publishedDate: data.publishedDate,
-        image: imageUrl,
+        image: imageUrls,
       };
 
       // `id`를 포함한 최종 데이터 생성

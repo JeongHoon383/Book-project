@@ -28,9 +28,9 @@ export const BookMain: React.FC<BookMainProps> = ({
 
   return (
     <div className="flex flex-col md:flex-row h-full gap-10 pb-10 border-b border-borderGray">
-      <div className="w-full md:w-2/5">
+      <div className="w-full md:w-2/5 shadow-2xl">
         <img
-          src={product.image}
+          src={product.image.original}
           className="w-full h-full object-contain"
           alt={product.title}
         />

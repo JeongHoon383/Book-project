@@ -28,12 +28,10 @@ export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
       } else {
         setItemsPerPage(5);
       }
-      console.log("resize");
     };
 
     const debouncedResize = debounce(updateItemsPerPage, 200); // 200ms 지연 적용
 
-    updateItemsPerPage();
     window.addEventListener("resize", debouncedResize);
 
     return () => {

@@ -8,7 +8,10 @@ export interface IProduct {
   category: { id: string; name: string };
   author: string;
   publishedDate: string;
-  image: string;
+  image: {
+    original: string;
+    webp: string;
+  };
   createdAt?: string;
   updatedAt?: string;
 }
@@ -28,5 +31,8 @@ export interface NewProductDTO {
   category: { id: string; name: string };
   author: string;
   publishedDate: string;
-  image: File | string | null;
+  image: {
+    original: string;
+    webp: string;
+  };
 }

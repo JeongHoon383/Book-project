@@ -22,6 +22,8 @@ export const ProductManageList = React.forwardRef<
     title,
   } = product;
 
+  console.log(image);
+
   return (
     <>
       <tr
@@ -38,7 +40,7 @@ export const ProductManageList = React.forwardRef<
         </td>
         <td className="p-2 flex items-center space-x-1 md:space-x-4 text-left py-10">
           <img
-            src={image}
+            src={image.webp}
             className="w-8 h-8 md:w-24 md:h-24 object-contain rounded hidden md:table-cell"
           />
           <div className="max-w-[90px] md:min-w-[300px]">
