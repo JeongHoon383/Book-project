@@ -46,11 +46,18 @@ export const ProductManageList = React.forwardRef<
           />
         </td>
         <td className="p-2 flex items-center space-x-1 md:space-x-4 text-left py-10">
-          <img
-            src={image.webp}
-            className="w-8 h-8 md:w-24 md:h-24 object-contain rounded hidden md:table-cell cursor-pointer"
-            onClick={handleNavigate}
-          />
+          <picture>
+            {/* WebP 이미지 */}
+            <source srcSet={image.webp} type="image/webp" />
+            {/* 폴백 이미지 (JPEG 또는 PNG) */}
+            <source srcSet={image.original} type="image/jpeg" />
+            {/* 기본 이미지 (폴백 미지원 브라우저에서도 동작) */}
+            <img
+              src={image.original} // 폴백용 이미지
+              className="w-8 h-8 md:w-24 md:h-24 object-contain rounded hidden md:table-cell cursor-pointer"
+              onClick={handleNavigate}
+            />
+          </picture>
           <div className="max-w-[90px] md:min-w-[300px]">
             <div className="flex flex-col justify-center max-w-[300px] h-full gap-2">
               <div

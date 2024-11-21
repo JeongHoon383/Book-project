@@ -1,7 +1,6 @@
 // 이미지 파일을 Firebase Storage에 업로드하고, 업로드한 이미지의 다운로드 URL을 반환
 // 이미지 파일을 압축, WebP 포맷으로 변환, Firebase에 업로드하여
 import imageCompression from "browser-image-compression";
-
 import { auth, storage } from "@/firebase";
 import {
   getDownloadURL,

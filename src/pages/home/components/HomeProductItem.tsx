@@ -65,10 +65,17 @@ export const HomeProductItem = React.forwardRef<
                 className="w-[50px] h-[50px] md:w-[200px] md:h-[200px] cursor-pointer"
                 onClick={handleNavigate}
               >
-                <img
-                  src={image.webp}
-                  className="w-full h-full object-contain"
-                />
+                <picture>
+                  {/* WebP 이미지 */}
+                  <source srcSet={image.webp} type="image/webp" />
+                  {/* 폴백 이미지 (JPEG 또는 PNG) */}
+                  <source srcSet={image.original} type="image/jpeg" />
+                  {/* 기본 이미지 (폴백 미지원 브라우저에서도 동작) */}
+                  <img
+                    src={image.original} // 폴백용 이미지
+                    className="w-full h-full object-contain"
+                  />
+                </picture>
               </div>
             </div>
             <div className="max-w-[500px] flex flex-col justify-center md:gap-5 gap-3">
