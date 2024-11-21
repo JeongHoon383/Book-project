@@ -65,7 +65,10 @@ export const HomeProductItem = React.forwardRef<
                 className="w-[50px] h-[50px] md:w-[200px] md:h-[200px] cursor-pointer"
                 onClick={handleNavigate}
               >
-                <img src={image} className="w-full h-full object-contain" />
+                <img
+                  src={image.webp}
+                  className="w-full h-full object-contain"
+                />
               </div>
             </div>
             <div className="max-w-[500px] flex flex-col justify-center md:gap-5 gap-3">

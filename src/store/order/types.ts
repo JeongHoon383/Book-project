@@ -15,7 +15,10 @@ export interface Item {
   productId: string;
   sellerId: string;
   title: string;
-  image: string;
+  image: {
+    original: string;
+    webp: string;
+  };
 }
 
 export interface OrderItem {

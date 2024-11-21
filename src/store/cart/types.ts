@@ -13,7 +13,10 @@ export interface CartStore {
 export interface CartItem {
   id: string;
   sellerId: string;
-  image: string;
+  image: {
+    original: string;
+    webp: string;
+  };
   title: string;
   price: number;
   count: number;

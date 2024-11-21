@@ -1,12 +1,20 @@
 import React from "react";
 import { ShoppingCart } from "lucide-react";
 import { CartItem } from "@/store/cart/types";
+import { useNavigate } from "react-router-dom";
+import { pageRoutes } from "@/apiRoutes";
 
 export interface OrderItemsProps {
   product: CartItem[] | null;
 }
 
 export const OrderItems: React.FC<OrderItemsProps> = ({ product }) => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (id: string) => {
+    navigate(`${pageRoutes.productDetail}/${id}`);
+  };
+
   return (
     <div className="border border-borderGray rounded-xl shadow-sm">
       {/* 헤더 */}
@@ -33,10 +41,14 @@ export const OrderItems: React.FC<OrderItemsProps> = ({ product }) => {
               <td className="p-4 md:p-10">
                 <div className="flex items-center gap-4 md:gap-10">
                   <img
-                    src={image}
-                    className="hidden md:block w-[82px] h-[122px]"
+                    src={image.webp}
+                    className="hidden md:block w-[82px] h-[122px] cursor-pointer"
+                    onClick={() => handleNavigate(id)}
                   />
-                  <div className="text-sm max-w-[80px] md:max-w-full md:text-lg font-semibold truncate overflow-hidden">
+                  <div
+                    className="text-sm max-w-[80px] md:max-w-full md:text-lg font-semibold truncate overflow-hidden cursor-pointer hover:underline"
+                    onClick={() => handleNavigate(id)}
+                  >
                     {title}
                   </div>
                 </div>

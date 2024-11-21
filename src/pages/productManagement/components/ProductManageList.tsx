@@ -1,5 +1,7 @@
 import * as React from "react";
 import { IProduct } from "@/lib/product/types";
+import { useNavigate } from "react-router-dom";
+import { pageRoutes } from "@/apiRoutes";
 
 interface ProductManageListProps {
   product: IProduct;
@@ -12,6 +14,7 @@ export const ProductManageList = React.forwardRef<
   ProductManageListProps
 >(({ product, onToggleSelect, isSelected }, ref) => {
   const {
+    id,
     author,
     category,
     description,
@@ -22,7 +25,11 @@ export const ProductManageList = React.forwardRef<
     title,
   } = product;
 
-  console.log(image);
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate(`${pageRoutes.productDetail}/${id}`);
+  };
 
   return (
     <>
@@ -41,11 +48,15 @@ export const ProductManageList = React.forwardRef<
         <td className="p-2 flex items-center space-x-1 md:space-x-4 text-left py-10">
           <img
             src={image.webp}
-            className="w-8 h-8 md:w-24 md:h-24 object-contain rounded hidden md:table-cell"
+            className="w-8 h-8 md:w-24 md:h-24 object-contain rounded hidden md:table-cell cursor-pointer"
+            onClick={handleNavigate}
           />
           <div className="max-w-[90px] md:min-w-[300px]">
             <div className="flex flex-col justify-center max-w-[300px] h-full gap-2">
-              <div className="font-bold text-sm md:text-base overflow-hidden text-ellipsis whitespace-nowrap">
+              <div
+                className="font-bold text-sm md:text-base overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer hover:underline"
+                onClick={handleNavigate}
+              >
                 {title}
               </div>
               <div className="text-sm text-gray-600 overflow-hidden text-ellipsis whitespace-nowrap">

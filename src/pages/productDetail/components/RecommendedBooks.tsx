@@ -1,6 +1,8 @@
+import { pageRoutes } from "@/apiRoutes";
 import { IProduct } from "@/lib/product/types";
 import { Carousel } from "@/pages/common/components/Carousel";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface RecommendedBooksProps {
   books: IProduct[];
@@ -9,7 +11,12 @@ interface RecommendedBooksProps {
 export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
   books,
 }) => {
+  const navigate = useNavigate();
   const [itemsPerPage, setItemsPerPage] = useState(5); // itemsPerPage 상태 추가
+
+  const handleNavigate = (id: string) => {
+    navigate(`${pageRoutes.productDetail}/${id}`);
+  };
 
   function debounce(func: () => void, wait: number) {
     let timeout: NodeJS.Timeout;
@@ -51,11 +58,15 @@ export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
         renderItem={(item) => (
           <div className="flex flex-col">
             <img
-              src={item.image}
-              className="w-full h-full max-h-[280px] justify-center object-contain"
+              src={item.image.webp}
+              className="w-full max-h-[280px] justify-center object-contain cursor-pointer"
+              onClick={() => handleNavigate(item.id)}
             />
             <div className="flex flex-col items-center h-full justify-center gap-1">
-              <div className="text-center mt-2 overflow-hidden text-ellipsis whitespace-normal line-clamp-1">
+              <div
+                className="text-center mt-2 overflow-hidden text-ellipsis whitespace-normal line-clamp-1 cursor-pointer hover:underline"
+                onClick={() => handleNavigate(item.id)}
+              >
                 {item.title}
               </div>
               <div className="text-sm text-gray-500">{item.author}</div>

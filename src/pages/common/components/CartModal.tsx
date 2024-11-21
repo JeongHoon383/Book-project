@@ -35,6 +35,11 @@ export const CartModal: React.FC<CartModalProps> = ({
   } = useCartStore();
   const { addToast } = useToastStore();
 
+  const handleNavigate = (id: string) => {
+    navigate(`${pageRoutes.productDetail}/${id}`);
+    handleClickDisagree();
+  };
+
   const [shippingFee, setShippingFee] = useState(3000); // 기본 배송비 설정
 
   const handleIncrease = (id: string) => {
@@ -104,12 +109,16 @@ export const CartModal: React.FC<CartModalProps> = ({
               renderItem={(item) => (
                 <div className="w-full h-full grid grid-cols-[1fr_1fr] justify-center">
                   <img
-                    className="w-[200px] h-[200px] object-contain"
-                    src={item.image}
+                    className="w-[200px] h-[200px] object-contain cursor-pointer"
+                    src={item.image.webp}
+                    onClick={() => handleNavigate(item.id)}
                   />
                   <div className="flex justify-between items-center">
                     <div className="flex flex-col gap-5">
-                      <div className="font-bold text-xl overflow-hidden text-ellipsis whitespace-normal line-clamp-1">
+                      <div
+                        className="font-bold text-xl overflow-hidden text-ellipsis whitespace-normal line-clamp-1 cursor-pointer hover:underline"
+                        onClick={() => handleNavigate(item.id)}
+                      >
                         {item.title}
                       </div>
                       <div className="text-info overflow-hidden text-ellipsis whitespace-normal line-clamp-1">

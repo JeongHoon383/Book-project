@@ -1,4 +1,6 @@
+import { pageRoutes } from "@/apiRoutes";
 import { OrderItem } from "@/store/order/types";
+import { useNavigate } from "react-router-dom";
 
 interface PurchaseItem {
   data: OrderItem;
@@ -11,6 +13,12 @@ export const PurchaseItem: React.FC<PurchaseItem> = ({
   onToggleSelect,
   isSelected,
 }) => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (id: string) => {
+    navigate(`${pageRoutes.productDetail}/${id}`);
+  };
+
   return (
     <>
       {data.items.map((item) => (
@@ -26,12 +34,15 @@ export const PurchaseItem: React.FC<PurchaseItem> = ({
               onChange={onToggleSelect}
             />
           </td>
-          <td className="p-2 flex items-center space-x-1 md:space-x-4 text-left py-10">
+          <td
+            className="p-2 flex items-center space-x-1 md:space-x-4 text-left py-10"
+            onClick={() => handleNavigate(item.productId)}
+          >
             <img
-              src={item.image}
-              className="w-8 h-8 md:w-24 md:h-24 object-contain rounded"
+              src={item.image.webp}
+              className="w-8 h-8 md:w-24 md:h-24 object-contain rounded cursor-pointer"
             />
-            <span className="text-left md:max-w-none md:whitespace-normal md:overflow-visible md:truncate-ellipsis max-w-[90px] truncate overflow-hidden whitespace-nowrap">
+            <span className="text-left md:max-w-none md:whitespace-normal md:overflow-visible md:truncate-ellipsis max-w-[90px] truncate overflow-hidden whitespace-nowrap cursor-pointer hover:underline">
               {item.title}
             </span>
           </td>

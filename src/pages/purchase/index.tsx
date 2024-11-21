@@ -105,13 +105,13 @@ export const Purchase: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="px-12 py-3 rounded-lg bg-[#5055B1] text-white font-medium hover:bg-[#2C307B]"
+              className="w-full md:w-[200px] px-12 py-3 rounded-lg bg-[#5055B1] text-white font-medium hover:bg-[#2C307B]"
             >
               {isLoading ? (
-                <>
+                <div className="flex gap-2">
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   처리 중...
-                </>
+                </div>
               ) : (
                 "구매하기"
               )}
