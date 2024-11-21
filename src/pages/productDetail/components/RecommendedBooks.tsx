@@ -57,11 +57,18 @@ export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
         itemsPerPage={itemsPerPage}
         renderItem={(item) => (
           <div className="flex flex-col">
-            <img
-              src={item.image.webp}
-              className="w-full max-h-[280px] justify-center object-contain cursor-pointer"
-              onClick={() => handleNavigate(item.id)}
-            />
+            <picture>
+              {/* WebP 이미지 */}
+              <source srcSet={item.image.webp} type="image/webp" />
+              {/* 폴백 이미지 (JPEG 또는 PNG) */}
+              <source srcSet={item.image.original} type="image/jpeg" />
+              {/* 기본 이미지 (폴백 미지원 브라우저에서도 동작) */}
+              <img
+                src={item.image.original} // 폴백용 이미지
+                className="w-full max-h-[280px] justify-center object-contain cursor-pointer"
+                onClick={() => handleNavigate(item.id)}
+              />
+            </picture>
             <div className="flex flex-col items-center h-full justify-center gap-1">
               <div
                 className="text-center mt-2 overflow-hidden text-ellipsis whitespace-normal line-clamp-1 cursor-pointer hover:underline"

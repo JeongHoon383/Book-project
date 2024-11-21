@@ -108,11 +108,18 @@ export const CartModal: React.FC<CartModalProps> = ({
               direction="column" // 세로 배치 설정
               renderItem={(item) => (
                 <div className="w-full h-full grid grid-cols-[1fr_1fr] justify-center">
-                  <img
-                    className="w-[200px] h-[200px] object-contain cursor-pointer"
-                    src={item.image.webp}
-                    onClick={() => handleNavigate(item.id)}
-                  />
+                  <picture>
+                    {/* WebP 이미지 */}
+                    <source srcSet={item.image.webp} type="image/webp" />
+                    {/* 폴백 이미지 (JPEG 또는 PNG) */}
+                    <source srcSet={item.image.original} type="image/jpeg" />
+                    {/* 기본 이미지 (폴백 미지원 브라우저에서도 동작) */}
+                    <img
+                      src={item.image.webp} // 폴백용 이미지
+                      className="w-[200px] h-[200px] object-contain cursor-pointer"
+                      onClick={() => handleNavigate(item.id)}
+                    />
+                  </picture>
                   <div className="flex justify-between items-center">
                     <div className="flex flex-col gap-5">
                       <div

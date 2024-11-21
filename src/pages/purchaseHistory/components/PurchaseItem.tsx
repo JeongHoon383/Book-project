@@ -38,10 +38,17 @@ export const PurchaseItem: React.FC<PurchaseItem> = ({
             className="p-2 flex items-center space-x-1 md:space-x-4 text-left py-10"
             onClick={() => handleNavigate(item.productId)}
           >
-            <img
-              src={item.image.webp}
-              className="w-8 h-8 md:w-24 md:h-24 object-contain rounded cursor-pointer"
-            />
+            <picture>
+              {/* WebP 이미지 */}
+              <source srcSet={item.image.webp} type="image/webp" />
+              {/* 폴백 이미지 (JPEG 또는 PNG) */}
+              <source srcSet={item.image.original} type="image/jpeg" />
+              {/* 기본 이미지 (폴백 미지원 브라우저에서도 동작) */}
+              <img
+                src={item.image.original} // 폴백용 이미지
+                className="w-8 h-8 md:w-24 md:h-24 object-contain rounded cursor-pointer"
+              />
+            </picture>
             <span className="text-left md:max-w-none md:whitespace-normal md:overflow-visible md:truncate-ellipsis max-w-[90px] truncate overflow-hidden whitespace-nowrap cursor-pointer hover:underline">
               {item.title}
             </span>
