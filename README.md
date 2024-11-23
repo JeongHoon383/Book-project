@@ -1,7 +1,5 @@
 # 경향문고
 
-![제목을-입력해주세요_-001](https://github.com/user-attachments/assets/be868f1c-7e90-4ebe-b1e5-3ab2e9075b14)
-
 **프로젝트 소개**
 
 도서를 판매, 구매를 할 수 있는 커머스 플랫폼 입니다.
@@ -23,6 +21,21 @@
 > 판매자  
 > ID:seller@test.com  
 > PW:123123!!
+
+## 🔥 성능 최적화
+
+- [웹 성능을 위한 이미지 최적화(webP)](https://velog.io/@wjdgns383/%EC%9B%B9-%EC%84%B1%EB%8A%A5%EC%9D%84-%EC%9C%84%ED%95%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%B5%9C%EC%A0%81%ED%99%94webP)
+- 설명2
+
+## 💡 트러블 슈팅
+
+- [캐러셀 컴포넌트 반응형 커스텀마이징 이슈 해결](https://velog.io/@wjdgns383/%EC%BA%90%EB%9F%AC%EC%85%80-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EB%B0%98%EC%9D%91%ED%98%95-%EC%BB%A4%EC%8A%A4%ED%85%80%EB%A7%88%EC%9D%B4%EC%A7%95-%EC%9D%B4%EC%8A%88-%ED%95%B4%EA%B2%B0)
+- [사용자 권한 관리 및 상태 유지 이슈 해결](https://velog.io/@wjdgns383/%EC%82%AC%EC%9A%A9%EC%9E%90-%EA%B6%8C%ED%95%9C-%EA%B4%80%EB%A6%AC-%EB%B0%8F-%EC%83%81%ED%83%9C-%EC%9C%A0%EC%A7%80-%EC%9D%B4%EC%8A%88-%ED%95%B4%EA%B2%B0)
+
+## 🛠️ 기술적 의사 결정
+
+- [Zustand를 사용하여 동적으로 주문페이지 관리](https://velog.io/@wjdgns383/Zustand%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC-%EB%8F%99%EC%A0%81%EC%9C%BC%EB%A1%9C-%EC%A3%BC%EB%AC%B8%ED%8E%98%EC%9D%B4%EC%A7%80-%EA%B4%80%EB%A6%AC)
+- 설명2
 
 ## 📖 실행방법
 
@@ -157,21 +170,6 @@ http://localhost:5173/
 
 - 판매 상품 조회, 등록, 수정, 삭제 기능
 - 상품 정렬, 무한스크롤 기능
-
-## 🔥 성능 최적화
-
-- [웹 성능을 위한 이미지 최적화(webP)](https://velog.io/@wjdgns383/%EC%9B%B9-%EC%84%B1%EB%8A%A5%EC%9D%84-%EC%9C%84%ED%95%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%B5%9C%EC%A0%81%ED%99%94webP)
-- 설명2
-
-## 💡 트러블 슈팅
-
-- [캐러셀 컴포넌트 반응형 커스텀마이징 이슈 해결](https://velog.io/@wjdgns383/%EC%BA%90%EB%9F%AC%EC%85%80-%EC%BB%B4%ED%8F%AC%EB%84%8C%ED%8A%B8-%EB%B0%98%EC%9D%91%ED%98%95-%EC%BB%A4%EC%8A%A4%ED%85%80%EB%A7%88%EC%9D%B4%EC%A7%95-%EC%9D%B4%EC%8A%88-%ED%95%B4%EA%B2%B0)
-- [사용자 권한 관리 및 상태 유지 이슈 해결](https://velog.io/@wjdgns383/%EC%82%AC%EC%9A%A9%EC%9E%90-%EA%B6%8C%ED%95%9C-%EA%B4%80%EB%A6%AC-%EB%B0%8F-%EC%83%81%ED%83%9C-%EC%9C%A0%EC%A7%80-%EC%9D%B4%EC%8A%88-%ED%95%B4%EA%B2%B0)
-
-## 🛠️ 기술적 의사 결정
-
-- [Zustand를 사용하여 동적으로 주문페이지 관리](https://velog.io/@wjdgns383/Zustand%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC-%EB%8F%99%EC%A0%81%EC%9C%BC%EB%A1%9C-%EC%A3%BC%EB%AC%B8%ED%8E%98%EC%9D%B4%EC%A7%80-%EA%B4%80%EB%A6%AC)
-- 설명2
 
 ## 🏗️ 아키텍처
 
