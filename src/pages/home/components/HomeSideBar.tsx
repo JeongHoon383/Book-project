@@ -2,6 +2,7 @@ import { pageRoutes } from "@/apiRoutes";
 import { useModal } from "@/hooks/useModal";
 import { CartModal } from "@/pages/common/components/CartModal";
 import { useAuthStore } from "@/store/auth/useAuthStore";
+import { useCartStore } from "@/store/cart/useCartStore";
 import { useToastStore } from "@/store/toast/useToastStore";
 import {
   BookPlus,
@@ -18,6 +19,7 @@ export const HomeSideBar = () => {
   const navigate = useNavigate();
 
   const user = useAuthStore((state) => state.user);
+  const cart = useCartStore((state) => state.cart);
   const addToast = useToastStore((state) => state.addToast);
   const {
     isOpen: isCartModalOpen,
@@ -37,6 +39,12 @@ export const HomeSideBar = () => {
       );
       return;
     }
+
+    if (cart.length === 0) {
+      addToast("장바구니에 상품을 담아주세요", "error");
+      return;
+    }
+
     openCartModal();
   };
 

@@ -10,11 +10,11 @@ import { CartButton } from "./CartButton";
 import { LogoutButton } from "./LogoutButton.";
 import { LoginButton } from "./LoginButton";
 import { ConfirmModal } from "./ConfirmModal";
-import { CartModal } from "./CartModal";
 import { useCartStore } from "@/store/cart/useCartStore";
 import { useToastStore } from "@/store/toast/useToastStore";
 import SearchBar from "./SearchBar";
 import { Menu } from "lucide-react";
+import { CartModal } from "./CartModal";
 import { MenuModal } from "./MenuModal";
 
 export const Navbar = () => {
@@ -89,8 +89,6 @@ export const Navbar = () => {
     openMenuModal();
   };
 
-  // menu바 클릭했을 때 메뉴 모달 나오게
-
   return (
     <>
       <nav className="h-32 flex items-center justify-between px-4 md:px-52 border-b border-borderGray">
@@ -132,10 +130,12 @@ export const Navbar = () => {
         isModalOpened={isCartModalOpen}
         handleClickDisagree={closeCartModal}
       />
-      <MenuModal
-        isModalOpened={isMenuModalOPen}
-        handleClickDisagree={closeMenuMOdal}
-      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <MenuModal
+          isModalOpened={isMenuModalOPen}
+          handleClickDisagree={closeMenuMOdal}
+        />
+      </Suspense>
     </>
   );
 };
