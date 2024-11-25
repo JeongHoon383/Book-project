@@ -1,8 +1,6 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-
 import { useAuthStore } from "@/store/auth/useAuthStore";
-
 import { pageRoutes } from "@/apiRoutes";
 import { Navbar } from "./Navbar";
 import { Toast } from "./Toast";
@@ -52,9 +50,7 @@ export const Layout: React.FC<LayoutProps> = ({
       return <Navigate to={pageRoutes.main} />;
     }
   }
-
   // 판매 관리 페이지 접근, 구매 관리 페이지에는 접근 불가
-
   // 구매자 권한이 필요할 때
   if (authStatus === authStatusType.NEED_BUYER) {
     if (!isLogin) {

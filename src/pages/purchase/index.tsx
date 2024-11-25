@@ -9,6 +9,7 @@ import { useMakePurchase } from "@/lib/purchase/hooks/useMakePurchase";
 import { Loader2 } from "lucide-react";
 import { useOrderStore } from "@/store/order/useOrderStore";
 import { calculateTotal } from "@/store/order/orderUtils";
+import { authStatusType, Layout } from "../common/components/Layout";
 
 // orderStore 데이터 초기화
 
@@ -95,30 +96,32 @@ export const Purchase: React.FC = () => {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-5">
-          <p className="text-3xl font-bold">주문/결제</p>
-          <ShippingInfo />
-          <OrderItems product={product} />
-          <PaymentInfo product={product} />
-          <div className="flex justify-end mb-10">
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full md:w-[200px] px-12 py-3 rounded-lg bg-[#5055B1] text-white font-medium hover:bg-[#2C307B]"
-            >
-              {isLoading ? (
-                <div className="flex gap-2">
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  처리 중...
-                </div>
-              ) : (
-                "구매하기"
-              )}
-            </button>
+      <Layout authStatus={authStatusType.NEED_BUYER}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-col gap-5">
+            <p className="text-3xl font-bold">주문/결제</p>
+            <ShippingInfo />
+            <OrderItems product={product} />
+            <PaymentInfo product={product} />
+            <div className="flex justify-end mb-10">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full md:w-[200px] px-12 py-3 rounded-lg bg-[#5055B1] text-white font-medium hover:bg-[#2C307B]"
+              >
+                {isLoading ? (
+                  <div className="flex gap-2">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    처리 중...
+                  </div>
+                ) : (
+                  "구매하기"
+                )}
+              </button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </Layout>
     </FormProvider>
   );
 };
