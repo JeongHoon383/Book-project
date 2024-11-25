@@ -25,7 +25,7 @@
 ## 🔥 성능 최적화
 
 - [웹 성능을 위한 이미지 최적화(webP)](https://velog.io/@wjdgns383/%EC%9B%B9-%EC%84%B1%EB%8A%A5%EC%9D%84-%EC%9C%84%ED%95%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%B5%9C%EC%A0%81%ED%99%94webP)
-- 설명2
+- [React.lazy()를 활용한 상품 등록 모달 동적 로드로 성능 개선](https://velog.io/@wjdgns383/React.lazy%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-%EC%83%81%ED%92%88-%EB%93%B1%EB%A1%9D-%EB%AA%A8%EB%8B%AC-%EB%8F%99%EC%A0%81-%EB%A1%9C%EB%93%9C%EB%A1%9C-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0)
 
 ## 💡 트러블 슈팅
 

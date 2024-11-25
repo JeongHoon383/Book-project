@@ -9,6 +9,7 @@ import { CartModal } from "../common/components/CartModal";
 import { pageRoutes } from "@/apiRoutes";
 import { CartItem } from "@/store/cart/types";
 import { useOrderStore } from "@/store/order/useOrderStore";
+import { authStatusType, Layout } from "../common/components/Layout";
 
 export const ProductDetail = () => {
   const navigate = useNavigate();
@@ -48,29 +49,31 @@ export const ProductDetail = () => {
   }
 
   return (
-    <div className="flex flex-col">
-      {product ? (
-        <BookMain
-          product={product}
-          onClickAddCartButton={(e: React.MouseEvent) => {
-            e.stopPropagation();
-            handleCartAction(product);
-          }}
-          onClickAddOrderButton={handleOrderAction}
-          onClickViewCart={openCartModal}
+    <Layout authStatus={authStatusType.NEED_LOGIN}>
+      <div className="flex flex-col">
+        {product ? (
+          <BookMain
+            product={product}
+            onClickAddCartButton={(e: React.MouseEvent) => {
+              e.stopPropagation();
+              handleCartAction(product);
+            }}
+            onClickAddOrderButton={handleOrderAction}
+            onClickViewCart={openCartModal}
+          />
+        ) : (
+          <div>Loading...</div>
+        )}
+        {filteredBooks ? (
+          <RecommendedBooks books={filteredBooks} />
+        ) : (
+          <div>Loading...</div>
+        )}
+        <CartModal
+          isModalOpened={isCartModalOpen}
+          handleClickDisagree={closeCartModal}
         />
-      ) : (
-        <div>Loading...</div>
-      )}
-      {filteredBooks ? (
-        <RecommendedBooks books={filteredBooks} />
-      ) : (
-        <div>Loading...</div>
-      )}
-      <CartModal
-        isModalOpened={isCartModalOpen}
-        handleClickDisagree={closeCartModal}
-      />
-    </div>
+      </div>
+    </Layout>
   );
 };
