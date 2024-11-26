@@ -12,7 +12,6 @@ import { NotFoundPage } from "@/pages/error/components/NotFoundPage";
 import { RootErrorBoundary } from "@/pages/common/components/RootErrorHandler";
 import { RootSuspense } from "@/pages/common/components/RootSuspense";
 
-// 로그인한 사용자에게 공통적으로 적용되는 레이아웃
 const CommonLayout = () => (
   <RootErrorBoundary>
     <RootSuspense>

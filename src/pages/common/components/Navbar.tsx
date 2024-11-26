@@ -130,12 +130,10 @@ export const Navbar = () => {
         isModalOpened={isCartModalOpen}
         handleClickDisagree={closeCartModal}
       />
-      <Suspense fallback={<div>Loading...</div>}>
-        <MenuModal
-          isModalOpened={isMenuModalOPen}
-          handleClickDisagree={closeMenuMOdal}
-        />
-      </Suspense>
+      <MenuModal
+        isModalOpened={isMenuModalOPen}
+        handleClickDisagree={closeMenuMOdal}
+      />
     </>
   );
 };

@@ -33,6 +33,7 @@ interface ApiErrorBoundaryProps {
   children: ReactNode;
 }
 
+// React-Query와 연동하여 에러 처리, 아래 함수로 자식 컴포넌트를 감싸 에러 처리
 export const ApiErrorBoundary: React.FC<ApiErrorBoundaryProps> = ({
   children,
 }) => {
