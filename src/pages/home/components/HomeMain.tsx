@@ -1,7 +1,8 @@
 import { categories } from "@/constants";
 import { HomeProductList } from "./HomeProductList";
 import { useFilterStore } from "@/store/filter/useFilterStore";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { ApiErrorBoundary } from "@/pages/common/components/ApiErrorBoundary";
 
 export const HomeMain = () => {
   const setCategoryId = useFilterStore((state) => state.setCategoryId);
@@ -45,7 +46,11 @@ export const HomeMain = () => {
         ))}
       </div>
       <div className="mt-10">
-        <HomeProductList />
+        <ApiErrorBoundary>
+          <Suspense fallback={<div>Loading...</div>}>
+            <HomeProductList />
+          </Suspense>
+        </ApiErrorBoundary>
       </div>
     </div>
   );
