@@ -11,8 +11,6 @@ import { useOrderStore } from "@/store/order/useOrderStore";
 import { calculateTotal } from "@/store/order/orderUtils";
 import { authStatusType, Layout } from "../common/components/Layout";
 
-// orderStore 데이터 초기화
-
 export interface FormData {
   name: string;
   address: string;
