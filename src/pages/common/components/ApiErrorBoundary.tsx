@@ -1,9 +1,8 @@
-import { Button } from "@/components/ui/button";
 import { useQueryErrorResetBoundary } from "@tanstack/react-query";
-import { RefreshCcw } from "lucide-react";
 import { ReactNode } from "react";
 import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { useLocation } from "react-router-dom";
+import { Button } from "./Button";
 
 interface ApiErrorFallbackProps extends FallbackProps {
   additionalProp?: string;
@@ -16,14 +15,29 @@ export const ApiErrorFallback: React.FC<ApiErrorFallbackProps> = ({
   if (error instanceof Error) {
     if (error.name === "FetchError") {
       return (
-        <Button variant="default" onClick={resetErrorBoundary}>
-          다시시도
-          <RefreshCcw className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="flex flex-col justify-center items-center h-screen">
+          <h1 className="md:text-5xl text-2xl font-bold mb-5">
+            서비스에 접속할 수 없습니다.
+          </h1>
+          <p className="mb-10 md:text-base text-xs">
+            새로고침을 하거나 잠시 후 다시 접속해 주시기 바랍니다.
+          </p>
+          <Button text="새로고침" onClick={resetErrorBoundary} />
+        </div>
       );
     }
-  } else {
-    throw error;
+    // 기본 에러 처리
+    return (
+      <div className="flex flex-col justify-center items-center h-screen">
+        <h1 className="md:text-5xl text-2xl font-bold mb-5">
+          서비스에 접속할 수 없습니다.
+        </h1>
+        <p className="mb-10 md:text-base text-xs">
+          새로고침을 하거나 잠시 후 다시 접속해 주시기 바랍니다.
+        </p>
+        <Button text="새로고침" onClick={resetErrorBoundary} />
+      </div>
+    );
   }
 
   return null;

@@ -122,39 +122,6 @@ export const fetchProductsAPI = async (
   }
 };
 
-// 상품 조회(동일한 아이디 값)
-export const fetchProductByIdAPI = async (
-  productId: string
-): Promise<IProduct> => {
-  try {
-    const productDocRef = collection(db, "products");
-    const q = query(productDocRef, where("id", "==", productId));
-    const querySnapshot = await getDocs(q);
-
-    const products = querySnapshot.docs.map((doc) => {
-      const data = doc.data();
-      return {
-        id: String(data.id),
-        sellerId: data.sellerId,
-        title: data.title,
-        price: Number(data.price),
-        stock: data.stock,
-        description: data.description,
-        category: data.category,
-        author: data.author,
-        publishedDate: data.publishedDate,
-        image: data.image || "",
-        createdAt: data.createdAt?.toDate().toISOString(),
-        updatedAt: data.updatedAt?.toDate().toISOString(),
-      } as IProduct;
-    });
-    return products[0];
-  } catch (error) {
-    console.error("Error fetching products: ", error);
-    throw error;
-  }
-};
-
 // 상품 추가
 export const addProductAPI = async (
   productData: NewProductDTO
@@ -204,28 +171,6 @@ export const addProductAPI = async (
     throw error;
   }
 };
-
-// const cleanUpDuplicates = async () => {
-//   const productsRef = collection(db, "products");
-//   const productsSnapshot = await getDocs(productsRef);
-
-//   const idMap: Record<string, boolean> = {};
-
-//   productsSnapshot.forEach((doc) => {
-//     const data = doc.data();
-//     const id = data.id;
-
-//     if (idMap[id]) {
-//       // 중복된 문서 삭제
-//       deleteDoc(doc.ref);
-//       console.log(`Deleted duplicate product with id: ${id}`);
-//     } else {
-//       idMap[id] = true; // 고유 ID 저장
-//     }
-//   });
-// };
-
-// cleanUpDuplicates();
 
 // 상품 삭제
 export const deleteProductAPI = async (productId: string): Promise<void> => {

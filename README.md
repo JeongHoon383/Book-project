@@ -173,7 +173,7 @@ http://localhost:5173/
 
 ## 🏗️ 아키텍처
 
-<img src="https://github.com/user-attachments/assets/88ded67a-88a7-470f-987d-46b54505af0e" width="1000"/>
+<img src="https://github.com/user-attachments/assets/c2983ec2-cf9d-4098-8b3c-9bb490c2e59b" width="1000"/>
 
 ## 🗂️ 폴더구조
 

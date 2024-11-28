@@ -3,7 +3,6 @@ import { HomeProductItem } from "./HomeProductItem";
 import { useState } from "react";
 import { PRODUCT_PAGE_SIZE } from "@/constants";
 import { useInfiniteScroll } from "@/lib/product/hooks/useInfiniteScroll";
-import { LoadingSpinner } from "@/pages/common/components/LoadingSpinner";
 import { useModal } from "@/hooks/useModal";
 import { CartModal } from "@/pages/common/components/CartModal";
 import { useAddToCart } from "@/hooks/useAddToCart";
@@ -14,6 +13,8 @@ import { IProduct } from "@/lib/product/types";
 import { CartItem } from "@/store/cart/types";
 import { Heart, ShoppingCart } from "lucide-react";
 import CustomSelect from "@/pages/common/components/CustomSelect";
+import { LoadingSpinner } from "@/pages/common/components/LoadingSpinner";
+import { LoadingPage } from "@/pages/loading/components/LoadingPage";
 
 interface HomeProductListProps {
   pageSize?: number;
@@ -109,15 +110,11 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
     }
   };
 
-  // hover 했을 때 해당 상품의 아이디가 담겨야됨
-
   const sortedProductList = sortedProducts();
 
   if (isLoading) {
-    return <LoadingSpinner size={50} color="#007aff" centered={true} />; // 초기 로딩 시 스피너 표시
+    return <LoadingPage />;
   }
-
-  // 모바일일때 글씨 제거, 아이콘만 나오게
 
   return (
     <div>

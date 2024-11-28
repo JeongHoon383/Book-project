@@ -10,13 +10,10 @@ import { PurchaseHistory } from "@/pages/purchaseHistory";
 import { ErrorPage } from "@/pages/error/components/ErrorPage";
 import { NotFoundPage } from "@/pages/error/components/NotFoundPage";
 import { RootErrorBoundary } from "@/pages/common/components/RootErrorHandler";
-import { RootSuspense } from "@/pages/common/components/RootSuspense";
 
 const CommonLayout = () => (
   <RootErrorBoundary>
-    <RootSuspense>
-      <Outlet />
-    </RootSuspense>
+    <Outlet />
   </RootErrorBoundary>
 );
 
