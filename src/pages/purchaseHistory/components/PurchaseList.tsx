@@ -1,9 +1,10 @@
 import CustomSelect from "@/pages/common/components/CustomSelect";
 import { useFetchPurchase } from "@/lib/purchase/hooks/useFetchPurchase";
-import { LoadingSpinner } from "@/pages/common/components/LoadingSpinner";
 import { PurchaseItem } from "./PurchaseItem";
 import { useState } from "react";
 import { useCancelPurchase } from "@/lib/purchase/hooks/useCancelPurchase";
+import { Button } from "@/pages/common/components/Button";
+import { LoadingPage } from "@/pages/loading/components/LoadingPage";
 
 export const PurchaseList = () => {
   const { data, isLoading } = useFetchPurchase();
@@ -65,27 +66,22 @@ export const PurchaseList = () => {
   };
 
   if (isLoading || !data) {
-    return <LoadingSpinner size={50} color="#007aff" centered={true} />;
+    return <LoadingPage />;
   }
 
   return (
     <div className="flex flex-col gap-5">
       <div className="flex gap-2 border-b border-borderGray py-5 px-2 font-medium">
-        <div>전체 {data.length}</div>
+        <div>전체 {data?.length}</div>
         <div>
-          주문 완료 {data.filter((item) => item.status === "주문 완료").length}
+          주문 완료 {data?.filter((item) => item.status === "주문 완료").length}
         </div>
         <div>
-          주문 취소 {data.filter((item) => item.status === "주문 취소").length}
+          주문 취소 {data?.filter((item) => item.status === "주문 취소").length}
         </div>
       </div>
       <div className="flex justify-end gap-2">
-        <button
-          onClick={handleCancelOrder}
-          className="border border-borderGray py-2 px-4 rounded-lg"
-        >
-          주문 취소
-        </button>
+        <Button text="주문취소" onClick={handleCancelOrder}></Button>
         <CustomSelect setSortOption={setSortOption} />
       </div>
       {/* 여기부터 시작 */}

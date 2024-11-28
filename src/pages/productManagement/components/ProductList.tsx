@@ -12,6 +12,7 @@ import { useFilterStore } from "@/store/filter/useFilterStore";
 import CustomSelect from "@/pages/common/components/CustomSelect";
 import { Button } from "@/pages/common/components/Button";
 import { useToastStore } from "@/store/toast/useToastStore";
+import { LoadingPage } from "@/pages/loading/components/LoadingPage";
 
 const ProductRegistrationModal = lazy(() =>
   import("./ProductRegistrationModal").then((module) => ({
@@ -43,11 +44,7 @@ export const ProductList: React.FC<ProductListProps> = ({
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  }); //
-
-  if (isLoading) {
-    return <LoadingSpinner size={50} color="#007aff" centered={true} />; // 초기 로딩 시 스피너 표시
-  }
+  });
 
   // 상품 목록 정렬 함수
   const sortedProducts = () => {
@@ -125,6 +122,10 @@ export const ProductList: React.FC<ProductListProps> = ({
       openModal();
     }
   };
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
   return (
     <div>

@@ -1,7 +1,7 @@
 import { categories } from "@/constants";
 import { HomeProductList } from "./HomeProductList";
 import { useFilterStore } from "@/store/filter/useFilterStore";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import { ApiErrorBoundary } from "@/pages/common/components/ApiErrorBoundary";
 
 export const HomeMain = () => {
@@ -47,9 +47,7 @@ export const HomeMain = () => {
       </div>
       <div className="mt-10">
         <ApiErrorBoundary>
-          <Suspense fallback={<div>Loading...</div>}>
-            <HomeProductList />
-          </Suspense>
+          <HomeProductList />
         </ApiErrorBoundary>
       </div>
     </div>

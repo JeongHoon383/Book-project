@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Carousel } from "./Carousel";
-import { LoadingSpinner } from "./LoadingSpinner";
 import { Trash2, X } from "lucide-react"; // Trash 아이콘 추가
 import { useCartStore } from "@/store/cart/useCartStore";
 import { convertCartItemToIProduct } from "@/utils/convertToCarouselType";
@@ -21,7 +20,7 @@ export const CartModal: React.FC<CartModalProps> = ({
   handleClickDisagree,
 }) => {
   const navigate = useNavigate();
-  const { data, isLoading } = useFetchAllProducts();
+  const { data } = useFetchAllProducts();
   const user = useAuthStore((state) => state.user);
   const setOrder = useOrderStore((state) => state.setOrder);
 
@@ -76,10 +75,6 @@ export const CartModal: React.FC<CartModalProps> = ({
       setShippingFee(3000); // 50,000원 미만이면 3,000원 부과
     }
   }, [totalPrice]);
-
-  if (isLoading || !data) {
-    return <LoadingSpinner size={50} color="#007aff" centered={true} />;
-  }
 
   const carouselItems = data ? convertCartItemToIProduct(cart, data) : [];
 
