@@ -35,7 +35,7 @@
 ## 🛠️ 기술적 의사 결정
 
 - [Zustand를 사용하여 동적으로 주문페이지 관리](https://velog.io/@wjdgns383/Zustand%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC-%EB%8F%99%EC%A0%81%EC%9C%BC%EB%A1%9C-%EC%A3%BC%EB%AC%B8%ED%8E%98%EC%9D%B4%EC%A7%80-%EA%B4%80%EB%A6%AC)
-- 설명2
+- [react-error-boundary를 활용한 에러처리](https://velog.io/@wjdgns383/react-error-boundary%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-%EC%97%90%EB%9F%AC%EC%B2%98%EB%A6%AC)
 
 ## 📖 실행방법
 
