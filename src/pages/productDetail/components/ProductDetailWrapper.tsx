@@ -9,6 +9,7 @@ import { pageRoutes } from "@/apiRoutes";
 import { CartItem } from "@/store/cart/types";
 import { useOrderStore } from "@/store/order/useOrderStore";
 import { LoadingPage } from "@/pages/loading/components/LoadingPage";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export const ProductDetailWrapper = () => {
   const navigate = useNavigate();
@@ -58,6 +59,8 @@ export const ProductDetailWrapper = () => {
       navigate(pageRoutes.purchase);
     }
   };
+
+  usePageTitle(selectedProduct?.title, "경향문고");
 
   if (isLoading) {
     return <LoadingPage />;
