@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { PRODUCT_KEY } from "../key";
 import { fetchProductsAPI } from "../api";
-import { PaginatedProductsDTO } from "../types"; // PaginatedProductsDTO를 포함
+import { PaginatedProductsDTO } from "../types";
 import { PRODUCT_PAGE_SIZE } from "@/constants";
 import { useFilterStore } from "@/store/filter/useFilterStore";
 

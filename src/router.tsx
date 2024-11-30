@@ -21,34 +21,34 @@ const router = createBrowserRouter([
   {
     element: <CommonLayout />,
     children: [
-      { path: pageRoutes.main, element: <Home />, errorElement: <ErrorPage /> }, // NEED_LOGIN
+      { path: pageRoutes.main, element: <Home />, errorElement: <ErrorPage /> },
       {
-        path: pageRoutes.register, // NEED_NOT_LOGIN
+        path: pageRoutes.register,
         element: <Register />,
         errorElement: <ErrorPage />,
       },
       {
-        path: pageRoutes.login, // NEED_NOT_LOGIN
+        path: pageRoutes.login,
         element: <Login />,
         errorElement: <ErrorPage />,
       },
       {
-        path: `${pageRoutes.productDetail}/:id`, // NEED_LOGIN
+        path: `${pageRoutes.productDetail}/:id`,
         element: <ProductDetail />,
         errorElement: <ErrorPage />,
       },
       {
-        path: pageRoutes.purchase, // NEED_BUYER
+        path: pageRoutes.purchase,
         element: <Purchase />,
         errorElement: <ErrorPage />,
       },
       {
         path: pageRoutes.purchaseHistory,
-        element: <PurchaseHistory />, // NEED_BUYER
+        element: <PurchaseHistory />,
         errorElement: <ErrorPage />,
       },
       {
-        path: pageRoutes.productManageMent, // NEED_SELLER
+        path: pageRoutes.productManageMent,
         element: <ProductManageMent />,
         errorElement: <ErrorPage />,
       },

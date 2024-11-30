@@ -21,9 +21,9 @@ export const useLogin = () => {
         id: userData.uid,
         email: userData.email,
         displayName: userData.displayName || "",
-        isSeller: false, // 기본값으로 설정, 실제 값은 별도로 확인 필요
-        createdAt: new Date(), // 현재 시간으로 설정, 실제 값은 서버에서 제공받아야 함
-        updatedAt: new Date(), // 현재 시간으로 설정, 실제 값은 서버에서 제공받아야 함
+        isSeller: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
       setUser(user);
       navigate(pageRoutes.main);

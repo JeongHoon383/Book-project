@@ -22,7 +22,6 @@ export const registerUserAPI = async ({
   isSeller,
 }: RegisterUserReqDTO): Promise<User> => {
   try {
-    // Firebase Authentication을 사용하여 사용자 생성
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -30,10 +29,8 @@ export const registerUserAPI = async ({
     );
     const user = userCredential.user;
 
-    // 사용자 프로필 업데이트
     await updateProfile(user, { displayName: name });
 
-    // Firestore에 저장할 사용자 정보 생성
     const now = new Date();
     const userData: User = {
       id: user.uid,
@@ -44,7 +41,6 @@ export const registerUserAPI = async ({
       updatedAt: now,
     };
 
-    // Firestore에 사용자 정보 저장
     await setDoc(doc(db, "users", user.uid), userData);
 
     return userData;
@@ -61,7 +57,6 @@ export const loginAPI = async ({
   password,
 }: LoginRequestDto): Promise<LoginResponseDto> => {
   try {
-    // Firebase Authentication을 사용하여 로그인
     const userCredential = await signInWithEmailAndPassword(
       auth,
       email,
@@ -72,7 +67,6 @@ export const loginAPI = async ({
 
     Cookies.set("accessToken", token, { expires: 7 });
 
-    // Firestore에서 추가 사용자 정보 가져오기
     const userDoc = await getDoc(doc(db, "users", user.uid));
 
     if (!userDoc.exists()) {
@@ -81,7 +75,6 @@ export const loginAPI = async ({
 
     const userData = userDoc.data() as LoginResponseDto;
 
-    // updatedAt 갱신
     await updateDoc(doc(db, "users", user.uid), {
       updatedAt: new Date(),
     });

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Carousel } from "./Carousel";
-import { Trash2, X } from "lucide-react"; // Trash 아이콘 추가
+import { Trash2, X } from "lucide-react";
 import { useCartStore } from "@/store/cart/useCartStore";
 import { convertCartItemToIProduct } from "@/utils/convertToCarouselType";
 import { useFetchAllProducts } from "@/lib/product/hooks/useFetchAllProducts";
@@ -39,7 +39,7 @@ export const CartModal: React.FC<CartModalProps> = ({
     handleClickDisagree();
   };
 
-  const [shippingFee, setShippingFee] = useState(3000); // 기본 배송비 설정
+  const [shippingFee, setShippingFee] = useState(3000);
 
   const handleIncrease = (id: string) => {
     const productInCart = cart.find((item) => item.id === id);
@@ -54,7 +54,7 @@ export const CartModal: React.FC<CartModalProps> = ({
   };
 
   const handleDecrease = (id: string) => {
-    decreaseItemCount(id, user!.id); // store의 수량 감소 함수 호출
+    decreaseItemCount(id, user!.id);
   };
 
   const handleClickDeleteItem = (id: string) => {
@@ -67,12 +67,11 @@ export const CartModal: React.FC<CartModalProps> = ({
     handleClickDisagree();
   };
 
-  // 배송비 조건 적용
   useEffect(() => {
     if (totalPrice >= 50000) {
-      setShippingFee(0); // 50,000원 이상이면 무료 배송
+      setShippingFee(0);
     } else {
-      setShippingFee(3000); // 50,000원 미만이면 3,000원 부과
+      setShippingFee(3000);
     }
   }, [totalPrice]);
 
@@ -100,17 +99,14 @@ export const CartModal: React.FC<CartModalProps> = ({
             <Carousel
               items={carouselItems}
               itemsPerPage={2}
-              direction="column" // 세로 배치 설정
+              direction="column"
               renderItem={(item) => (
                 <div className="w-full h-full grid grid-cols-[1fr_1fr] justify-center">
                   <picture>
-                    {/* WebP 이미지 */}
                     <source srcSet={item.image.webp} type="image/webp" />
-                    {/* 폴백 이미지 (JPEG 또는 PNG) */}
                     <source srcSet={item.image.original} type="image/jpeg" />
-                    {/* 기본 이미지 (폴백 미지원 브라우저에서도 동작) */}
                     <img
-                      src={item.image.webp} // 폴백용 이미지
+                      src={item.image.webp}
                       className="w-[200px] h-[200px] object-contain cursor-pointer"
                       onClick={() => handleNavigate(item.id)}
                     />
@@ -151,9 +147,8 @@ export const CartModal: React.FC<CartModalProps> = ({
                       </div>
                     </div>
                     <div>
-                      {/* 삭제 버튼 추가 */}
                       <button onClick={() => handleClickDeleteItem(item.id)}>
-                        <Trash2 size={16} /> {/* Trash 아이콘 표시 */}
+                        <Trash2 size={16} />
                       </button>
                     </div>
                   </div>

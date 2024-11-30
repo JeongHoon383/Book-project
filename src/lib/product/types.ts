@@ -20,7 +20,7 @@ export interface PaginatedProductsDTO {
   products: IProduct[];
   hasNextPage: boolean;
   nextPage?: number;
-} // 페이지네이션 처리된 상품 리스트
+}
 
 export interface NewProductDTO {
   sellerId: string;

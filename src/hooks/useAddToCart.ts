@@ -22,7 +22,7 @@ export const useAddToCart = () => {
       }
 
       const cartItem: CartItem = { ...product, count: 1 };
-      addCartItem(cartItem, user!.id, 1); // user가 로그인된 상태이므로 non-null 확정
+      addCartItem(cartItem, user!.id, 1);
       addToast("상품이 장바구니에 담겼습니다.", "success");
     },
     [user, addCartItem, addToast]

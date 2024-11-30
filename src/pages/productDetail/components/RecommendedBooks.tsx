@@ -12,7 +12,7 @@ export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
   books,
 }) => {
   const navigate = useNavigate();
-  const [itemsPerPage, setItemsPerPage] = useState(5); // itemsPerPage 상태 추가
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const handleNavigate = (id: string) => {
     navigate(`${pageRoutes.productDetail}/${id}`);
@@ -37,7 +37,7 @@ export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
       }
     };
 
-    const debouncedResize = debounce(updateItemsPerPage, 200); // 200ms 지연 적용
+    const debouncedResize = debounce(updateItemsPerPage, 200);
 
     window.addEventListener("resize", debouncedResize);
 
@@ -58,13 +58,10 @@ export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
         renderItem={(item) => (
           <div className="flex flex-col">
             <picture>
-              {/* WebP 이미지 */}
               <source srcSet={item.image.webp} type="image/webp" />
-              {/* 폴백 이미지 (JPEG 또는 PNG) */}
               <source srcSet={item.image.original} type="image/jpeg" />
-              {/* 기본 이미지 (폴백 미지원 브라우저에서도 동작) */}
               <img
-                src={item.image.original} // 폴백용 이미지
+                src={item.image.original}
                 className="w-full max-h-[280px] justify-center object-contain cursor-pointer"
                 onClick={() => handleNavigate(item.id)}
               />

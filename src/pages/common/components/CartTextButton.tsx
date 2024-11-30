@@ -11,7 +11,7 @@ interface CartTextButtonProps {
 export const CartTextButton: React.FC<CartTextButtonProps> = ({
   onClickAdd,
   onClickView,
-  id, // 해당 페이지의 상품 id
+  id,
 }) => {
   const cart = useCartStore((state) => state.cart);
   const isInCart = cart.some((item) => item.id === id);

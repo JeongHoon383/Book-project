@@ -25,7 +25,7 @@ export const HomeSideBar = () => {
     isOpen: isCartModalOpen,
     openModal: openCartModal,
     closeModal: closeCartModal,
-  } = useModal(); // CartModal 상태
+  } = useModal();
 
   const handleClickIcon = (page: string) => {
     navigate(page);

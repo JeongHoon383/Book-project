@@ -14,7 +14,6 @@ export const PurchaseList = () => {
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [isAllSelected, setIsAllSelected] = useState<boolean>(false);
 
-  // 상품 목록 정렬 함수
   const sortedProducts = () => {
     if (!data) return [];
     switch (sortOption) {
@@ -84,10 +83,8 @@ export const PurchaseList = () => {
         <Button text="주문취소" onClick={handleCancelOrder}></Button>
         <CustomSelect setSortOption={setSortOption} />
       </div>
-      {/* 여기부터 시작 */}
       <div className="container mx-auto">
         <table className="w-full border-collapse">
-          {/* 테이블 헤더 */}
           <thead>
             <tr className="text-gray-700 border-b border-borderGray text-sm md:text-lg">
               <th className="p-2 text-center w-8">
@@ -110,7 +107,6 @@ export const PurchaseList = () => {
               <th className="p-2 text-center hidden md:table-cell">주문일</th>
             </tr>
           </thead>
-          {/* 테이블 바디 */}
           <tbody>
             {sortedProductList.map((item) => (
               <PurchaseItem

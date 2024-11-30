@@ -28,12 +28,12 @@ export const Navbar = () => {
     isOpen: isConfirmModalOpen,
     openModal: openConfirmModal,
     closeModal: closeConfirmModal,
-  } = useModal(); // ConfirmModal 상태
+  } = useModal();
   const {
     isOpen: isCartModalOpen,
     openModal: openCartModal,
     closeModal: closeCartModal,
-  } = useModal(); // CartModal 상태
+  } = useModal();
   const isLogin = useAuthStore((state) => state.isLogin);
   const logout = useAuthStore((state) => state.logout);
   const user = useAuthStore((state) => state.user);

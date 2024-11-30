@@ -16,7 +16,7 @@ export const useProductStore = create<ProductState>((set) => ({
       products: state.products.filter((product) => product.id !== productId),
     })),
 
-  setEditableProduct: (product) => set(() => ({ editableProduct: product })), // 수정할 상품 설정
+  setEditableProduct: (product) => set(() => ({ editableProduct: product })),
 
   updateProductInStore: (updatedProduct) =>
     set((state) => ({

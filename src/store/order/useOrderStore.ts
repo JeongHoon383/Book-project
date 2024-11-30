@@ -8,9 +8,8 @@ import {
 import { OrderStore } from "./types";
 
 export const useOrderStore = create<OrderStore>((set) => ({
-  product: null, // "바로 구매" 또는 "장바구니 주문" 상품을 저장
+  product: null,
 
-  // 초기화 함수 : 로컬스토리지에서 상태 불러오기
   initOrder: () => {
     const { product } = getOrderFromLocalStorage();
     set({ product });

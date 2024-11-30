@@ -19,9 +19,7 @@ import { db } from "@/firebase";
 import { ALL_CATEGORY_ID } from "@/constants";
 import { ProductFilter } from "@/store/product/types";
 
-let lastVisibleDocument: QueryDocumentSnapshot<DocumentData> | null = null; // 페이지네이션 상태 관리
-
-// 전체 상품 조회
+let lastVisibleDocument: QueryDocumentSnapshot<DocumentData> | null = null;
 export const fetchAllProductsAPI = async (): Promise<IProduct[]> => {
   try {
     const productDocRef = collection(db, "products");
@@ -54,7 +52,6 @@ export const fetchAllProductsAPI = async (): Promise<IProduct[]> => {
   }
 };
 
-// 상품 조회(무한 스크롤)
 export const fetchProductsAPI = async (
   filter: ProductFilter,
   pageSize: number,
@@ -66,7 +63,6 @@ export const fetchProductsAPI = async (
       orderBy("id", "desc"),
       limit(pageSize)
     );
-    // 특정 카테고리가 선택된 경우 해당 카테고리로 필터링
     if (filter.categoryId && filter.categoryId !== ALL_CATEGORY_ID) {
       q = query(
         q,
@@ -75,21 +71,18 @@ export const fetchProductsAPI = async (
       );
     }
 
-    // 검색어 필터
     if (filter.searchTerm) {
       const start = filter.searchTerm;
-      const end = filter.searchTerm + "\uf8ff"; // 접두사 기반 부분 일치
+      const end = filter.searchTerm + "\uf8ff";
       q = query(q, where("title", ">=", start), where("title", "<=", end));
     }
 
-    // 페이지가 1 이상일 경우 startAfter로 페이지네이션 설정
     if (page > 1 && lastVisibleDocument) {
       q = query(q, startAfter(lastVisibleDocument));
     }
 
     const querySnapshot = await getDocs(q);
 
-    // 현재 페이지의 마지막 문서를 저장하여 다음 페이지 시작점을 결정
     if (!querySnapshot.empty) {
       lastVisibleDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
     }
@@ -122,36 +115,31 @@ export const fetchProductsAPI = async (
   }
 };
 
-// 상품 추가
 export const addProductAPI = async (
   productData: NewProductDTO
 ): Promise<IProduct> => {
-  // Promise<IProduct> 추가된 데이터를 받았을 때 받는 데이터의 타입
-  // 데이터를 다시 반환하는 이유 : 1. 추가가 잘 되었는지 확인, 2. 반환된 데이터를 즉시 client측에 반영 - 추후 데이터를 다시 부를 필요가 없음 성능면에서 효율적
   try {
     return await runTransaction(db, async (transaction) => {
-      const productsRef = collection(db, "products"); // db 내의 "products" 라는 컬렉션 접근
-      const q = query(productsRef, orderBy("id", "desc"), limit(1)); // productRef 라는 컬렉션 안에 가장 최신화된 문서(id 기준 내림차순 정렬시 가장 높은값이 최신에 추가된 것) 1개를 가져옴
-      const querySnapshot = await getDocs(q); // q에 해당하는 데이터를 querySnapshot에 저장
+      const productsRef = collection(db, "products");
+      const q = query(productsRef, orderBy("id", "desc"), limit(1));
+      const querySnapshot = await getDocs(q);
 
       let maxId = 0;
       if (!querySnapshot.empty) {
         maxId = querySnapshot.docs[0].data().id;
       }
-      // 데이터가 비어있을 때를 대비
-      // 아이디값을 저장하는 이유 : 가장 최신화된 아이디를 저장함으로써 문서의 id 값을 순차적으로 배치 할 수 있음
 
       const newId = maxId + 1;
-      const newDocRef = doc(productsRef); // 문서를 저장할 위치 설정
+      const newDocRef = doc(productsRef);
 
       const newProductData = {
         ...productData,
         id: String(newId),
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
-      }; // 데이터를 어떻게 추가할건지 세팅
+      };
 
-      transaction.set(newDocRef, newProductData); // 데이터 저장
+      transaction.set(newDocRef, newProductData);
 
       const newProduct: IProduct = {
         ...newProductData,
@@ -184,7 +172,7 @@ export const deleteProductAPI = async (productId: string): Promise<void> => {
     }
 
     const docToDelete = querySnapshot.docs[0];
-    await deleteDoc(docToDelete.ref); // 여기서 왜 ref? docToDelete에 문서가 잘 담겨있지 않음?
+    await deleteDoc(docToDelete.ref);
     console.log("Product deleted successfully");
   } catch (error) {
     console.error("Error deleting product: ", error);
@@ -192,7 +180,6 @@ export const deleteProductAPI = async (productId: string): Promise<void> => {
   }
 };
 
-// 상품 업데이트
 export const updateProductAPI = async (
   productId: string,
   updateData: NewProductDTO

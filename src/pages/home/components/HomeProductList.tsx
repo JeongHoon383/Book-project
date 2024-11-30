@@ -45,18 +45,16 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
     isFetchingNextPage,
   });
 
-  // 전체 선택 체크박스 클릭 시 호출
   const handleSelectAll = () => {
     if (!products) return [];
     if (isAllSelected) {
-      setSelectedProductIds([]); // 전체 해제 시, 선택 목록 초기화
+      setSelectedProductIds([]);
     } else {
-      setSelectedProductIds(products.map((product) => product.id)); // 전체 선택시, 모든 상품의 ID 추가
+      setSelectedProductIds(products.map((product) => product.id));
     }
-    setIsAllSelected(!isAllSelected); // 전체 선택 상태 반전
+    setIsAllSelected(!isAllSelected);
   };
 
-  // 개별 상품 선택/해제 핸들링 함수
   const toggleSelectProduct = (id: string) => {
     setSelectedProductIds((prevSelected) =>
       prevSelected.includes(id)
@@ -65,7 +63,6 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
     );
   };
 
-  // 상품 목록 정렬 함수
   const sortedProducts = () => {
     if (!products) return [];
     switch (sortOption) {
@@ -105,7 +102,7 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
         ...product,
         count: 1,
       };
-      setOrder(directItem); // product가 있을 때만 호출
+      setOrder(directItem);
       navigate(pageRoutes.purchase);
     }
   };
@@ -150,13 +147,13 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
             key={`${product.id}_${index}`}
             onToggleSelect={() => toggleSelectProduct(product.id)}
             isSelected={selectedProductIds.includes(product.id)}
-            ref={index === sortedProductList.length - 1 ? ref : undefined} // 마지막 요소에 ref 할당
+            ref={index === sortedProductList.length - 1 ? ref : undefined}
             onClickAddCartButton={(e: React.MouseEvent) => {
               e.stopPropagation();
               handleCartAction(product);
             }}
             onClickAddOrderButton={() => handleOrderAction(product)}
-            onClickViewCart={openCartModal} // 장바구니 보기 클릭 시 모달 열기
+            onClickViewCart={openCartModal}
           />
         ))}
         <CartModal
@@ -169,7 +166,6 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
           style={{ display: "flex", justifyContent: "center", padding: "20px" }}
         >
           <LoadingSpinner size={30} color="#36d7b7" />{" "}
-          {/* 무한 스크롤 로딩 스피너 */}
         </div>
       )}
     </div>

@@ -1,6 +1,3 @@
-// 상품 등록 모달 구현
-// 파일 업로드, 상품 등록 그리고 firebase와 연동하여 데이터를 저장
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -20,7 +17,6 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ALL_CATEGORY_ID, categories } from "@/constants";
-// import { createNewProduct } from "@/helpers/product";
 import { useAddProduct } from "@/lib/product/hooks/useAddProduct";
 import { useUpdateProduct } from "@/lib/product/hooks/useUpdateProduct";
 
@@ -55,7 +51,6 @@ export const ProductRegistrationModal: React.FC<
     useAddProduct();
   const { mutateAsync: updateProductMutate, isPending: isUpdating } =
     useUpdateProduct();
-  // isPending 라고 이름을 붙여준 이유 : 지금 이 작업이 진행중이다 라고 명확하게 알려줌, 로딩중이라는 뜻은 좀 더 확장된 의미라 isPending으로 좀 더 명확하게 구분
   const editableProduct = useProductStore((state) => state.editableProduct);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
@@ -80,10 +75,9 @@ export const ProductRegistrationModal: React.FC<
 
   const [submissionError, setSubmissionError] = useState<string | null>(null);
 
-  // 수정 모드일 때 기존 데이터를 폼에 채우기 위한 useEffect
   useEffect(() => {
     if (editableProduct) {
-      setIsEditMode(true); // 수정 모드로 설정
+      setIsEditMode(true);
       setValue("title", editableProduct.title);
       setValue("author", editableProduct.author);
       setValue("price", editableProduct.price);
@@ -91,15 +85,15 @@ export const ProductRegistrationModal: React.FC<
       setValue("description", editableProduct.description || "");
       setValue("publishedDate", editableProduct.publishedDate);
       setValue("categoryId", editableProduct.category.id);
-      console.log("Editable product loaded into form:", editableProduct); // 폼에 채워진 데이터 확인용 로그
+      console.log("Editable product loaded into form:", editableProduct);
     } else {
-      setIsEditMode(false); // 등록 모드로 설정
+      setIsEditMode(false);
       reset();
     }
   }, [editableProduct, setValue, reset]);
 
   const onSubmit = async (data: ProductFormInputs) => {
-    setSubmissionError(null); // 폼 제출 과정에서 발생할 수 있는 에러 관리, ex) 에러 발생했을 때 에러 메세지를 UI에 보여줄 수 있음
+    setSubmissionError(null);
     try {
       if (!data.image || data.image.length === 0) {
         throw new Error("이미지를 선택해야 합니다.");
@@ -109,7 +103,7 @@ export const ProductRegistrationModal: React.FC<
       const imageUrls = await uploadImage(imageFile);
       if (!imageUrls) {
         throw new Error("이미지 업로드에 실패했습니다.");
-      } // 이미지 파일을 저장하는게 아닌 이미지 URL을 저장
+      }
 
       const selectedCategory = categories.find(
         (category) => category.id === data.categoryId
@@ -131,19 +125,16 @@ export const ProductRegistrationModal: React.FC<
         image: imageUrls,
       };
 
-      // `id`를 포함한 최종 데이터 생성
       const newProduct = {
-        id: editableProduct?.id || `${Date.now()}`, // 수정 시 기존 id, 아니면 새로 생성
+        id: editableProduct?.id || `${Date.now()}`,
         ...newProductData,
         createdAt: editableProduct?.createdAt || new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
 
       if (isEditMode && editableProduct) {
-        // 수정 모드
         await updateProductMutate(newProduct);
       } else {
-        // 등록 모드
         await addProductMutate(newProduct);
       }
       reset();

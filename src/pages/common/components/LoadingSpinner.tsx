@@ -1,9 +1,8 @@
-// components/LoadingSpinner.tsx
 import React from "react";
 
 interface LoadingSpinnerProps {
-  size?: number; // 스피너 크기 조정
-  color?: string; // 스피너 색상 조정
+  size?: number;
+  color?: string;
   centered?: boolean;
 }
 

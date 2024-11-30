@@ -18,7 +18,6 @@ export const HomeMain = () => {
   return (
     <div className="w-full h-screen">
       <div className="flex relative ml-2">
-        {/* 하단 border를 별도의 div로 분리 */}
         <div className="absolute bottom-0 w-full border-b border-black" />
 
         {categories.map((category) => (

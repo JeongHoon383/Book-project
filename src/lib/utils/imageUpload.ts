@@ -1,5 +1,3 @@
-// 이미지 파일을 Firebase Storage에 업로드하고, 업로드한 이미지의 다운로드 URL을 반환
-// 이미지 파일을 압축, WebP 포맷으로 변환, Firebase에 업로드하여
 import imageCompression from "browser-image-compression";
 import { auth, storage } from "@/firebase";
 import {
@@ -14,8 +12,6 @@ const MAX_HEIGHT = 512;
 const MAX_FILE_SIZE_MB = 1;
 const WEBP_QUALITY = 0.3;
 
-// 이미지 파일 WebP 포맷으로 변환
-// 파일 크기를 줄이고 업로드 성능 최적화
 const convertToWebP = async (file: File): Promise<Blob> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -67,7 +63,6 @@ const convertToWebP = async (file: File): Promise<Blob> => {
   });
 };
 
-// 최종적으로 다운로드 가능한 URL을 제공
 export const uploadImage = async (
   file: File
 ): Promise<{ original: string; webp: string } | null> => {
@@ -78,14 +73,12 @@ export const uploadImage = async (
     throw new Error("User not authenticated");
   }
 
-  // 원본 파일 이름 생성
   const originalFileName = `${Date.now()}_${file.name}`;
   const originalStorageRef = ref(
     storage,
     `products/original/${originalFileName}`
   );
 
-  // WebP 파일 이름 생성
   const webpFileName = `${Date.now()}_${file.name.split(".")[0]}.webp`;
   const webpStorageRef = ref(storage, `products/webp/${webpFileName}`);
 
@@ -97,11 +90,9 @@ export const uploadImage = async (
     customMetadata: { token: idToken },
   };
 
-  // 1. 원본 파일 업로드
   await uploadBytes(originalStorageRef, file, metadata);
   const originalUrl = await getDownloadURL(originalStorageRef);
 
-  // 2. WebP 파일 생성 및 업로드
   const compressdFile: File = await imageCompression(file, {
     maxSizeMB: MAX_FILE_SIZE_MB,
     maxWidthOrHeight: Math.max(MAX_WIDTH, MAX_HEIGHT),

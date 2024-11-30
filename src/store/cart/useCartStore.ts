@@ -52,7 +52,7 @@ export const useCartStore = create<CartStore>((set) => ({
                 stock: cartItem.stock - 1,
               }
             : cartItem
-        ); // 중복이 된다면
+        );
       } else {
         updatedCart = [
           ...state.cart,

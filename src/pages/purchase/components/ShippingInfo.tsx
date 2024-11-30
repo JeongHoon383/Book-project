@@ -102,11 +102,11 @@ export const ShippingInfo: React.FC = () => {
             id="request"
             placeholder="요청 사항을 입력하세요"
             className="input-style"
-            rows={3} // 기본 높이 설정
-            style={{ resize: "none" }} // 크기 조절 핸들러 제거
+            rows={3}
+            style={{ resize: "none" }}
             onChange={(e) => {
               handleRequestChange(e);
-              register("requests").onChange(e); // react-hook-form과의 연결 유지
+              register("requests").onChange(e);
             }}
           />
           <div className="text-sm text-gray-600 absolute bottom-2 right-2">

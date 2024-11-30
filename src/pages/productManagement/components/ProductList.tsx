@@ -46,16 +46,14 @@ export const ProductList: React.FC<ProductListProps> = ({
     isFetchingNextPage,
   });
 
-  // 상품 목록 정렬 함수
   const sortedProducts = () => {
     if (!products) return [];
     switch (sortOption) {
       case "latest":
         return [...products].sort((a, b) => {
-          // undefined 처리: createdAt이 undefined인 경우 null 날짜를 대체하도록 처리
           const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
           const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-          return dateB - dateA; // 최신순으로 정렬
+          return dateB - dateA;
         });
       case "priceLow":
         return [...products].sort((a, b) => a.price - b.price);
@@ -68,18 +66,16 @@ export const ProductList: React.FC<ProductListProps> = ({
 
   const sortedProductList = sortedProducts();
 
-  // 전체 선택 체크박스 클릭 시 호출
   const handleSelectAll = () => {
     if (!products) return [];
     if (isAllSelected) {
-      setSelectedProductIds([]); // 전체 해제 시, 선택 목록 초기화
+      setSelectedProductIds([]);
     } else {
-      setSelectedProductIds(products.map((product) => product.id)); // 전체 선택시, 모든 상품의 ID 추가
+      setSelectedProductIds(products.map((product) => product.id));
     }
-    setIsAllSelected(!isAllSelected); // 전체 선택 상태 반전
+    setIsAllSelected(!isAllSelected);
   };
 
-  // 개별 상품 선택/해제 핸들링 함수
   const toggleSelectProduct = (id: string) => {
     setSelectedProductIds((prevSelected) =>
       prevSelected.includes(id)
@@ -88,10 +84,9 @@ export const ProductList: React.FC<ProductListProps> = ({
     );
   };
 
-  // 개별 상품 선택, 삭제 기능
   const handleDelete = async () => {
     if (selectedProductIds.length === 0) {
-      alert("삭제할 항목이 없습니다."); // 삭제 알림창 수정 필요
+      alert("삭제할 항목이 없습니다.");
       return;
     }
     if (window.confirm("선택한 항목을 삭제하시겠습니까?")) {
@@ -100,15 +95,14 @@ export const ProductList: React.FC<ProductListProps> = ({
           selectedProductIds.map((id) => deleteMutation.mutateAsync(id))
         );
         addToast("상품이 삭제되었습니다.", "success");
-        setSelectedProductIds([]); // 삭제 후 선택 초기화
+        setSelectedProductIds([]);
       } catch (error) {
         console.error(error);
         addToast("상품 삭제에 실패하였습니다.", "error");
       }
-    } // 삭제 알림창 수정 필요
+    }
   };
 
-  // 개별 상품 선택, 수정 기능
   const handleEdit = () => {
     if (selectedProductIds.length !== 1) {
       alert("하나의 상품만 선택해 주세요.");
@@ -145,7 +139,6 @@ export const ProductList: React.FC<ProductListProps> = ({
           <Button text="수정" onClick={handleEdit} />
           <Button text="삭제" onClick={handleDelete} />
         </div>
-        {/* 여기부터 시작 */}
         <div className="container mx-auto">
           <table className="w-full border-collapse">
             <thead>
@@ -202,7 +195,6 @@ export const ProductList: React.FC<ProductListProps> = ({
           style={{ display: "flex", justifyContent: "center", padding: "20px" }}
         >
           <LoadingSpinner size={30} color="#36d7b7" />{" "}
-          {/* 무한 스크롤 로딩 스피너 */}
         </div>
       )}
     </div>

@@ -1,6 +1,3 @@
-// 상품 객체 생성 및 초기 상태 설정
-// 상품 등록시 필요한 데이터를 일관되게 처리
-
 import { categories } from "@/constants";
 import { NewProductDTO } from "@/lib/product/types";
 
@@ -27,5 +24,8 @@ export const initialProductState: NewProductDTO = {
   publishedDate: "",
   author: "",
   category: { id: "", name: "" },
-  image: null,
+  image: {
+    webp: "",
+    original: "",
+  },
 };

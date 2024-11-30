@@ -34,7 +34,7 @@ export const MenuModal: React.FC<MenuModalProps> = ({
 
   const handleIconClick = (page: string) => {
     navigate(page);
-    handleClickDisagree(); // 메뉴 클릭 시 드로어 닫기
+    handleClickDisagree();
   };
 
   const handleClickCart = () => {

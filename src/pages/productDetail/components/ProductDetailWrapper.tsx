@@ -12,7 +12,7 @@ import { LoadingPage } from "@/pages/loading/components/LoadingPage";
 
 export const ProductDetailWrapper = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>(); // URL 파라미터에서 ID 가져오기
+  const { id } = useParams<{ id: string }>();
   const setOrder = useOrderStore((state) => state.setOrder);
   const { data, isLoading } = useFetchAllProducts();
   const {
@@ -54,7 +54,7 @@ export const ProductDetailWrapper = () => {
         stock: selectedProduct.stock,
         author: selectedProduct.author,
       };
-      setOrder(directItem); // product가 있을 때만 호출
+      setOrder(directItem);
       navigate(pageRoutes.purchase);
     }
   };

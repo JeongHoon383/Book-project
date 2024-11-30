@@ -1,4 +1,3 @@
-// hooks/useInfiniteScroll.ts
 import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
@@ -25,5 +24,3 @@ export const useInfiniteScroll = ({
 
   return { ref };
 };
-
-// 동작원리 이해해야됨

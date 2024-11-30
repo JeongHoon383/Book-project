@@ -4,10 +4,10 @@ interface CarouselProps {
   items: IProduct[];
   itemsPerPage: number;
   renderItem: (item: IProduct) => React.ReactNode;
-  renderPrevArrow?: () => React.ReactNode; // 커스텀 이전 화살표 렌더링 함수
-  renderNextArrow?: () => React.ReactNode; // 커스텀 다음 화살표 렌더링 함수
-  showArrowsOnHover?: boolean; // hover 상태에서 화살표 표시 여부
-  direction?: "row" | "column"; // 가로 또는 세로 방향 설정 추가
+  renderPrevArrow?: () => React.ReactNode;
+  renderNextArrow?: () => React.ReactNode;
+  showArrowsOnHover?: boolean;
+  direction?: "row" | "column";
 }
 
 export const Carousel: React.FC<CarouselProps> = ({
@@ -16,14 +16,13 @@ export const Carousel: React.FC<CarouselProps> = ({
   renderItem,
   renderPrevArrow,
   renderNextArrow,
-  showArrowsOnHover = true, // 기본값을 hover 상태에서 표시로 설정
-  direction = "row", // 기본 방향을 "row"로 설정
+  showArrowsOnHover = true,
+  direction = "row",
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const [isHovered, setIsHovered] = useState(false);
 
-  // 페이지 이동 시 요소 개수를 확인하여 요소가 없으면 이전 페이지로 이동
   useEffect(() => {
     const startIdx = (currentPage - 1) * itemsPerPage;
     const currentItems = items.slice(startIdx, startIdx + itemsPerPage);
@@ -53,16 +52,16 @@ export const Carousel: React.FC<CarouselProps> = ({
         <div
           className={`grid gap-4 w-full h-full overflow-hidden ${
             direction === "row" ? `grid-cols-${itemsPerPage}` : "grid-rows-1"
-          }`} // direction에 따라 가로 또는 세로 grid 설정
+          }`}
           style={{
             gridTemplateColumns:
               direction === "row"
                 ? `repeat(${itemsPerPage}, minmax(0, 1fr))`
-                : undefined, // direction이 "row"일 때만 gridTemplateColumns 설정
+                : undefined,
             gridTemplateRows:
               direction === "column"
                 ? `repeat(${itemsPerPage}, minmax(0, 1fr))`
-                : undefined, // direction이 "column"일 때만 gridTemplateRows 설정
+                : undefined,
           }}
         >
           {items
@@ -72,7 +71,6 @@ export const Carousel: React.FC<CarouselProps> = ({
             ))}
         </div>
       </div>
-      {/* 화살표 렌더링 */}
       {(showArrowsOnHover ? isHovered : true) && (
         <>
           <button
@@ -93,6 +91,5 @@ export const Carousel: React.FC<CarouselProps> = ({
   );
 };
 
-// 기본 화살표 컴포넌트
 const DefaultPrevArrow = () => <span className="text-2xl">&#9664;</span>;
 const DefaultNextArrow = () => <span className="text-2xl">&#9654;</span>;

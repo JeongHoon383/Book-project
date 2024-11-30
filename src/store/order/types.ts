@@ -1,8 +1,6 @@
 import { CartItem } from "../cart/types";
 
 export interface OrderStore {
-  // orderStore에 담겨야 할 데이터의 타입
-  // 카트 데이터와 바로구매시
   product: CartItem[] | null;
   setOrder: (products: CartItem | CartItem[]) => void;
   initOrder: () => void;
@@ -26,7 +24,7 @@ export interface OrderItem {
   buyerId: string;
   status: string;
   totalPayment: number;
-  items: Item[]; // Item 타입의 배열로 정의
+  items: Item[];
   shippingFee: number;
   totalAmount: number;
   createdAt?: string;

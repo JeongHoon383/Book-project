@@ -39,13 +39,10 @@ export const PurchaseItem: React.FC<PurchaseItem> = ({
             onClick={() => handleNavigate(item.productId)}
           >
             <picture>
-              {/* WebP 이미지 */}
               <source srcSet={item.image.webp} type="image/webp" />
-              {/* 폴백 이미지 (JPEG 또는 PNG) */}
               <source srcSet={item.image.original} type="image/jpeg" />
-              {/* 기본 이미지 (폴백 미지원 브라우저에서도 동작) */}
               <img
-                src={item.image.original} // 폴백용 이미지
+                src={item.image.original}
                 className="w-8 h-8 md:w-24 md:h-24 object-contain rounded cursor-pointer"
               />
             </picture>
@@ -66,7 +63,6 @@ export const PurchaseItem: React.FC<PurchaseItem> = ({
           ) : (
             <td className="p-2 hidden md:table-cell">{data.status}</td>
           )}
-          {/*  */}
           <td className="p-2">{item.count}</td>
           <td className="p-2 hidden md:table-cell">
             {data.shippingFee.toLocaleString()}원

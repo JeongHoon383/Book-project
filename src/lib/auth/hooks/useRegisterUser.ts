@@ -1,4 +1,3 @@
-// useRegisterUser.ts
 import { useMutation } from "@tanstack/react-query";
 import { registerUserAPI } from "../api";
 import { User, RegisterUserReqDTO, LoginRequestDto } from "../types";
@@ -22,5 +21,3 @@ export const useRegisterUser = () => {
     },
   });
 };
-
-// 토스트 추가해야됨

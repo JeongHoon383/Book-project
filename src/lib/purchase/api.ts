@@ -15,7 +15,6 @@ import {
 import { db } from "@/firebase";
 import { Item, OrderItem } from "@/store/order/types";
 
-// 주문 상품 조회
 export const fetchPurchaseAPI = async (): Promise<OrderItem[]> => {
   try {
     const productDocRef = collection(db, "purchases");
@@ -52,7 +51,6 @@ export const fetchPurchaseAPI = async (): Promise<OrderItem[]> => {
   }
 };
 
-// 주문상품 추가
 export const makePurchaseAPI = async (
   purchaseData: PurchaseDTO,
   userId: string,
@@ -97,7 +95,6 @@ export const makePurchaseAPI = async (
       const newPurchaseRef = doc(purchasesRef);
       transcation.set(newPurchaseRef, newPurchaseData);
 
-      // 각 상품의 재고 업데이트: 읽기 후 쓰기
       const stockUpdates: { ref: DocumentReference; newStock: number }[] = [];
 
       for (const item of orderData) {
@@ -110,7 +107,6 @@ export const makePurchaseAPI = async (
           const currentStock = productDoc.data().stock;
           const newStock = currentStock - item.count;
 
-          // 업데이트할 상품과 새 재고를 저장
           stockUpdates.push({
             ref: doc(db, "products", productDoc.id),
             newStock,
@@ -120,7 +116,6 @@ export const makePurchaseAPI = async (
         }
       }
 
-      // 읽기 완료 후 한 번에 쓰기 작업 수행
       stockUpdates.forEach(({ ref, newStock }) => {
         transcation.update(ref, { stock: newStock });
       });
@@ -131,7 +126,6 @@ export const makePurchaseAPI = async (
   }
 };
 
-// 상품 상태 취소 변경
 export const cancelPurchaseAPI = async (productId: string): Promise<void> => {
   try {
     await runTransaction(db, async (transaction) => {
@@ -146,10 +140,8 @@ export const cancelPurchaseAPI = async (productId: string): Promise<void> => {
       const orderDoc = querySnapshot.docs[0];
       const orderData = orderDoc.data();
 
-      // 주문 상태를 "주문 취소"로 업데이트
       transaction.update(orderDoc.ref, { status: "주문 취소" });
 
-      // 주문에 포함된 각 상품의 stock 업데이트
       const items = orderData.items as Item[];
       for (const item of items) {
         const productRef = collection(db, "products");
@@ -162,9 +154,8 @@ export const cancelPurchaseAPI = async (productId: string): Promise<void> => {
         if (!productSnapshot.empty) {
           const productDoc = productSnapshot.docs[0];
           const currentStock = productDoc.data().stock;
-          const newStock = currentStock + item.count; // stock 증가
+          const newStock = currentStock + item.count;
 
-          // Transaction을 통해 stock 업데이트
           transaction.update(productDoc.ref, { stock: newStock });
         } else {
           console.error(`상품이 존재하지 않습니다 : ID ${item.productId}`);

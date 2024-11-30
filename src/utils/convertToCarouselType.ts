@@ -1,4 +1,3 @@
-// src/utils/convertToCarouselType.ts
 import { IProduct } from "@/lib/product/types";
 import { CartItem } from "@/store/cart/types";
 
@@ -15,8 +14,8 @@ export const convertCartItemToIProduct = (
       sellerId: item.sellerId,
       title: item.title,
       price: item.price,
-      stock: originalProduct?.stock || 0, // 원본 제품의 재고량 참조
-      category: { id: "", name: "" }, // 필요한 경우 빈 값으로 설정
+      stock: originalProduct?.stock || 0,
+      category: { id: "", name: "" },
       author: item.author,
       publishedDate: "",
       image: item.image,

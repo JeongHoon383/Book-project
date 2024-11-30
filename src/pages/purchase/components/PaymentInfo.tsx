@@ -10,16 +10,13 @@ interface PaymentInfoProps {
 export const PaymentInfo: React.FC<PaymentInfoProps> = ({ product }) => {
   const { register } = useFormContext();
 
-  // 총 상품 가격
   const totalProductPrice = product?.reduce(
     (acc, item) => acc + item.price * item.count,
     0
   );
 
-  // 배송비 계산
   const shippingFee = totalProductPrice! >= 50000 ? 0 : 3000;
 
-  // 총 결제 금액 계산
   const totalPayment = totalProductPrice! + shippingFee;
 
   return (
@@ -29,7 +26,6 @@ export const PaymentInfo: React.FC<PaymentInfoProps> = ({ product }) => {
         결제 정보
       </div>
       <div className="px-6 pb-6">
-        {/* 총 상품 가격 */}
         <div className="flex text-sm md:text-lg gap-12 p-6 border-b border-borderGray">
           <div className="font-bold min-w-[70px]">총 상품 가격</div>
           <div className="min-w-[60px] font-medium">
@@ -37,7 +33,6 @@ export const PaymentInfo: React.FC<PaymentInfoProps> = ({ product }) => {
           </div>
         </div>
 
-        {/* 배송비 */}
         <div className="flex text-sm md:text-lg gap-[90px] p-6 border-b border-borderGray">
           <div className="font-bold min-w-[40px]">배송비</div>
           <div className="min-w-[50px] font-medium">
@@ -45,7 +40,6 @@ export const PaymentInfo: React.FC<PaymentInfoProps> = ({ product }) => {
           </div>
         </div>
 
-        {/* 총 결제 금액 */}
         <div className="flex text-sm md:text-lg gap-12 p-6 border-b border-borderGray">
           <div className="font-bold min-w-[70px]">총 결제 금액</div>
           <div className="min-w-[60px] font-medium">
@@ -53,7 +47,6 @@ export const PaymentInfo: React.FC<PaymentInfoProps> = ({ product }) => {
           </div>
         </div>
 
-        {/* 결제 방법 선택 */}
         <div className="flex flex-col md:flex-row items-start text-sm md:text-lg gap-6 px-6 pt-6">
           <div className="flex items-center font-bold">
             <CreditCard className="mr-2 h-4 w-4" />

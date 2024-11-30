@@ -17,7 +17,6 @@ export const OrderItems: React.FC<OrderItemsProps> = ({ product }) => {
 
   return (
     <div className="border border-borderGray rounded-xl shadow-sm">
-      {/* 헤더 */}
       <div className="flex items-center p-4 md:p-8 justify-between border-b border-borderGray">
         <div className="flex items-center">
           <ShoppingCart className="mr-2 h-6 w-6" />
@@ -32,22 +31,17 @@ export const OrderItems: React.FC<OrderItemsProps> = ({ product }) => {
         </div>
       </div>
 
-      {/* 상품 목록 테이블 */}
       <table className="w-full">
         <tbody>
-          {/* 추가 상품들 */}
           {product?.map(({ id, title, image, count, price }) => (
             <tr key={id} className="border-b border-dotted border-borderGray">
               <td className="p-4 md:p-10">
                 <div className="flex items-center gap-4 md:gap-10">
                   <picture>
-                    {/* WebP 이미지 */}
                     <source srcSet={image.webp} type="image/webp" />
-                    {/* 폴백 이미지 (JPEG 또는 PNG) */}
                     <source srcSet={image.original} type="image/jpeg" />
-                    {/* 기본 이미지 (폴백 미지원 브라우저에서도 동작) */}
                     <img
-                      src={image.original} // 폴백용 이미지
+                      src={image.original}
                       className="hidden md:block w-[82px] h-[122px] cursor-pointer"
                       onClick={() => handleNavigate(id)}
                     />
