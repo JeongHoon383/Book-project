@@ -115,7 +115,7 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
 
   return (
     <div>
-      <div className="text-sm md:text-base flex justify-end items-center border-b border-borderGray pb-5">
+      <div className="flex justify-end items-center border-b border-borderGray pb-5">
         <div className="flex gap-1 md:gap-2 items-center">
           <div className="flex gap-2 mr-4">
             <input
@@ -126,13 +126,13 @@ export const HomeProductList: React.FC<HomeProductListProps> = ({
             <span className="hidden md:block">전체선택</span>
           </div>
           <div className="p-2 border border-borderGray rounded-lg cursor-pointer">
-            <Heart className="w-5 h-5" />
+            <Heart className="w-4 h-4" />
           </div>
           <div
             onClick={handleAddSelectedToCart}
-            className="flex gap-2 py-2 px-2 md:px-4 font-bold cursor-pointer border border-borderGray rounded-lg"
+            className="flex items-center gap-2 py-2 px-2 md:px-4 font-bold cursor-pointer border border-borderGray rounded-lg"
           >
-            <ShoppingCart className="w-5 h-5" />
+            <ShoppingCart className="w-4 h-4" />
             <span className="hidden md:block">장바구니</span>
           </div>
           <div>

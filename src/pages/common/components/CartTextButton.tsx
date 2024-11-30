@@ -36,7 +36,7 @@ export const CartTextButton: React.FC<CartTextButtonProps> = ({
   return (
     <button
       onClick={handleCartClick}
-      className="w-full py-2 bg-blue-500 text-white text-sm md:text-base rounded-lg"
+      className="w-full py-2 bg-blue-500 text-white rounded-lg"
     >
       {isInCart ? "장바구니 보기" : "장바구니"}
     </button>

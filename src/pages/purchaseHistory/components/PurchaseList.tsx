@@ -70,7 +70,7 @@ export const PurchaseList = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex gap-2 border-b border-borderGray py-5 px-2 font-medium">
+      <div className="flex gap-2 border-b border-borderGray py-5 text-xs font-bold">
         <div>전체 {data?.length}</div>
         <div>
           주문 완료 {data?.filter((item) => item.status === "주문 완료").length}
@@ -86,7 +86,7 @@ export const PurchaseList = () => {
       <div className="container mx-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="text-gray-700 border-b border-borderGray text-sm md:text-lg">
+            <tr className="text-gray-700 border-b border-borderGray text-sm">
               <th className="p-2 text-center w-8">
                 <input
                   type="checkbox"
@@ -95,7 +95,7 @@ export const PurchaseList = () => {
                   onChange={handleSelectAll}
                 />
               </th>
-              <th className="p-2 text-left w-1/3">상품명</th>
+              <th className="md:px-5 px-2 text-left w-1/3">상품명</th>
               <th className="p-2 text-center hidden md:table-cell">
                 상품 금액
               </th>

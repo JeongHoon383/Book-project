@@ -35,7 +35,7 @@ export const ProductManageList = React.forwardRef<
     <>
       <tr
         ref={ref}
-        className="text-center text-sm md:text-base border-b border-borderGray py-10"
+        className="text-center text-xs border-b border-borderGray py-10"
       >
         <td className="p-2">
           <input
@@ -45,28 +45,28 @@ export const ProductManageList = React.forwardRef<
             onChange={onToggleSelect}
           />
         </td>
-        <td className="p-2 flex items-center space-x-1 md:space-x-4 text-left py-10">
-          <picture>
+        <td className="p-2 flex items-center md:space-x-4 text-left py-6">
+          <picture className="w-24 h-24 hidden md:table-cell">
             <source srcSet={image.webp} type="image/webp" />
             <source srcSet={image.original} type="image/jpeg" />
             <img
               src={image.original}
-              className="w-8 h-8 md:w-24 md:h-24 object-contain rounded hidden md:table-cell cursor-pointer"
+              className="w-full h-full object-contain rounded cursor-pointer"
               onClick={handleNavigate}
             />
           </picture>
           <div className="max-w-[90px] md:min-w-[300px]">
             <div className="flex flex-col justify-center max-w-[300px] h-full gap-2">
               <div
-                className="font-bold text-sm md:text-base overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer hover:underline"
+                className="font-bold text-xs overflow-hidden text-ellipsis whitespace-nowrap cursor-pointer hover:underline"
                 onClick={handleNavigate}
               >
                 {title}
               </div>
-              <div className="text-sm text-gray-600 overflow-hidden text-ellipsis whitespace-nowrap">
+              <div className="text-xs text-gray-600 overflow-hidden text-ellipsis whitespace-nowrap">
                 {author} 저 | {publishedDate}
               </div>
-              <div className="text-sm text-gray-600 overflow-hidden text-ellipsis whitespace-nowrap">
+              <div className="text-xs text-gray-600 overflow-hidden text-ellipsis whitespace-nowrap">
                 {description}
               </div>
             </div>

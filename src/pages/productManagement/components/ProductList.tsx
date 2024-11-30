@@ -125,7 +125,7 @@ export const ProductList: React.FC<ProductListProps> = ({
     <div>
       <div className="flex flex-col">
         <div className="flex justify-between items-center border-b border-borderGray pb-5">
-          <div className="flex items-center gap-2 md:gap-4 font-bold text-sm md:text-base">
+          <div className="flex items-center gap-2 md:gap-4 font-bold text-xs">
             <div>전체 {products.length}</div>
             <div>판매중 1</div>
             <div>판매완료 1</div>
@@ -134,7 +134,7 @@ export const ProductList: React.FC<ProductListProps> = ({
             {user?.isSeller && <Button text="상품 등록" onClick={openModal} />}
           </div>
         </div>
-        <div className="flex gap-2 justify-center md:justify-end items-center py-5">
+        <div className="flex gap-2 justify-end items-center py-5">
           <CustomSelect setSortOption={setSortOption} />
           <Button text="수정" onClick={handleEdit} />
           <Button text="삭제" onClick={handleDelete} />
@@ -142,7 +142,7 @@ export const ProductList: React.FC<ProductListProps> = ({
         <div className="container mx-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="text-gray-700 border-b border-borderGray text-sm md:text-lg">
+              <tr className="text-gray-700 border-b border-borderGray text-sm">
                 <th className="p-2 text-center w-8">
                   <input
                     type="checkbox"
@@ -151,7 +151,7 @@ export const ProductList: React.FC<ProductListProps> = ({
                     onChange={handleSelectAll}
                   />
                 </th>
-                <th className="p-2 text-left w-1/3">상품명</th>
+                <th className="px-5 text-left w-1/3">상품명</th>
                 <th className="p-2 text-center">판매가</th>
                 <th className="p-2 text-center hidden md:table-cell">
                   카테고리

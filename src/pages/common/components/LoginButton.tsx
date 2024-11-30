@@ -14,7 +14,7 @@ export const LoginButton = () => {
     <Button
       variant="ghost"
       size="sm"
-      className="text-primary hover:text-primary-dark"
+      className="text-xs text-primary hover:text-primary-dark"
       onClick={handleClickLogin}
     >
       로그인

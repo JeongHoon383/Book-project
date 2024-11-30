@@ -21,38 +21,32 @@ export const PaymentInfo: React.FC<PaymentInfoProps> = ({ product }) => {
 
   return (
     <div className="border border-borderGray rounded-xl shadow-sm">
-      <div className="flex items-center p-4 md:p-8 text-lg md:text-2xl font-bold border-b border-borderGray">
-        <CreditCard className="mr-2 h-6 w-6" />
+      <div className="flex gap-2 items-center p-4 text-base font-bold border-b border-borderGray">
+        <CreditCard className="w-4 h-4" />
         결제 정보
       </div>
-      <div className="px-6 pb-6">
-        <div className="flex text-sm md:text-lg gap-12 p-6 border-b border-borderGray">
-          <div className="font-bold min-w-[70px]">총 상품 가격</div>
-          <div className="min-w-[60px] font-medium">
-            {totalProductPrice?.toLocaleString()}원
-          </div>
+      <div className="text-xs">
+        <div className="flex text-sm justify-between p-3 md:px-6 font-bold border-b border-borderGray">
+          <div>총 상품 가격</div>
+          <div>{totalProductPrice?.toLocaleString()}원</div>
         </div>
 
-        <div className="flex text-sm md:text-lg gap-[90px] p-6 border-b border-borderGray">
-          <div className="font-bold min-w-[40px]">배송비</div>
-          <div className="min-w-[50px] font-medium">
-            {shippingFee.toLocaleString()}원
-          </div>
+        <div className="flex text-sm justify-between md:gap-[89px] p-3 md:px-6 font-bold border-b border-borderGray">
+          <div>배송비</div>
+          <div>{shippingFee.toLocaleString()}원</div>
         </div>
 
-        <div className="flex text-sm md:text-lg gap-12 p-6 border-b border-borderGray">
-          <div className="font-bold min-w-[70px]">총 결제 금액</div>
-          <div className="min-w-[60px] font-medium">
-            {totalPayment.toLocaleString()}원
-          </div>
+        <div className="flex text-sm justify-between md:gap-20 p-3 md:px-6 font-bold border-b border-borderGray">
+          <div>총 결제 금액</div>
+          <div>{totalPayment.toLocaleString()}원</div>
         </div>
 
-        <div className="flex flex-col md:flex-row items-start text-sm md:text-lg gap-6 px-6 pt-6">
-          <div className="flex items-center font-bold">
-            <CreditCard className="mr-2 h-4 w-4" />
+        <div className="flex flex-col md:flex-row items-start text-sm gap-4 p-4">
+          <div className="flex gap-2 items-center font-bold">
+            <CreditCard className="h-4 w-4" />
             결제 방법
           </div>
-          <label className="flex items-center font-medium space-x-2">
+          <label className="flex items-center font-medium gap-2">
             <input
               type="radio"
               value="accountTransfer"
@@ -60,22 +54,22 @@ export const PaymentInfo: React.FC<PaymentInfoProps> = ({ product }) => {
                 required: "결제 방법을 선택해 주세요.",
               })}
             />
-            <Building className="mr-2 h-4 w-4" />
+            <Building className="h-4 w-4" />
             <span>계좌이체</span>
           </label>
-          <label className="flex items-center font-medium space-x-2">
+          <label className="flex items-center font-medium gap-2">
             <input type="radio" value="creditCard" {...register("payment")} />
-            <CreditCard className="mr-2 h-4 w-4" />
+            <CreditCard className="h-4 w-4" />
             <span>신용/체크카드</span>
           </label>
-          <label className="flex items-center font-medium space-x-2">
+          <label className="flex items-center font-medium gap-2">
             <input type="radio" value="phone" {...register("payment")} />
-            <Smartphone className="mr-2 h-4 w-4" />
+            <Smartphone className="h-4 w-4" />
             <span>휴대폰</span>
           </label>
-          <label className="flex items-center font-medium space-x-2">
+          <label className="flex items-center font-medium gap-2">
             <input type="radio" value="bankDeposit" {...register("payment")} />
-            <Wallet className="mr-2 h-4 w-4" />
+            <Wallet className="h-4 w-4" />
             <span>무통장입금</span>
           </label>
         </div>

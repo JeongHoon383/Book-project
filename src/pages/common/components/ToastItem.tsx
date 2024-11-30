@@ -59,7 +59,7 @@ export const ToastItem: React.FC<ToastItemProps> = ({ toast }) => {
     >
       <div className="flex-1 p-4 flex items-center">
         <Icon className="mr-2 text-white" size={20} />
-        <p className="text-sm font-medium text-white">{toast.message}</p>
+        <p className="text-xs font-medium text-white">{toast.message}</p>
       </div>
       <div className="flex border-l border-black border-opacity-10">
         <button

@@ -1,4 +1,5 @@
 import { IProduct } from "@/lib/product/types";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useEffect, useState } from "react";
 interface CarouselProps {
   items: IProduct[];
@@ -41,13 +42,14 @@ export const Carousel: React.FC<CarouselProps> = ({
 
   return (
     <div
-      className="relative border border-borderGray p-5 rounded-lg"
+      className="relative border border-borderGray p-3 rounded-lg"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="w-full h-full flex flex-col justify-between">
-        <div className="flex justify-end mb-5">
-          {currentPage} / {totalPages}
+        <div className="flex gap-1 justify-end items-center text-xs mb-2">
+          <span>{currentPage}</span>
+          <span className="text-gray-500">/ {totalPages}</span>
         </div>
         <div
           className={`grid gap-4 w-full h-full overflow-hidden ${
@@ -91,5 +93,5 @@ export const Carousel: React.FC<CarouselProps> = ({
   );
 };
 
-const DefaultPrevArrow = () => <span className="text-2xl">&#9664;</span>;
-const DefaultNextArrow = () => <span className="text-2xl">&#9654;</span>;
+const DefaultPrevArrow = () => <ChevronLeft className="text-gray-500" />;
+const DefaultNextArrow = () => <ChevronRight className="text-gray-500" />;

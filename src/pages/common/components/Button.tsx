@@ -9,7 +9,7 @@ export const Button: React.FC<ButtonProps> = ({ text, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="text-xs md:text-base border border-borderGray p-2 md:px-4 rounded-lg"
+      className="text-xs border border-borderGray p-2 rounded-lg"
     >
       {text}
     </button>

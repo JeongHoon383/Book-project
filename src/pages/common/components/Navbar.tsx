@@ -1,11 +1,10 @@
 import { useModal } from "@/hooks/useModal";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/store/auth/useAuthStore";
-import { Suspense, useEffect } from "react";
+import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { pageRoutes } from "@/apiRoutes";
 import { ApiErrorBoundary } from "./ApiErrorBoundary";
-import { Skeleton } from "@/components/ui/skeleton";
 import { CartButton } from "./CartButton";
 import { LogoutButton } from "./LogoutButton.";
 import { LoginButton } from "./LoginButton";
@@ -91,26 +90,24 @@ export const Navbar = () => {
 
   return (
     <>
-      <nav className="h-32 flex items-center justify-between px-4 md:px-52 border-b border-borderGray">
+      <nav className="h-24 flex items-center justify-between px-4 md:px-32 border-b border-borderGray">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center h-16">
             <div className="flex gap-2 items-center">
               <Menu className="block md:hidden" onClick={handleClickMenu} />
               <h1
-                className="text-2xl font-bold cursor-pointer"
+                className="text-lg font-bold cursor-pointer"
                 onClick={handleClickLogo}
               >
                 경향 문고
               </h1>
             </div>
             <SearchBar />
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-7">
               {isLogin ? (
                 <ApiErrorBoundary>
-                  <Suspense fallback={<Skeleton className="w-24 h-8" />}>
-                    <CartButton onClick={handleClickCart} cart={cart} />
-                    <LogoutButton onClick={handleLogout} />
-                  </Suspense>
+                  <CartButton onClick={handleClickCart} cart={cart} />
+                  <LogoutButton onClick={handleLogout} />
                 </ApiErrorBoundary>
               ) : (
                 <LoginButton />

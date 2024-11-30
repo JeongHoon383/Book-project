@@ -5,7 +5,7 @@ export const LogoutButton = ({ onClick }: { onClick: () => void }) => {
     <Button
       variant="ghost"
       size="sm"
-      className="text-primary hover:text-primary-dark"
+      className="text-xs text-primary hover:text-primary-dark"
       onClick={onClick}
     >
       로그아웃

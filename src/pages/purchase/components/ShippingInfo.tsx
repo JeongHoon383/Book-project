@@ -17,16 +17,13 @@ export const ShippingInfo: React.FC = () => {
 
   return (
     <div className="border border-borderGray rounded-xl shadow-sm">
-      <div className="flex items-center p-4 md:p-8 text-lg md:text-2xl font-bold border-b border-borderGray">
-        <Truck className="mr-2 h-6 w-6" />
+      <div className="flex gap-2 items-center p-4 text-base font-bold border-b border-borderGray">
+        <Truck className="h-5 w-5" />
         배송 정보
       </div>
-      <div className="p-4">
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-medium mb-1"
-            htmlFor="name"
-          >
+      <div className="p-4 text-xs flex flex-col gap-3">
+        <div>
+          <label className="block text-gray-700 font-bold mb-1" htmlFor="name">
             이름
           </label>
           <input
@@ -41,9 +38,9 @@ export const ShippingInfo: React.FC = () => {
           )}
         </div>
 
-        <div className="mb-4">
+        <div>
           <label
-            className="block text-gray-700 text-sm font-medium mb-1"
+            className="block text-gray-700 font-bold mb-1"
             htmlFor="address"
           >
             주소
@@ -60,11 +57,8 @@ export const ShippingInfo: React.FC = () => {
           )}
         </div>
 
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-medium mb-1"
-            htmlFor="phone"
-          >
+        <div>
+          <label className="block text-gray-700 font-bold mb-1" htmlFor="phone">
             전화번호
           </label>
           <input
@@ -87,10 +81,10 @@ export const ShippingInfo: React.FC = () => {
 
         <div className="mb-4 relative">
           <label
-            className="block text-gray-700 text-sm font-medium mb-1"
+            className="block text-gray-700 font-bold mb-1"
             htmlFor="request"
           >
-            요청 사항
+            요청사항
           </label>
           <textarea
             {...register("requests", {
@@ -100,7 +94,7 @@ export const ShippingInfo: React.FC = () => {
               },
             })}
             id="request"
-            placeholder="요청 사항을 입력하세요"
+            placeholder="요청사항을 입력하세요"
             className="input-style"
             rows={3}
             style={{ resize: "none" }}
@@ -109,7 +103,7 @@ export const ShippingInfo: React.FC = () => {
               register("requests").onChange(e);
             }}
           />
-          <div className="text-sm text-gray-600 absolute bottom-2 right-2">
+          <div className="text-gray-600 absolute bottom-2 right-2">
             <span className="text-black">{currentChars}</span>
             <span className="text-gray-400">/{maxChars}</span>
           </div>

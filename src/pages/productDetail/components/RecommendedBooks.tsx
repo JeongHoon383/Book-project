@@ -62,19 +62,19 @@ export const RecommendedBooks: React.FC<RecommendedBooksProps> = ({
               <source srcSet={item.image.original} type="image/jpeg" />
               <img
                 src={item.image.original}
-                className="w-full max-h-[280px] justify-center object-contain cursor-pointer"
+                className="w-full max-h-[200px] justify-center object-contain cursor-pointer"
                 onClick={() => handleNavigate(item.id)}
               />
             </picture>
             <div className="flex flex-col items-center h-full justify-center gap-1">
               <div
-                className="text-center mt-2 overflow-hidden text-ellipsis whitespace-normal line-clamp-1 cursor-pointer hover:underline"
+                className="max-w-[130px] text-center font-bold mt-2 overflow-hidden text-ellipsis whitespace-normal line-clamp-1 cursor-pointer hover:underline"
                 onClick={() => handleNavigate(item.id)}
               >
                 {item.title}
               </div>
-              <div className="text-sm text-gray-500">{item.author}</div>
-              <div className="text-sm">{item.price.toLocaleString()}원</div>
+              <div className=" text-gray-500">{item.author}</div>
+              <div>{item.price.toLocaleString()}원</div>
             </div>
           </div>
         )}

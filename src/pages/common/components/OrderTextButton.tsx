@@ -27,7 +27,7 @@ export const OrderTextButton: React.FC<OrderTextButtonProps> = ({
   return (
     <button
       onClick={handleOrderClick}
-      className="text-sm md:text-base py-2 w-full bg-green-500 text-white rounded-lg"
+      className="py-2 w-full bg-green-500 text-white rounded-lg"
     >
       바로구매
     </button>

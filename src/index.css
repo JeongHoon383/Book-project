@@ -14,7 +14,7 @@ body {
 
 #root {
   background-color: white;
-  max-width: 1500px;
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
   min-height: 100vh;
@@ -22,8 +22,9 @@ body {
   box-sizing: border-box;
   box-shadow: rgba(100, 100, 100, 0.2) 0px 0px 29px 0px;
   overflow: scroll;
+  font-size: small;
 }
 
 .input-style {
-  @apply w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-black transition-all duration-200;
+  @apply w-full text-xs p-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-black transition-all duration-200;
 }

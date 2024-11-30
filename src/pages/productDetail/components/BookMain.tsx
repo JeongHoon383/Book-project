@@ -41,8 +41,12 @@ export const BookMain: React.FC<BookMainProps> = ({
           <div className="text-sm text-info">
             {product.author} | {product.publishedDate}
           </div>
-          <div className="text-xl font-bold">
-            {product.price.toLocaleString()}원
+          <div className="flex gap-2 items-center text-base">
+            <div className="font-bold text-title">10%</div>
+            <div className="font-bold ">{product.price.toLocaleString()}원</div>
+            <div className="text-gray-400 line-through">
+              {Math.round(product.price * 1.1).toLocaleString()}원
+            </div>
           </div>
           <div className="text-info">{product.description}</div>
         </div>

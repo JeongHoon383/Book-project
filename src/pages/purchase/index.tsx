@@ -97,7 +97,7 @@ export const Purchase: React.FC = () => {
       <Layout authStatus={authStatusType.NEED_BUYER}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-5">
-            <p className="text-3xl font-bold">주문/결제</p>
+            <p className="text-xl font-bold">주문/결제</p>
             <ShippingInfo />
             <OrderItems product={product} />
             <PaymentInfo product={product} />
@@ -105,7 +105,7 @@ export const Purchase: React.FC = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full md:w-[200px] px-12 py-3 rounded-lg bg-[#5055B1] text-white font-medium hover:bg-[#2C307B]"
+                className="w-full md:w-[200px] px-12 py-3 rounded-lg bg-[#5055B1] text-white text-sm font-medium hover:bg-[#2C307B]"
               >
                 {isLoading ? (
                   <div className="flex gap-2">

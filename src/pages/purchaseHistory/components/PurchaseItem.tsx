@@ -24,7 +24,7 @@ export const PurchaseItem: React.FC<PurchaseItem> = ({
       {data.items.map((item) => (
         <tr
           key={item.productId}
-          className="text-center text-sm md:text-base border-b border-borderGray py-10"
+          className="text-center text-xs border-b border-borderGray py-10"
         >
           <td className="p-2">
             <input
@@ -35,18 +35,18 @@ export const PurchaseItem: React.FC<PurchaseItem> = ({
             />
           </td>
           <td
-            className="p-2 flex items-center space-x-1 md:space-x-4 text-left py-10"
+            className="p-2 flex items-center md:space-x-4 text-left py-6"
             onClick={() => handleNavigate(item.productId)}
           >
-            <picture>
+            <picture className="w-24 h-24 hidden md:table-cell">
               <source srcSet={item.image.webp} type="image/webp" />
               <source srcSet={item.image.original} type="image/jpeg" />
               <img
                 src={item.image.original}
-                className="w-8 h-8 md:w-24 md:h-24 object-contain rounded cursor-pointer"
+                className="w-full h-full object-contain rounded cursor-pointer"
               />
             </picture>
-            <span className="text-left md:max-w-none md:whitespace-normal md:overflow-visible md:truncate-ellipsis max-w-[90px] truncate overflow-hidden whitespace-nowrap cursor-pointer hover:underline">
+            <span className="text-left md:max-w-[200px] max-w-[90px] truncate overflow-hidden whitespace-nowrap cursor-pointer hover:underline">
               {item.title}
             </span>
           </td>

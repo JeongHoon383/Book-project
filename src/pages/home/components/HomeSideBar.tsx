@@ -61,49 +61,52 @@ export const HomeSideBar = () => {
   };
 
   return (
-    <div className="md:flex w-full max-w-[200px] h-screen border-r text-lg border-borderGray flex-col gap-10 hidden">
+    <div className="md:flex w-full max-w-[150px] text-xs h-screen border-r border-borderGray flex-col gap-5 hidden">
       <div className="flex flex-col gap-5 p-5">
         <div
-          className="flex gap-3 cursor-pointer"
+          className="flex items-center gap-2 cursor-pointer"
           onClick={() => handleClickIcon(pageRoutes.main)}
         >
-          <House />
+          <House className="w-5 h-5" />
           홈으로
         </div>
-        <div className="flex gap-3">
-          <BookPlus />
+        <div className="flex items-center gap-2">
+          <BookPlus className="w-5 h-5" />
           신간도서
         </div>
-        <div className="flex gap-3">
-          <Star />
+        <div className="flex items-center gap-2">
+          <Star className="w-5 h-5" />
           베스트셀러
         </div>
       </div>
       <div className="flex flex-col gap-5 p-5">
-        <div className="text-xl font-bold">관리하기</div>
-        <div className="flex gap-3">
-          <User />
+        <div className="text-base font-bold">관리하기</div>
+        <div className="flex items-center gap-2">
+          <User className="w-5 h-5" />
           마이페이지
         </div>
         <div
-          className="flex gap-3 cursor-pointer"
+          className="flex items-center gap-2 cursor-pointer"
           onClick={() => handleClickIcon(pageRoutes.purchaseHistory)}
         >
-          <CreditCard />
+          <CreditCard className="w-5 h-5" />
           구매 내역
         </div>
-        <div className="flex gap-3 cursor-pointer" onClick={handleClickCart}>
-          <ShoppingBasket />
+        <div
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={handleClickCart}
+        >
+          <ShoppingBasket className="w-5 h-5" />
           장바구니
         </div>
       </div>
       <div className="flex flex-col gap-5 p-5">
-        <div className="text-xl font-bold">관리자</div>
+        <div className="text-base font-bold">관리자</div>
         <div
-          className="flex gap-3 cursor-pointer"
+          className="flex items-center gap-2 cursor-pointer"
           onClick={handleClickProductManagement}
         >
-          <Settings />
+          <Settings className="w-5 h-5" />
           상품 관리
         </div>
       </div>

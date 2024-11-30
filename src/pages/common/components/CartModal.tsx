@@ -86,7 +86,7 @@ export const CartModal: React.FC<CartModalProps> = ({
         ></div>
       )}
       <div
-        className={`fixed top-0 right-0 h-full w-full sm:w-[500px] bg-white z-50 transition-transform duration-300 transform ${
+        className={`fixed top-0 right-0 h-full w-full sm:w-[400px] bg-white z-50 transition-transform duration-300 transform ${
           isModalOpened ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -94,7 +94,7 @@ export const CartModal: React.FC<CartModalProps> = ({
           <X />
         </button>
         <div className="p-4 h-full flex flex-col">
-          <h2 className="text-xl font-bold mb-4">장바구니</h2>
+          <h2 className="text-base font-bold mb-4">장바구니</h2>
           <div className="flex-1 overflow-y-auto">
             <Carousel
               items={carouselItems}
@@ -107,14 +107,14 @@ export const CartModal: React.FC<CartModalProps> = ({
                     <source srcSet={item.image.original} type="image/jpeg" />
                     <img
                       src={item.image.webp}
-                      className="w-[200px] h-[200px] object-contain cursor-pointer"
+                      className="w-[150px] h-[150px] object-contain cursor-pointer"
                       onClick={() => handleNavigate(item.id)}
                     />
                   </picture>
                   <div className="flex justify-between items-center">
-                    <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap-3">
                       <div
-                        className="font-bold text-xl overflow-hidden text-ellipsis whitespace-normal line-clamp-1 cursor-pointer hover:underline"
+                        className="font-bold overflow-hidden text-ellipsis whitespace-normal line-clamp-1 cursor-pointer hover:underline"
                         onClick={() => handleNavigate(item.id)}
                       >
                         {item.title}
@@ -167,7 +167,7 @@ export const CartModal: React.FC<CartModalProps> = ({
                 </div>
               </div>
               <div className="py-5 flex flex-col gap-10">
-                <div className="flex justify-between text-xl font-bold">
+                <div className="flex justify-between text-base font-bold">
                   <div>합계</div>
                   <div>{(totalPrice + shippingFee).toLocaleString()}원</div>
                 </div>

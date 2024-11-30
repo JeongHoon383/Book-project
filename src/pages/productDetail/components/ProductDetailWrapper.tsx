@@ -62,17 +62,17 @@ export const ProductDetailWrapper = () => {
 
   usePageTitle(selectedProduct?.title, "경향문고");
 
-  if (isLoading) {
+  if (isLoading || !selectedProduct) {
     return <LoadingPage />;
   }
 
   return (
     <div className="flex flex-col">
       <BookMain
-        product={selectedProduct!}
+        product={selectedProduct}
         onClickAddCartButton={(e: React.MouseEvent) => {
           e.stopPropagation();
-          handleCartAction(selectedProduct!);
+          handleCartAction(selectedProduct);
         }}
         onClickAddOrderButton={handleOrderAction}
         onClickViewCart={openCartModal}

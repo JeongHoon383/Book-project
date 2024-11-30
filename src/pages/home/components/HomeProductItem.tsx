@@ -61,7 +61,7 @@ export const HomeProductItem = React.forwardRef<
                 onChange={onToggleSelect}
               />
               <div
-                className="w-[50px] h-[50px] md:w-[200px] md:h-[200px] cursor-pointer"
+                className="w-[50px] h-[50px] md:w-[150px] md:h-[150px] cursor-pointer"
                 onClick={handleNavigate}
               >
                 <picture>
@@ -74,28 +74,24 @@ export const HomeProductItem = React.forwardRef<
                 </picture>
               </div>
             </div>
-            <div className="max-w-[500px] flex flex-col justify-center md:gap-5 gap-3">
+            <div className="max-w-[500px] flex flex-col justify-center gap-3">
               <div
                 onClick={handleNavigate}
-                className="cursor-pointer text-sm md:text-lg font-bold hover:underline overflow-hidden text-ellipsis whitespace-normal line-clamp-1"
+                className="cursor-pointer font-bold hover:underline overflow-hidden text-ellipsis whitespace-normal line-clamp-1"
               >
                 {title}
               </div>
-              <div className="text-info text-sm md:text-base">
+              <div className="text-info">
                 {author} | {publishedDate}
               </div>
               <div className="flex gap-2 items-center">
-                <div className="font-bold text-sm md:text-lg text-title">
-                  10%
-                </div>
-                <div className="font-bold text-sm md:text-lg">
-                  {price.toLocaleString()}원
-                </div>
-                <div className="text-gray-400 line-through text-sm md:text-base">
+                <div className="font-bold text-title">10%</div>
+                <div className="font-bold ">{price.toLocaleString()}원</div>
+                <div className="text-gray-400 line-through">
                   {Math.round(price * 1.1).toLocaleString()}원
                 </div>
               </div>
-              <div className="overflow-hidden text-ellipsis whitespace-normal line-clamp-2 text-info text-sm md:text-base">
+              <div className="overflow-hidden text-ellipsis whitespace-normal line-clamp-2 text-info">
                 {description}
               </div>
             </div>
