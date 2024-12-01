@@ -10,7 +10,7 @@
 
 **프로젝트 배포링크**
 
-- 배포링크
+[경향문고 배포링크](https://kyunghyang-library.vercel.app/)
 
 **테스트 계정**
 
